@@ -125,15 +125,13 @@ const cotizacionEmail = (cotizacion) => {
         </div>
       </div>
         <hr style="margin-top: 30px; margin-bottom: 10px;" />
-     <div style="margin-top: 30px; text-align: center;">
-  <div style="display: inline-block; position: relative; left: 60px;">
-    <img src="${firmaUsuario}" alt="Firma o American Vial" style="width: 300px; height: auto;" />
-  </div>
-  <a href="http://www.americanvial.com" style="display: block; margin-bottom: 20px; font-weight: bold;">
-    www.americanvial.com
-  </a>
-</div>
-
+      <div style="margin-top: 30px; text-align: center;">
+        <img src="${firmaUsuario}" alt="Firma o American Vial" style="width: 300px; height: auto; display: block; margin-left: 50px ;" />
+       
+        <a href="http://www.americanvial.com" style="display: block; margin-bottom: 20px; font-weight: bold;">
+          www.americanvial.com
+        </a>
+      </div>
     </div>
   `;
 };
