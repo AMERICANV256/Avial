@@ -6,8 +6,7 @@ const cotizacionEmail = (cotizacion) => {
 
   const notasEmail = cotizacion.notasEmail || "";
 
-  const firmaUsuario =
-    cotizacion.cotizacionDetalle?.usuario?.firma || americanVialImage;
+  const firmaUsuario = cotizacion?.usuario?.firma || americanVialImage;
 
   // Filtrar cotizacionesIndividuales para incluir solo aquellas con más de 1 cuota
   const cotizacionesIndividuales = cotizacion.cotizacionesIndividuales
