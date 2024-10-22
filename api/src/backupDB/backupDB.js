@@ -17,6 +17,8 @@
 //   return { PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE };
 // };
 
+//nada probando
+
 // // Función para realizar el respaldo de la base de datos
 // const backupDatabase = () => {
 //   const { PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE } =
