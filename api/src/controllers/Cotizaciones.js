@@ -315,7 +315,7 @@ const getCotizacionDetalle = async (req, res) => {
       include: [
         {
           model: Usuarios,
-          attributes: ["nombre", "apellido", "email"],
+          attributes: ["nombre", "apellido", "email", "firma"],
         },
         {
           model: Clientes,
@@ -428,6 +428,7 @@ const getCotizacionDetalle = async (req, res) => {
         nombre: cotizacion.Usuario.nombre,
         apellido: cotizacion.Usuario.apellido,
         email: cotizacion.Usuario.email,
+        firma: cotizacion.Usuario.firma,
       },
       producto: {
         division: cotizacion.Producto.division,
