@@ -84,6 +84,10 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      liberado: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       fechaDeCreacion: {
         type: DataTypes.DATE,
         allowNull: false,
