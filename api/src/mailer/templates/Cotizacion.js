@@ -119,7 +119,7 @@ const cotizacionEmail = (cotizacion) => {
           }" download style="text-decoration: none;">
             <img src="${PDFUrl}" alt="Descargar Ficha" style="width: 50px; height: auto; border: none;" />
           </a>
-          <div style="margin-top: 5px; font-weight: bold; font-size: 16px;">Ficha Técnica de ${
+          <div style="margin-top: 5px; font-weight: bold; font-size: 16px;">Ficha Técnica ${
             cotizacion.producto.familia
           } ${cotizacion.producto.marca} ${cotizacion.producto.modelo}</div>
         </div>
