@@ -218,7 +218,7 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
       <div
         style={{
           marginTop: "30px",
-          textAlign: "center",
+          textAlign: "left",
         }}
       >
         <div
@@ -235,7 +235,7 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
             }
             alt="Firma o American Vial"
             style={{
-              width: "250px",
+              width: "300px",
               height: "auto",
               border: "none",
               display: "inline-block",
@@ -251,8 +251,7 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
               fontWeight: "bold",
               color: "blue",
               textAlign: "left",
-              marginLeft: "55px",
-              marginTop: "15px",
+              marginLeft: "65px",
             }}
           >
             www.americanvial.com
