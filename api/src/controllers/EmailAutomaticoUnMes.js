@@ -55,7 +55,7 @@ const iniciarCronJob = () => {
         include: [
           {
             model: Usuarios,
-            attributes: ["nombre", "apellido", "email"],
+            attributes: ["nombre", "apellido", "email", "firma"],
           },
           {
             model: Clientes,
@@ -161,6 +161,7 @@ const iniciarCronJob = () => {
               nombre: usuario.nombre,
               apellido: usuario.apellido,
               email: usuario.email,
+              firma: usuario.firma,
             },
             producto: {
               division: producto.division,

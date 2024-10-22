@@ -215,34 +215,49 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
         </div>
       </div>
       <hr />
-      <div style={{ marginTop: "30px", textAlign: "center" }}>
-        <img
-          src={americanVialImage}
-          alt="American Vial"
+      <div
+        style={{
+          marginTop: "30px",
+          textAlign: "center",
+        }}
+      >
+        <div
           style={{
-            width: "150px",
-            height: "auto",
-            border: "none",
             display: "inline-block",
-          }}
-        />
-        <p style={{ margin: "10px 0", fontWeight: "bold" }}>
-          Paris 256 esq. Colectora Este <br />
-          1611 - Don Torcuato - Bs. As.
-          <br />
-          Tel./Fax : (+54) 11 4748 5900 / int. 273
-        </p>
-        <a
-          href="http://www.americanvial.com"
-          style={{
-            display: "block",
-            marginBottom: "20px",
-            fontWeight: "bold",
-            color: "blue",
+            textAlign: "left",
           }}
         >
-          www.americanvial.com
-        </a>
+          <img
+            src={
+              cotizacionDetalle.usuario.firma
+                ? cotizacionDetalle.usuario.firma
+                : americanVialImage
+            }
+            alt="Firma o American Vial"
+            style={{
+              width: "250px",
+              height: "auto",
+              border: "none",
+              display: "inline-block",
+              marginLeft: "50px",
+            }}
+          />
+
+          <a
+            href="http://www.americanvial.com"
+            style={{
+              display: "block",
+              marginBottom: "20px",
+              fontWeight: "bold",
+              color: "blue",
+              textAlign: "left",
+              marginLeft: "55px",
+              marginTop: "15px",
+            }}
+          >
+            www.americanvial.com
+          </a>
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,9 @@ const cotizacionEmail = (cotizacion) => {
 
   const notasEmail = cotizacion.notasEmail || "";
 
+  const firmaUsuario =
+    cotizacion.cotizacionDetalle?.usuario?.firma || americanVialImage;
+
   // Filtrar cotizacionesIndividuales para incluir solo aquellas con más de 1 cuota
   const cotizacionesIndividuales = cotizacion.cotizacionesIndividuales
     .filter((item) => item.cuotas > 1) // Filtra las que tienen más de 1 cuota
@@ -124,12 +127,8 @@ const cotizacionEmail = (cotizacion) => {
       </div>
         <hr style="margin-top: 30px; margin-bottom: 10px;" />
       <div style="margin-top: 30px; text-align: center;">
-        <img src="${americanVialImage}" alt="American Vial" style="width: 200px; height: auto; display: block; margin: 10px auto;" />
-        <p style="margin: 10px 0; font-weight: bold;">
-          Paris 256 esq. Colectora Este <br />
-          1611 - Don Torcuato - Bs. As.<br />
-          Tel./Fax : (+54) 11 4748 5900 / int. 273
-        </p>
+        <img src="${firmaUsuario}" alt="Firma o American Vial" style="width: 200px; height: auto; display: block; margin: 10px auto;" />
+       
         <a href="http://www.americanvial.com" style="display: block; margin-bottom: 20px; font-weight: bold;">
           www.americanvial.com
         </a>
