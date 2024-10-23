@@ -19,7 +19,7 @@ const mailsMasivos = (cuerpoMensaje, pdf, imagen, imagen1) => {
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           padding: 20px;
         }
-        h1 {
+        h3 {
           color: #333333;
         }
         p {
@@ -47,7 +47,7 @@ const mailsMasivos = (cuerpoMensaje, pdf, imagen, imagen1) => {
     </head>
     <body>
       <div class="email-container">
-        <h1>Mensaje Importante</h1>
+        <h3>Mensaje Importante</h3>
         <p>${cuerpoMensaje}</p>
         
         <div class="image-container">
