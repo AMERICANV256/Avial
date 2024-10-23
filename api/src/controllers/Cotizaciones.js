@@ -1171,7 +1171,10 @@ const getCotizacionesSum = async (req, res) => {
       return res.status(401).send({ error: "Token no proporcionado" });
     }
 
-    const decodedToken = jwt.decode(token.replace("Bearer ", ""), JWTSECRET);
+    const decodedToken = jwt.decodeToken(
+      token.replace("Bearer ", ""),
+      JWTSECRET
+    );
 
     const idUsuario = decodedToken.id;
 
