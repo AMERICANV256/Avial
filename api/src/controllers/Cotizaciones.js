@@ -1097,7 +1097,7 @@ const getUltimasCotizaciones = async (req, res) => {
     const token = req.headers.authorization;
 
     if (!token) {
-      return res.status(401).send({ error: "Token no proporcionado" });
+      return res.status(401).json({ error: "Token no proporcionado" });
     }
 
     const decodedToken = jwt.decodeToken(
@@ -1111,70 +1111,73 @@ const getUltimasCotizaciones = async (req, res) => {
       return res.status(400).json({ error: "Se requiere el ID de usuario" });
     }
 
-    // Buscar el usuario en la base de datos
     const usuario = await Usuarios.findByPk(idUsuario);
 
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Definir las condiciones de búsqueda según el rol y distribuidor
-    let whereCondition = {};
+    let cotizaciones;
 
+    // Lógica de rol y distribuidor
     if (usuario.rol === true) {
       if (!usuario.distribuidor) {
-        // Si el distribuidor está vacío, el usuario ve todas las cotizaciones
-        whereCondition = {}; // No hay restricción
-      } else {
-        // Si el distribuidor tiene un valor, ve lo suyo y lo de otros usuarios con rol false y el mismo distribuidor
-        whereCondition = {
-          [Op.or]: [
-            { idUsuario: usuario.id }, // Lo propio
+        // Si no hay distribuidor, obtener todas las cotizaciones (estado 1)
+        cotizaciones = await Cotizaciones.findAll({
+          include: [
             {
-              "$Usuarios.rol$": false, // Otros usuarios con rol false
-              "$Usuarios.distribuidor$": usuario.distribuidor, // Mismo distribuidor
+              model: CotizacionIndividual,
+              where: { estado: 1 }, // Modifica esto según tu lógica
+              attributes: ["PrecioFinal", "moneda"],
             },
           ],
-        };
+        });
+      } else {
+        // Si el distribuidor tiene un valor, obtener cotizaciones del usuario y otros con mismo distribuidor
+        cotizaciones = await Cotizaciones.findAll({
+          include: [
+            {
+              model: CotizacionIndividual,
+              where: { estado: 1 }, // Modifica esto según tu lógica
+              attributes: ["PrecioFinal", "moneda"],
+            },
+            {
+              model: Usuarios,
+              where: {
+                [Op.or]: [
+                  { id: usuario.id }, // Cotizaciones del usuario actual
+                  {
+                    rol: false, // Otros usuarios con rol false
+                    distribuidor: usuario.distribuidor, // Mismo distribuidor
+                  },
+                ],
+              },
+              attributes: [], // No traer atributos adicionales de Usuario
+            },
+          ],
+        });
       }
-    } else if (usuario.rol === false) {
-      // Si el rol es false, solo ve sus propias cotizaciones
-      whereCondition.idUsuario = idUsuario;
     } else {
-      return res
-        .status(403)
-        .send({ error: "No tienes permisos para acceder a esta información" });
+      // Para usuarios con rol false, obtener solo las cotizaciones del usuario
+      cotizaciones = await Cotizaciones.findAll({
+        where: { idUsuario },
+        include: [
+          {
+            model: CotizacionIndividual,
+            where: { estado: 1 }, // Modifica esto según tu lógica
+            attributes: ["PrecioFinal", "moneda"],
+          },
+        ],
+      });
     }
 
-    // Obtener las últimas 5 cotizaciones
-    const cotizaciones = await Cotizaciones.findAll({
-      where: whereCondition,
-      order: [["fechaDeCreacion", "DESC"]],
-      limit: 5,
-      include: [
-        {
-          model: Clientes,
-          attributes: ["nombre", "apellido"],
-        },
-        {
-          model: Productos,
-          attributes: ["modelo"],
-        },
-        {
-          model: CotizacionIndividual,
-          attributes: ["PrecioFinal"],
-        },
-        {
-          model: Usuarios, // Relación con Usuarios
-          attributes: [], // No traer atributos adicionales de Usuario
-        },
-      ],
-    });
-
-    return res.status(200).json(cotizaciones);
+    // Aquí puedes retornar las cotizaciones obtenidas
+    return res.status(200).json({ cotizaciones });
   } catch (error) {
     console.error("Error al obtener cotizaciones:", error);
-    return res.status(500).json({ error: "Error al obtener cotizaciones" });
+    return res
+      .status(500)
+      .json({ error: "Error interno del servidor", detalle: error.message });
   }
 };
 
