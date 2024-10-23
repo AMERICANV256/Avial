@@ -1124,6 +1124,7 @@ const getUltimasCotizaciones = async (req, res) => {
       if (!usuario.distribuidor) {
         // Si no hay distribuidor, obtener todas las cotizaciones (estado 1)
         cotizaciones = await Cotizaciones.findAll({
+          attributes: ["id", "idUsuario", "idCliente", "idProducto"], // Limitar atributos de Cotizaciones
           include: [
             {
               model: CotizacionIndividual,
@@ -1134,11 +1135,16 @@ const getUltimasCotizaciones = async (req, res) => {
               model: Clientes, // Incluir el modelo Clientes
               attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
             },
+            {
+              model: Productos, // Incluir el modelo Productos
+              attributes: ["modelo"], // Solo traer el modelo
+            },
           ],
         });
       } else {
         // Si el distribuidor tiene un valor, obtener cotizaciones del usuario y otros con mismo distribuidor
         cotizaciones = await Cotizaciones.findAll({
+          attributes: ["id", "idUsuario", "idCliente", "idProducto"], // Limitar atributos de Cotizaciones
           include: [
             {
               model: CotizacionIndividual,
@@ -1162,6 +1168,10 @@ const getUltimasCotizaciones = async (req, res) => {
               model: Clientes, // Incluir el modelo Clientes
               attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
             },
+            {
+              model: Productos, // Incluir el modelo Productos
+              attributes: ["modelo"], // Solo traer el modelo
+            },
           ],
         });
       }
@@ -1169,6 +1179,7 @@ const getUltimasCotizaciones = async (req, res) => {
       // Para usuarios con rol false, obtener solo las cotizaciones del usuario
       cotizaciones = await Cotizaciones.findAll({
         where: { idUsuario },
+        attributes: ["id", "idUsuario", "idCliente", "idProducto"], // Limitar atributos de Cotizaciones
         include: [
           {
             model: CotizacionIndividual,
@@ -1179,10 +1190,15 @@ const getUltimasCotizaciones = async (req, res) => {
             model: Clientes, // Incluir el modelo Clientes
             attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
           },
+          {
+            model: Productos, // Incluir el modelo Productos
+            attributes: ["modelo"], // Solo traer el modelo
+          },
         ],
       });
     }
 
+    // Aquí puedes retornar las cotizaciones obtenidas
     return res.status(200).json({ cotizaciones });
   } catch (error) {
     console.error("Error al obtener cotizaciones:", error);
