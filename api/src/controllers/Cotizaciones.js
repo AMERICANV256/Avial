@@ -1191,7 +1191,6 @@ const getCotizacionesSum = async (req, res) => {
     let cotizacionesCotizaciones;
     let cotizacionesVentas;
 
-    // Condiciones para obtener cotizaciones y ventas
     if (usuario.rol === true) {
       if (!usuario.distribuidor) {
         // Si el distribuidor está vacío, obtener todas las cotizaciones (estado 1) y ventas (estado 2)
@@ -1217,15 +1216,6 @@ const getCotizacionesSum = async (req, res) => {
       } else {
         // Si el distribuidor tiene un valor, obtener lo propio y los de otros usuarios con rol false y distribuidor coincidente
         cotizacionesCotizaciones = await Cotizaciones.findAll({
-          where: {
-            [Op.or]: [
-              { idUsuario: usuario.id }, // Lo propio
-              {
-                "$Usuario.rol$": false, // Otros usuarios con rol false
-                distribuidor: usuario.distribuidor, // Mismo distribuidor
-              },
-            ],
-          },
           include: [
             {
               model: CotizacionIndividual,
@@ -1233,22 +1223,22 @@ const getCotizacionesSum = async (req, res) => {
               attributes: ["PrecioFinal", "moneda"],
             },
             {
-              model: Usuarios, // Asegurarse de incluir la relación con Usuario
+              model: Usuarios, // Asegurarse de incluir la relación con Usuarios
+              where: {
+                [Op.or]: [
+                  { id: usuario.id }, // Lo propio
+                  {
+                    rol: false, // Otros usuarios con rol false
+                    distribuidor: usuario.distribuidor, // Mismo distribuidor
+                  },
+                ],
+              },
               attributes: [], // No traer atributos adicionales de Usuario
             },
           ],
         });
 
         cotizacionesVentas = await Cotizaciones.findAll({
-          where: {
-            [Op.or]: [
-              { idUsuario: usuario.id }, // Lo propio
-              {
-                "$Usuario.rol$": false, // Otros usuarios con rol false
-                distribuidor: usuario.distribuidor, // Mismo distribuidor
-              },
-            ],
-          },
           include: [
             {
               model: CotizacionIndividual,
@@ -1256,7 +1246,16 @@ const getCotizacionesSum = async (req, res) => {
               attributes: ["PrecioFinal", "moneda"],
             },
             {
-              model: Usuarios, // Asegurarse de incluir la relación con Usuario
+              model: Usuarios, // Asegurarse de incluir la relación con Usuarios
+              where: {
+                [Op.or]: [
+                  { id: usuario.id }, // Lo propio
+                  {
+                    rol: false, // Otros usuarios con rol false
+                    distribuidor: usuario.distribuidor, // Mismo distribuidor
+                  },
+                ],
+              },
               attributes: [], // No traer atributos adicionales de Usuario
             },
           ],
