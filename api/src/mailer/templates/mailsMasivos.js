@@ -78,10 +78,8 @@ const mailsMasivos = (cuerpoMensaje, pdf, imagen, imagen1) => {
         <hr style="margin-top: 30px; margin-bottom: 10px;" />
 
         <img src="${americanVialImage}" alt="American Vial" style="width: 300px; height: auto; display: block; margin: 10px auto;" />
-        
-       
-        
-        <a href="http://www.americanvial.com" style="text-align: center; display: block; margin-bottom: 20px; margin-left:-25px; font-weight: bold;">www.americanvial.com</a>
+
+        <a href="http://www.americanvial.com" style="text-align: center; display: block; margin-bottom: 20px; margin-left:-45px; font-weight: bold;">www.americanvial.com</a>
       </div>
     </body>
   </html>
