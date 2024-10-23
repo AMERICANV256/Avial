@@ -124,6 +124,7 @@ const crearTemplateReporte = (data) => {
         <th>Saldo con Interés</th>
         <th>Precio Final</th>
         <th>Fecha de Creación</th>
+        <th>Notas</th>
         <th>Estado</th>
      
       </tr>`;
@@ -148,7 +149,10 @@ const crearTemplateReporte = (data) => {
       <td>${item.interes || "N/A"}</td>
       <td>${item.saldoConInteres || "N/A"}</td>
       <td>${item.PrecioFinal}</td>
-      <td>${new Date(item.fechaDeCreacion).toLocaleDateString("es-ES") || "N/A"}</td>
+      <td>${item.notasUsuario}</td>
+      <td>${
+        new Date(item.fechaDeCreacion).toLocaleDateString("es-ES") || "N/A"
+      }</td>
        <td>${estadoMap[item.estado] || "N/A"}</td>
      
   

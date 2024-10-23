@@ -370,10 +370,10 @@ export default function Historial() {
                     <strong>Fecha de Creación:</strong>{" "}
                     {new Date(detalle.fechaDeCreacion).toLocaleDateString()}
                   </span>
-                  <span style={{ display: "block", marginBottom: "8px" }}>
+                  {/* <span style={{ display: "block", marginBottom: "8px" }}>
                     <strong>Fecha de Modificación:</strong>{" "}
                     {new Date(detalle.fechaModi).toLocaleDateString()}
-                  </span>
+                  </span> */}
                   <strong>Notas de la Cotización:</strong>{" "}
                   {detalle?.notasUsuario}
                 </span>
@@ -532,23 +532,23 @@ export default function Historial() {
                     {cotizacion.codigoCotizacion}
                   </span>
                 </span>
-                <span style={{ display: "block", marginBottom: "8px" }}>
+                <span style={{ display: "block" }}>
                   <strong>Cliente:</strong> {cotizacion.Cliente?.nombre}{" "}
                   {cotizacion.Cliente?.apellido}
                 </span>
-                <span style={{ display: "block", marginBottom: "8px" }}>
+                <span style={{ display: "block" }}>
                   <strong>Vendedor:</strong> {cotizacion.Usuario?.nombre}{" "}
                   {cotizacion.Usuario?.apellido}
                 </span>
-                <span style={{ display: "block", marginBottom: "8px" }}>
+                <span style={{ display: "block" }}>
                   <strong>Fecha de Creación:</strong>{" "}
                   {new Date(cotizacion.fechaDeCreacion).toLocaleDateString()}
                 </span>
-                <span style={{ display: "block", marginBottom: "8px" }}>
+                {/* <span style={{ display: "block", marginBottom: "8px" }}>
                   <strong>Fecha de Modificación:</strong>{" "}
                   {new Date(cotizacion.fechaModi).toLocaleDateString()}
-                </span>
-                <span style={{ display: "block", marginBottom: "8px" }}>
+                </span> */}
+                <span style={{ display: "block" }}>
                   <strong>Notas de la Cotización:</strong>{" "}
                   {cotizacion?.notasUsuario}
                 </span>
