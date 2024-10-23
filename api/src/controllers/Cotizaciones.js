@@ -1120,33 +1120,19 @@ const getUltimasCotizaciones = async (req, res) => {
 
     // Definir las condiciones de búsqueda
     let whereCondition = {};
-
-    if (usuario.rol === false) {
-      // Si el usuario tiene rol "false", filtrar solo sus cotizaciones
+    if (usuario.rol === false && !usuario.baneado) {
       whereCondition.idUsuario = idUsuario;
-    } else if (usuario.rol === true) {
-      // Si el usuario tiene rol "true" (distribuidor)
-      if (!usuario.distribuidor) {
-        // Si el distribuidor es nulo, no filtramos por distribuidor, obtenemos todas las cotizaciones
-      } else {
-        // Si tiene distribuidor, filtrar cotizaciones propias y de otros con el mismo distribuidor
-        whereCondition = {
-          [Op.or]: [
-            { idUsuario: usuario.id }, // Cotizaciones del propio usuario
-            {
-              "$Usuarios.distribuidor$": usuario.distribuidor, // Cotizaciones de otros usuarios con el mismo distribuidor
-              "$Usuarios.rol$": false, // Solo de usuarios con rol "false"
-            },
-          ],
-        };
-      }
+    } else if (
+      usuario.rol === true ||
+      (usuario.rol === false && usuario.baneado === true)
+    ) {
     } else {
       return res
         .status(403)
         .send({ error: "No tienes permisos para acceder a esta información" });
     }
 
-    // Obtener las últimas 5 cotizaciones con las condiciones definidas
+    // Obtener las últimas 5 cotizaciones
     const cotizaciones = await Cotizaciones.findAll({
       where: whereCondition,
       order: [["fechaDeCreacion", "DESC"]],
@@ -1163,10 +1149,6 @@ const getUltimasCotizaciones = async (req, res) => {
         {
           model: CotizacionIndividual,
           attributes: ["PrecioFinal"],
-        },
-        {
-          model: Usuarios,
-          attributes: [],
         },
       ],
     });
