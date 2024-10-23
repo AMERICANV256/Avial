@@ -1218,7 +1218,7 @@ const getCotizacionesSum = async (req, res) => {
         // Si el distribuidor tiene un valor, obtener lo propio y los de otros usuarios con rol false y distribuidor coincidente
         cotizacionesCotizaciones = await Cotizaciones.findAll({
           where: {
-            [conn.Op.or]: [
+            [Op.or]: [
               { idUsuario: usuario.id }, // Lo propio
               {
                 "$Usuario.rol$": false, // Otros usuarios con rol false
@@ -1241,7 +1241,7 @@ const getCotizacionesSum = async (req, res) => {
 
         cotizacionesVentas = await Cotizaciones.findAll({
           where: {
-            [conn.Op.or]: [
+            [Op.or]: [
               { idUsuario: usuario.id }, // Lo propio
               {
                 "$Usuario.rol$": false, // Otros usuarios con rol false
