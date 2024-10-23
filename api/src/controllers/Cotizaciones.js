@@ -1127,8 +1127,12 @@ const getUltimasCotizaciones = async (req, res) => {
           include: [
             {
               model: CotizacionIndividual,
-              where: { estado: 1 }, // Modifica esto según tu lógica
-              attributes: ["PrecioFinal", "moneda"],
+              where: { estado: 1 },
+              attributes: ["PrecioFinal", "moneda"], // Solo traer PrecioFinal y moneda
+            },
+            {
+              model: Clientes, // Incluir el modelo Clientes
+              attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
             },
           ],
         });
@@ -1138,8 +1142,8 @@ const getUltimasCotizaciones = async (req, res) => {
           include: [
             {
               model: CotizacionIndividual,
-              where: { estado: 1 }, // Modifica esto según tu lógica
-              attributes: ["PrecioFinal", "moneda"],
+              where: { estado: 1 },
+              attributes: ["PrecioFinal", "moneda"], // Solo traer PrecioFinal y moneda
             },
             {
               model: Usuarios,
@@ -1154,6 +1158,10 @@ const getUltimasCotizaciones = async (req, res) => {
               },
               attributes: [], // No traer atributos adicionales de Usuario
             },
+            {
+              model: Clientes, // Incluir el modelo Clientes
+              attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
+            },
           ],
         });
       }
@@ -1164,14 +1172,17 @@ const getUltimasCotizaciones = async (req, res) => {
         include: [
           {
             model: CotizacionIndividual,
-            where: { estado: 1 }, // Modifica esto según tu lógica
-            attributes: ["PrecioFinal", "moneda"],
+            where: { estado: 1 },
+            attributes: ["PrecioFinal", "moneda"], // Solo traer PrecioFinal y moneda
+          },
+          {
+            model: Clientes, // Incluir el modelo Clientes
+            attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
           },
         ],
       });
     }
 
-    // Aquí puedes retornar las cotizaciones obtenidas
     return res.status(200).json({ cotizaciones });
   } catch (error) {
     console.error("Error al obtener cotizaciones:", error);
