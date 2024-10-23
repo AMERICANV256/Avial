@@ -1118,14 +1118,23 @@ const getUltimasCotizaciones = async (req, res) => {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Definir las condiciones de búsqueda
+    // Definir las condiciones de búsqueda basadas en el rol y el campo distribuidor
     let whereCondition = {};
-    if (usuario.rol === false && !usuario.baneado) {
+
+    if (usuario.rol === true && usuario.distribuidor) {
+      // Si el rol es true y tiene distribuidor, ve sus cotizaciones y las de los usuarios con el mismo distribuidor y rol false
+      whereCondition = {
+        [Op.or]: [
+          { idUsuario: idUsuario }, // Sus propias cotizaciones
+          { distribuidor: usuario.distribuidor, rol: false }, // Cotizaciones de otros con el mismo distribuidor y rol false
+        ],
+      };
+    } else if (usuario.rol === true) {
+      // Si el rol es true, ve todas las cotizaciones
+      whereCondition = {};
+    } else if (usuario.rol === false) {
+      // Si el rol es false, solo ve sus propias cotizaciones
       whereCondition.idUsuario = idUsuario;
-    } else if (
-      usuario.rol === true ||
-      (usuario.rol === false && usuario.baneado === true)
-    ) {
     } else {
       return res
         .status(403)
