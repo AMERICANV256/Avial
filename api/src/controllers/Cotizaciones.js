@@ -1118,20 +1118,25 @@ const getUltimasCotizaciones = async (req, res) => {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Definir las condiciones de búsqueda basadas en el rol y el campo distribuidor
+    // Definir las condiciones de búsqueda según el rol y distribuidor
     let whereCondition = {};
 
-    if (usuario.rol === true && usuario.distribuidor) {
-      // Si el rol es true y tiene distribuidor, ve sus cotizaciones y las de los usuarios con el mismo distribuidor y rol false
-      whereCondition = {
-        [Op.or]: [
-          { idUsuario: idUsuario }, // Sus propias cotizaciones
-          { distribuidor: usuario.distribuidor, rol: false }, // Cotizaciones de otros con el mismo distribuidor y rol false
-        ],
-      };
-    } else if (usuario.rol === true) {
-      // Si el rol es true, ve todas las cotizaciones
-      whereCondition = {};
+    if (usuario.rol === true) {
+      if (!usuario.distribuidor) {
+        // Si el distribuidor está vacío, el usuario ve todas las cotizaciones
+        whereCondition = {}; // No hay restricción
+      } else {
+        // Si el distribuidor tiene un valor, ve lo suyo y lo de otros usuarios con rol false y el mismo distribuidor
+        whereCondition = {
+          [Op.or]: [
+            { idUsuario: usuario.id }, // Lo propio
+            {
+              "$usuario.rol$": false, // Otros usuarios con rol false
+              "$usuario.distribuidor$": usuario.distribuidor, // Mismo distribuidor
+            },
+          ],
+        };
+      }
     } else if (usuario.rol === false) {
       // Si el rol es false, solo ve sus propias cotizaciones
       whereCondition.idUsuario = idUsuario;
@@ -1158,6 +1163,10 @@ const getUltimasCotizaciones = async (req, res) => {
         {
           model: CotizacionIndividual,
           attributes: ["PrecioFinal"],
+        },
+        {
+          model: Usuarios,
+          attributes: [],
         },
       ],
     });
