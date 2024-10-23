@@ -1171,7 +1171,10 @@ const getCotizacionesSum = async (req, res) => {
       return res.status(401).send({ error: "Token no proporcionado" });
     }
 
-    const decodedToken = jwt.decode(token.replace("Bearer ", ""), JWTSECRET);
+    const decodedToken = jwt.decodeToken(
+      token.replace("Bearer ", ""),
+      JWTSECRET
+    );
 
     const idUsuario = decodedToken.id;
 
@@ -1190,77 +1193,28 @@ const getCotizacionesSum = async (req, res) => {
 
     // Condiciones para obtener cotizaciones y ventas
     if (usuario.rol === true) {
-      if (!usuario.distribuidor) {
-        // Si el distribuidor está vacío, obtener todas las cotizaciones (estado 1) y ventas (estado 2)
-        cotizacionesCotizaciones = await Cotizaciones.findAll({
-          include: [
-            {
-              model: CotizacionIndividual,
-              where: { estado: 1 },
-              attributes: ["PrecioFinal", "moneda"],
-            },
-          ],
-        });
-
-        cotizacionesVentas = await Cotizaciones.findAll({
-          include: [
-            {
-              model: CotizacionIndividual,
-              where: { estado: 2 },
-              attributes: ["PrecioFinal", "moneda"],
-            },
-          ],
-        });
-      } else {
-        // Si el distribuidor tiene un valor, obtener lo propio y los de otros usuarios con rol false y distribuidor coincidente
-        cotizacionesCotizaciones = await Cotizaciones.findAll({
-          where: {
-            [Sequelize.Op.or]: [
-              { idUsuario: usuario.id }, // Lo propio
-              {
-                "$Usuario.rol$": false, // Otros usuarios con rol false
-                distribuidor: usuario.distribuidor, // Mismo distribuidor
-              },
-            ],
+      // Obtener todas las cotizaciones (estado 1) y ventas (estado 2)
+      cotizacionesCotizaciones = await Cotizaciones.findAll({
+        include: [
+          {
+            model: CotizacionIndividual,
+            where: { estado: 1 },
+            attributes: ["PrecioFinal", "moneda"],
           },
-          include: [
-            {
-              model: CotizacionIndividual,
-              where: { estado: 1 },
-              attributes: ["PrecioFinal", "moneda"],
-            },
-            {
-              model: Usuarios, // Asegurarse de incluir la relación con Usuario
-              attributes: [], // No traer atributos adicionales de Usuario
-            },
-          ],
-        });
+        ],
+      });
 
-        cotizacionesVentas = await Cotizaciones.findAll({
-          where: {
-            [Sequelize.Op.or]: [
-              { idUsuario: usuario.id }, // Lo propio
-              {
-                "$Usuario.rol$": false, // Otros usuarios con rol false
-                distribuidor: usuario.distribuidor, // Mismo distribuidor
-              },
-            ],
+      cotizacionesVentas = await Cotizaciones.findAll({
+        include: [
+          {
+            model: CotizacionIndividual,
+            where: { estado: 2 },
+            attributes: ["PrecioFinal", "moneda"],
           },
-          include: [
-            {
-              model: CotizacionIndividual,
-              where: { estado: 2 },
-              attributes: ["PrecioFinal", "moneda"],
-            },
-            {
-              model: Usuarios, // Asegurarse de incluir la relación con Usuario
-              attributes: [], // No traer atributos adicionales de Usuario
-            },
-          ],
-        });
-      }
+        ],
+      });
     } else {
-      // Para los usuarios con rol false, obtener solo lo suyo
+      // Obtener solo las cotizaciones y ventas del usuario con estado filtrado
       cotizacionesCotizaciones = await Cotizaciones.findAll({
         where: { idUsuario }, // Filtrar por ID de usuario
         include: [
