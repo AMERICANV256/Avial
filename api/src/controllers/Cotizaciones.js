@@ -1131,8 +1131,8 @@ const getUltimasCotizaciones = async (req, res) => {
           [Op.or]: [
             { idUsuario: usuario.id }, // Lo propio
             {
-              "$usuario.rol$": false, // Otros usuarios con rol false
-              "$usuario.distribuidor$": usuario.distribuidor, // Mismo distribuidor
+              "$Usuarios.rol$": false, // Otros usuarios con rol false
+              "$Usuarios.distribuidor$": usuario.distribuidor, // Mismo distribuidor
             },
           ],
         };
@@ -1165,8 +1165,8 @@ const getUltimasCotizaciones = async (req, res) => {
           attributes: ["PrecioFinal"],
         },
         {
-          model: Usuarios,
-          attributes: [],
+          model: Usuarios, // Relación con Usuarios
+          attributes: [], // No traer atributos adicionales de Usuario
         },
       ],
     });
