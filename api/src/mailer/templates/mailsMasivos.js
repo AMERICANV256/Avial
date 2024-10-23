@@ -81,7 +81,7 @@ const mailsMasivos = (cuerpoMensaje, pdf, imagen, imagen1) => {
         
        
         
-        <a href="http://www.americanvial.com" style="text-align: center; display: block; margin-bottom: 20px; font-weight: bold;">www.americanvial.com</a>
+        <a href="http://www.americanvial.com" style="text-align: center; display: block; margin-bottom: 20px;margin-top: -20px;margin-left: -15px; font-weight: bold;">www.americanvial.com</a>
       </div>
     </body>
   </html>
