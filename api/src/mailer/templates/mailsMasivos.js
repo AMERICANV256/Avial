@@ -1,6 +1,6 @@
 const mailsMasivos = (cuerpoMensaje, pdf, imagen, imagen1) => {
   const americanVialImage =
-    "https://res.cloudinary.com/dr5okg3aq/image/upload/v1729551600/lqrtopb1j9msb03svol5.png";
+    "https://res.cloudinary.com/dr5okg3aq/image/upload/v1729653040/tqxzxakuyhjdpvdzjkrd.png";
   const PDFUrl =
     "https://res.cloudinary.com/dmfzplfra/image/upload/v1727730981/PDF_b1hsox.png";
 

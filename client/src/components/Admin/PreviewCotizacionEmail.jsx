@@ -2,9 +2,9 @@ import React from "react";
 
 export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
   const PDFUrl =
-    "https://res.cloudinary.com/dmfzplfra/image/upload/v1727730981/PDF_b1hsox.png"; // URL pública de la imagen para el PDF
+    "https://res.cloudinary.com/dmfzplfra/image/upload/v1727730981/PDF_b1hsox.png";
   const americanVialImage =
-    "https://res.cloudinary.com/dmfzplfra/image/upload/v1727536957/Images/american_ftok3h.png"; // URL de la imagen de American Vial
+    "https://res.cloudinary.com/dr5okg3aq/image/upload/v1729653040/tqxzxakuyhjdpvdzjkrd.png";
 
   const notasEmail = cotizacionDetalle.notasEmail || "";
 
