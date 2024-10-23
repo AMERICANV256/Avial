@@ -76,31 +76,74 @@ const getClientesPorIdDeUsuario = async (req, res) => {
 
     let clientes;
 
+    // Lógica de rol y distribuidor
     if (usuario.rol === true) {
-      // Administrador: Ver todos los clientes
-      clientes = await Clientes.findAll({
-        attributes: [
-          "id",
-          "nombre",
-          "apellido",
-          "mail",
-          "fechaDeCreacion",
-          "CUIT",
-          "razonSocial",
-          "telefono",
-          "provincia",
-          "ciudad",
-          "contactoAlternativo",
-          "telefonoAlternativo",
-          "mailAlternativo",
-          "contactoAlternativo1",
-          "telefonoAlternativo1",
-          "mailAlternativo1",
-        ],
-        order: [["apellido", "ASC"]],
-      });
+      if (!usuario.distribuidor) {
+        // Si no hay distribuidor, obtener todos los clientes
+        clientes = await Clientes.findAll({
+          attributes: [
+            "id",
+            "nombre",
+            "apellido",
+            "mail",
+            "fechaDeCreacion",
+            "CUIT",
+            "razonSocial",
+            "telefono",
+            "provincia",
+            "ciudad",
+            "contactoAlternativo",
+            "telefonoAlternativo",
+            "mailAlternativo",
+            "contactoAlternativo1",
+            "telefonoAlternativo1",
+            "mailAlternativo1",
+          ],
+          order: [["apellido", "ASC"]],
+        });
+      } else {
+        // Si el distribuidor tiene un valor, obtener clientes del usuario y otros con mismo distribuidor
+        clientes = await Clientes.findAll({
+          where: {
+            id: {
+              [Op.in]: conn.literal(
+                `(SELECT "idCliente" FROM "Cotizaciones"
+                  WHERE "idUsuario" = '${idUsuario}' OR 
+                  "idUsuario" IN (
+                    SELECT "id" FROM "Usuarios"
+                    WHERE "distribuidor" = '${usuario.distribuidor}'
+                  )
+                  AND (
+                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
+                  ))`
+              ),
+            },
+          },
+          attributes: [
+            "id",
+            "nombre",
+            "apellido",
+            "mail",
+            "fechaDeCreacion",
+            "CUIT",
+            "razonSocial",
+            "telefono",
+            "provincia",
+            "ciudad",
+            "contactoAlternativo",
+            "telefonoAlternativo",
+            "mailAlternativo",
+            "contactoAlternativo1",
+            "telefonoAlternativo1",
+            "mailAlternativo1",
+          ],
+          order: [["apellido", "ASC"]],
+        });
+      }
     } else {
-      // Vendedor: Ver clientes a los que les haya creado, modificado una cotización o realizado una venta
+      // Para usuarios con rol false, obtener solo los clientes del usuario
       clientes = await Clientes.findAll({
         where: {
           id: {
