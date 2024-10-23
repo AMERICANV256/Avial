@@ -2,7 +2,7 @@ const cotizacionEmail = (cotizacion) => {
   const PDFUrl =
     "https://res.cloudinary.com/dmfzplfra/image/upload/v1727730981/PDF_b1hsox.png"; // URL pública de la imagen para el PDF
   const americanVialImage =
-    "https://res.cloudinary.com/dr5okg3aq/image/upload/v1729653040/tqxzxakuyhjdpvdzjkrd.png"; // URL de la imagen de American Vial
+    "https://res.cloudinary.com/dr5okg3aq/image/upload/v1729654420/tqxzxakuyhjdpvdzjkrd.png"; // URL de la imagen de American Vial
 
   const notasEmail = cotizacion.notasEmail || "";
 
