@@ -1578,12 +1578,16 @@ const getCotizacionesPorModelo = async (req, res) => {
       return res.status(400).json({ error: "Se requiere el ID de usuario" });
     }
 
-    // Buscar el usuario para obtener su rol
-    const usuario = await Usuarios.findByPk(idUsuario);
+    // Buscar el usuario para obtener su rol y distribuidor
+    const usuario = await Usuarios.findByPk(idUsuario, {
+      attributes: ["rol", "distribuidor"],
+    });
 
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
+
+    const { rol, distribuidor } = usuario;
 
     // Obtener el modelo del cuerpo de la solicitud
     const { modelo } = req.body;
@@ -1592,11 +1596,37 @@ const getCotizacionesPorModelo = async (req, res) => {
       return res.status(400).json({ error: "El modelo es requerido" });
     }
 
-    // Determinar si el rol permite ver todas las cotizaciones o solo las del usuario
-    const whereClause = usuario.rol ? {} : { idUsuario };
+    // Filtrar por distribuidor y rol
+    let filtroUsuario = {};
+
+    if (rol === true) {
+      // Administrador con distribuidor: ver cotizaciones de los usuarios de ese distribuidor
+      if (distribuidor) {
+        const usuariosDistribuidor = await Usuarios.findAll({
+          where: { distribuidor: distribuidor },
+          attributes: ["id"],
+        });
+
+        const idsUsuariosDistribuidor = usuariosDistribuidor.map(
+          (user) => user.id
+        );
+
+        filtroUsuario = {
+          idUsuario: {
+            [Op.in]: idsUsuariosDistribuidor, // Filtrar por usuarios de ese distribuidor
+          },
+        };
+      }
+      // Si es administrador sin distribuidor, no aplicamos filtro adicional
+    } else {
+      // Vendedor: ver solo sus propias cotizaciones
+      filtroUsuario = { idUsuario };
+    }
 
     const cotizaciones = await Cotizaciones.findAll({
-      where: whereClause, // Aplica el filtro de rol
+      where: {
+        ...filtroUsuario, // Aplicamos el filtro según el rol y distribuidor
+      },
       include: [
         {
           model: Productos,
@@ -1604,7 +1634,7 @@ const getCotizacionesPorModelo = async (req, res) => {
           attributes: ["familia", "marca", "modelo"],
           where: {
             modelo: {
-              [Op.like]: `%${modelo}%`,
+              [Op.like]: `%${modelo}%`, // Filtro por modelo
             },
           },
         },
