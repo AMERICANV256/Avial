@@ -1483,10 +1483,23 @@ const filtrarCotizacionesPorFecha = async (req, res) => {
     // Filtro según el rol del usuario
     if (rol === true) {
       if (distribuidor) {
-        // Administrador con distribuidor: ver solo cotizaciones asociadas al mismo distribuidor
-        filtroUsuario = { idDistribuidor: distribuidor };
+        // Administrador con distribuidor: Ver cotizaciones solo de los usuarios asociados a ese distribuidor
+        const usuariosDistribuidor = await Usuarios.findAll({
+          where: { distribuidor: distribuidor },
+          attributes: ["id"],
+        });
+
+        const idsUsuariosDistribuidor = usuariosDistribuidor.map(
+          (user) => user.id
+        );
+
+        filtroUsuario = {
+          idUsuario: {
+            [Op.in]: idsUsuariosDistribuidor, // Filtrar por usuarios de ese distribuidor
+          },
+        };
       }
-      // Administrador sin distribuidor: ver todas las cotizaciones (no se aplica filtro)
+      // Si es administrador sin distribuidor, no aplicamos ningún filtro adicional
     } else {
       // Vendedor: ver solo sus propias cotizaciones
       filtroUsuario = { idUsuario: idUsuario };
