@@ -1683,7 +1683,7 @@ const getCotizacionesPorModelo = async (req, res) => {
 
 // FUNCION DE RANKING DE COTIZACIONES Y VENTAS POR VENDEDOR Y MODELO //
 
-const getRanking = async (req, res) => {
+const getranking = async (req, res) => {
   try {
     // Obtener y verificar el token de autorización
     const token = req.headers.authorization;
