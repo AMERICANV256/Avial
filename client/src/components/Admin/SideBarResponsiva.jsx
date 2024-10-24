@@ -77,7 +77,7 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Cargar productos",
           path: "/admin/productos/cargar",
-          roles: ["administrador", "gerente"],
+          roles: ["administrador"],
         },
         {
           label: "Ver productos",
@@ -116,7 +116,7 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Mis Ventas",
           path: "/admin/ventas/ver",
-          roles: ["administrador", "vendedor"],
+          roles: ["administrador", "vendedor", "gerente"],
         },
         {
           label: "Pendientes de Aprobación",
