@@ -1683,11 +1683,40 @@ const getCotizacionesPorModelo = async (req, res) => {
 
 // FUNCION DE RANKING DE COTIZACIONES Y VENTAS POR VENDEDOR Y MODELO //
 
-const getranking = async (req, res) => {
+const getRanking = async (req, res) => {
   try {
+    // Obtener y verificar el token de autorización
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ error: "Token no proporcionado" });
+    }
+
+    const decodedToken = jwt.decodeToken(
+      token.replace("Bearer ", ""),
+      JWTSECRET
+    );
+    const idUsuario = decodedToken.id;
+
+    if (!idUsuario) {
+      return res.status(400).json({ error: "Se requiere el ID de usuario" });
+    }
+
+    // Buscar el usuario para obtener su rol
+    const usuario = await Usuarios.findByPk(idUsuario);
+
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // Determinar si el rol permite ver todas las cotizaciones o solo las del usuario
+    const whereClause = usuario.rol
+      ? { estado: [1, 2] }
+      : { estado: [1, 2], "$Cotizacione.Usuario.id$": idUsuario };
+
     // Obtener todas las cotizaciones activas con detalles de usuario, cliente y producto
     const cotizaciones = await CotizacionIndividual.findAll({
-      where: { estado: [1, 2] }, // Traer tanto cotizaciones (1) como ventas (2)
+      where: whereClause, // Aplica el filtro de rol según el usuario
       include: [
         {
           model: Cotizaciones,
@@ -1857,8 +1886,8 @@ const getranking = async (req, res) => {
         ? {
             id: topProductIdVentas,
             nombre: topProductDetailsVentas?.modelo,
-            familia: topProductDetailsCotizaciones?.familia,
-            marca: topProductDetailsCotizaciones?.marca,
+            familia: topProductDetailsVentas?.familia,
+            marca: topProductDetailsVentas?.marca,
             count: productCount.ventas[topProductIdVentas],
           }
         : null,
