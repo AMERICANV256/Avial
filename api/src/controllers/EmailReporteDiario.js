@@ -123,8 +123,8 @@ const crearTemplateReporte = (data) => {
         <th>Interés</th>
         <th>Saldo con Interés</th>
         <th>Precio Final</th>
-        <th>Fecha de Creación</th>
         <th>Notas</th>
+        <th>Fecha de Creación</th>
         <th>Estado</th>
      
       </tr>`;
