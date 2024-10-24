@@ -1685,39 +1685,17 @@ const getCotizacionesPorModelo = async (req, res) => {
 
 const getranking = async (req, res) => {
   try {
-    const usuarioLogueado = req.user; // Supongo que el usuario ya está autenticado y el rol está disponible en req.user
-    const { rol, id, distribuidor } = usuarioLogueado; // Extraer rol, id y distribuidor del usuario logueado
-
-    // Inicializar el whereClause para las cotizaciones
-    const whereClause = { estado: [1, 2] };
-
-    // Lógica de inclusión y filtrado según el rol
-    let includeUsuarios = {
-      model: Usuarios,
-      attributes: ["id", "nombre", "apellido", "distribuidor"],
-    };
-
-    if (rol === true && distribuidor) {
-      // Rol true y distribuidor con número: ve solo cotizaciones de usuarios con rol false y distribuidor que coincide
-      includeUsuarios = {
-        ...includeUsuarios,
-        where: {
-          distribuidor: distribuidor, // Filtrar usuarios con el mismo distribuidor
-        },
-      };
-    } else if (rol === false) {
-      // Rol false: solo ve sus propias cotizaciones
-      whereClause["$Cotizaciones.Usuario.id$"] = id; // Filtrar solo por el usuario logueado
-    }
-
     // Obtener todas las cotizaciones activas con detalles de usuario, cliente y producto
     const cotizaciones = await CotizacionIndividual.findAll({
-      where: whereClause,
+      where: { estado: [1, 2] }, // Traer tanto cotizaciones (1) como ventas (2)
       include: [
         {
           model: Cotizaciones,
           include: [
-            includeUsuarios,
+            {
+              model: Usuarios,
+              attributes: ["id", "nombre", "apellido"],
+            },
             {
               model: Clientes,
               attributes: ["id", "nombre"],
