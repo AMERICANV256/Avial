@@ -389,25 +389,36 @@ const getUsuariosConRolFalse = async (req, res) => {
       return res.status(400).json({ error: "Se requiere el ID de usuario" });
     }
 
-    // Buscar el usuario para obtener su rol
+    // Buscar el usuario para obtener su rol y distribuidor
     const usuarioAutenticado = await Usuarios.findByPk(idUsuario, {
-      attributes: ["rol"],
+      attributes: ["rol", "distribuidor"],
     });
 
     if (!usuarioAutenticado) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    const rol = usuarioAutenticado.rol;
+    const { rol, distribuidor } = usuarioAutenticado;
 
     let usuarios;
 
     if (rol === true) {
-      usuarios = await Usuarios.findAll({
-        attributes: ["id", "nombre", "apellido"],
-      });
+      if (!distribuidor) {
+        // Administrador sin distribuidor: traer todos los usuarios
+        usuarios = await Usuarios.findAll({
+          attributes: ["id", "nombre", "apellido"],
+        });
+      } else {
+        // Administrador con distribuidor: traer solo usuarios con el mismo distribuidor
+        usuarios = await Usuarios.findAll({
+          where: {
+            distribuidor: distribuidor,
+          },
+          attributes: ["id", "nombre", "apellido"],
+        });
+      }
     } else {
-      // El usuario no es admin, trae solo su propio usuario
+      // Vendedor: solo traer su propio usuario
       usuarios = await Usuarios.findAll({
         where: { id: idUsuario },
         attributes: ["id", "nombre", "apellido"],
@@ -418,6 +429,7 @@ const getUsuariosConRolFalse = async (req, res) => {
       return res.status(404).json({ error: "No se encontraron usuarios" });
     }
 
+    // Cortar el ID del usuario a los primeros 5 caracteres
     const usuariosConIdCortado = usuarios.map((usuario) => ({
       ...usuario.toJSON(),
       id: usuario.id.substring(0, 5),
