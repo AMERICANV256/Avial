@@ -241,14 +241,22 @@ const getCotizaciones = async (req, res) => {
 
     let whereCondition = { estado: 1 };
 
-    if (usuario.rol === false && !usuario.baneado) {
-      // Si es vendedor, solo ve sus cotizaciones
+    if (usuario.rol === true) {
+      // Si el usuario es administrador (rol === true)
+      if (!usuario.distribuidor) {
+        // Si no tiene distribuidor, ve todas las cotizaciones.
+        // No se requiere cambiar el whereCondition en este caso.
+      } else {
+        // Si tiene un distribuidor, ve sus cotizaciones y las de otros usuarios con el mismo distribuidor.
+        whereCondition.idUsuario = {
+          [Op.in]: conn.literal(
+            `(SELECT "id" FROM "Usuarios" WHERE "id" = '${idUsuario}' OR "distribuidor" = '${usuario.distribuidor}')`
+          ),
+        };
+      }
+    } else if (usuario.rol === false) {
+      // Si el usuario es vendedor (rol === false), solo ve sus propias cotizaciones.
       whereCondition.idUsuario = idUsuario;
-    } else if (
-      usuario.rol === true ||
-      (usuario.rol === false && usuario.baneado === true)
-    ) {
-      // Si es administrador o gerente (ven todas las cotizaciones)
     } else {
       return res
         .status(403)
@@ -1184,15 +1192,15 @@ const getUltimasCotizaciones = async (req, res) => {
           {
             model: CotizacionIndividual,
             where: { estado: 1 },
-            attributes: ["PrecioFinal", "moneda"], // Solo traer PrecioFinal y moneda
+            attributes: ["PrecioFinal", "moneda"],
           },
           {
-            model: Clientes, // Incluir el modelo Clientes
-            attributes: ["nombre", "apellido"], // Solo traer nombre y apellido
+            model: Clientes,
+            attributes: ["nombre", "apellido"],
           },
           {
-            model: Productos, // Incluir el modelo Productos
-            attributes: ["modelo"], // Solo traer el modelo
+            model: Productos,
+            attributes: ["modelo"],
           },
         ],
       });
