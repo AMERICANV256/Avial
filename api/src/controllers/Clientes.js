@@ -318,7 +318,9 @@ const getClientesParaCotizar = async (req, res) => {
 
     const idUsuario = decodedToken.id;
 
-    const usuario = await Usuarios.findByPk(idUsuario, { attributes: ["rol"] });
+    const usuario = await Usuarios.findByPk(idUsuario, {
+      attributes: ["rol", "distribuidor"],
+    });
 
     if (!usuario) {
       throw "Usuario no encontrado";
@@ -331,10 +333,28 @@ const getClientesParaCotizar = async (req, res) => {
     let clientes;
 
     if (usuario.rol === true) {
-      // Administrador: Ver todos los clientes
-      clientes = await Clientes.findAll({
-        attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
-      });
+      if (!usuario.distribuidor) {
+        // Administrador sin distribuidor: Ver todos los clientes
+        clientes = await Clientes.findAll({
+          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+        });
+      } else {
+        // Administrador con distribuidor: Ver sus clientes y aquellos asociados al mismo distribuidor
+        clientes = await Clientes.findAll({
+          where: {
+            id: {
+              [Op.in]: conn.literal(
+                `(SELECT "idCliente" FROM "Cotizaciones"
+                WHERE "idUsuario" IN (
+                  SELECT "id" FROM "Usuarios" 
+                  WHERE "distribuidor" = '${usuario.distribuidor}' OR "id" = '${idUsuario}'
+                ))`
+              ),
+            },
+          },
+          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+        });
+      }
     } else {
       // Vendedor: Ver clientes exclusivos y aquellos sin cotizaciones recientes
       clientes = await Clientes.findAll({
@@ -381,6 +401,7 @@ const getClientesParaCotizar = async (req, res) => {
       .json({ error: "Error al obtener los clientes para cotizar" });
   }
 };
+
 const getMailsPorIdDeUsuario = async (req, res) => {
   try {
     const token = req.headers.authorization;
