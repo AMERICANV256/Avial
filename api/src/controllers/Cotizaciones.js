@@ -1691,16 +1691,21 @@ const getranking = async (req, res) => {
     // Inicializar el whereClause para las cotizaciones
     const whereClause = { estado: [1, 2] };
 
-    // Lógica de filtrado según el rol
-    if (rol === true) {
-      if (distribuidor === null || distribuidor === "") {
-        // Rol true y distribuidor vacío: ve todo
-        // No se hace ningún cambio en el whereClause
-      } else {
-        // Rol true y distribuidor con número: ve solo cotizaciones de usuarios con rol false y distribuidor que coincide
-        whereClause["$Cotizaciones.Usuario.distribuidor$"] = distribuidor; // Filtrar por distribuidor
-      }
-    } else {
+    // Lógica de inclusión y filtrado según el rol
+    let includeUsuarios = {
+      model: Usuarios,
+      attributes: ["id", "nombre", "apellido", "distribuidor"],
+    };
+
+    if (rol === true && distribuidor) {
+      // Rol true y distribuidor con número: ve solo cotizaciones de usuarios con rol false y distribuidor que coincide
+      includeUsuarios = {
+        ...includeUsuarios,
+        where: {
+          distribuidor: distribuidor, // Filtrar usuarios con el mismo distribuidor
+        },
+      };
+    } else if (rol === false) {
       // Rol false: solo ve sus propias cotizaciones
       whereClause["$Cotizaciones.Usuario.id$"] = id; // Filtrar solo por el usuario logueado
     }
@@ -1712,10 +1717,7 @@ const getranking = async (req, res) => {
         {
           model: Cotizaciones,
           include: [
-            {
-              model: Usuarios,
-              attributes: ["id", "nombre", "apellido", "distribuidor"], // Asegúrate de incluir distribuidor en la consulta
-            },
+            includeUsuarios,
             {
               model: Clientes,
               attributes: ["id", "nombre"],
