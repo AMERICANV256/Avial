@@ -1685,45 +1685,36 @@ const getCotizacionesPorModelo = async (req, res) => {
 
 const getranking = async (req, res) => {
   try {
-    // Obtener y verificar el token de autorización
-    const token = req.headers.authorization;
+    const usuarioLogueado = req.user; // Supongo que el usuario ya está autenticado y el rol está disponible en req.user
+    const { rol, id, distribuidor } = usuarioLogueado; // Extraer rol, id y distribuidor del usuario logueado
 
-    if (!token) {
-      return res.status(401).json({ error: "Token no proporcionado" });
+    // Inicializar el whereClause para las cotizaciones
+    const whereClause = { estado: [1, 2] };
+
+    // Lógica de filtrado según el rol
+    if (rol === true) {
+      if (distribuidor === null || distribuidor === "") {
+        // Rol true y distribuidor vacío: ve todo
+        // No se hace ningún cambio en el whereClause
+      } else {
+        // Rol true y distribuidor con número: ve solo cotizaciones de usuarios con rol false y distribuidor que coincide
+        whereClause["$Cotizaciones.Usuario.distribuidor$"] = distribuidor; // Filtrar por distribuidor
+      }
+    } else {
+      // Rol false: solo ve sus propias cotizaciones
+      whereClause["$Cotizaciones.Usuario.id$"] = id; // Filtrar solo por el usuario logueado
     }
-
-    const decodedToken = jwt.decodeToken(
-      token.replace("Bearer ", ""),
-      JWTSECRET
-    );
-    const idUsuario = decodedToken.id;
-
-    if (!idUsuario) {
-      return res.status(400).json({ error: "Se requiere el ID de usuario" });
-    }
-
-    // Buscar el usuario para obtener su rol
-    const usuario = await Usuarios.findByPk(idUsuario);
-
-    if (!usuario) {
-      return res.status(404).json({ error: "Usuario no encontrado" });
-    }
-
-    // Determinar si el rol permite ver todas las cotizaciones o solo las del usuario
-    const whereClause = usuario.rol
-      ? { estado: [1, 2] }
-      : { estado: [1, 2], "$Cotizacione.Usuario.id$": idUsuario };
 
     // Obtener todas las cotizaciones activas con detalles de usuario, cliente y producto
     const cotizaciones = await CotizacionIndividual.findAll({
-      where: whereClause, // Aplica el filtro de rol según el usuario
+      where: whereClause,
       include: [
         {
           model: Cotizaciones,
           include: [
             {
               model: Usuarios,
-              attributes: ["id", "nombre", "apellido"],
+              attributes: ["id", "nombre", "apellido", "distribuidor"], // Asegúrate de incluir distribuidor en la consulta
             },
             {
               model: Clientes,
@@ -1886,8 +1877,8 @@ const getranking = async (req, res) => {
         ? {
             id: topProductIdVentas,
             nombre: topProductDetailsVentas?.modelo,
-            familia: topProductDetailsVentas?.familia,
-            marca: topProductDetailsVentas?.marca,
+            familia: topProductDetailsCotizaciones?.familia,
+            marca: topProductDetailsCotizaciones?.marca,
             count: productCount.ventas[topProductIdVentas],
           }
         : null,
