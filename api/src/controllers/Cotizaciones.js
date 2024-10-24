@@ -945,39 +945,80 @@ const getCotizacionesEstadoDos = async (req, res) => {
     }
 
     let cotizaciones;
+
     if (usuario.rol === true) {
-      // Usuario con rol true: traer todas las cotizaciones individuales con estado 2
-      cotizaciones = await CotizacionIndividual.findAll({
-        where: { estado: 2 },
-        attributes: [
-          "id",
-          "precio",
-          "cuotas",
-          "cuotaValor",
-          "saldoAFinanciar",
-          "interes",
-          "PrecioFinal",
-          "fechaDeCreacion",
-          "fechaVenta",
-        ],
-        include: [
-          {
-            model: Cotizaciones,
-            attributes: ["codigoCotizacion"],
-            include: [
-              { model: Usuarios, attributes: ["nombre", "apellido"] },
-              { model: Clientes, attributes: ["nombre", "apellido", "mail"] },
-              {
-                model: Productos,
-                attributes: ["familia", "marca", "modelo"],
+      if (!usuario.distribuidor) {
+        // Si el usuario es administrador y no tiene distribuidor, ve todas las cotizaciones con estado 2
+        cotizaciones = await CotizacionIndividual.findAll({
+          where: { estado: 2 },
+          attributes: [
+            "id",
+            "precio",
+            "cuotas",
+            "cuotaValor",
+            "saldoAFinanciar",
+            "interes",
+            "PrecioFinal",
+            "fechaDeCreacion",
+            "fechaVenta",
+          ],
+          include: [
+            {
+              model: Cotizaciones,
+              attributes: ["codigoCotizacion"],
+              include: [
+                { model: Usuarios, attributes: ["nombre", "apellido"] },
+                { model: Clientes, attributes: ["nombre", "apellido", "mail"] },
+                {
+                  model: Productos,
+                  attributes: ["familia", "marca", "modelo"],
+                },
+              ],
+              order: [["fechaVenta", "DESC"]],
+            },
+          ],
+        });
+      } else {
+        // Si tiene un distribuidor, ve las suyas y las de otros usuarios con el mismo distribuidor
+        cotizaciones = await CotizacionIndividual.findAll({
+          where: { estado: 2 },
+          attributes: [
+            "id",
+            "precio",
+            "cuotas",
+            "cuotaValor",
+            "saldoAFinanciar",
+            "interes",
+            "PrecioFinal",
+            "fechaDeCreacion",
+            "fechaVenta",
+          ],
+          include: [
+            {
+              model: Cotizaciones,
+              attributes: ["codigoCotizacion"],
+              where: {
+                idUsuario: {
+                  [Op.in]: conn.literal(
+                    `(SELECT "id" FROM "Usuarios" WHERE "id" = '${idUsuario}' OR "distribuidor" = '${usuario.distribuidor}')`
+                  ),
+                },
               },
-            ],
-            order: [["fechaVenta", "DESC"]],
-          },
-        ],
-      });
+              include: [
+                { model: Usuarios, attributes: ["nombre", "apellido"] },
+                { model: Clientes, attributes: ["nombre", "apellido", "mail"] },
+                {
+                  model: Productos,
+                  attributes: ["familia", "marca", "modelo"],
+                },
+              ],
+              order: [["fechaVenta", "DESC"]],
+            },
+          ],
+        });
+      }
     } else if (usuario.rol === false) {
-      // Usuario con rol false: traer solo sus cotizaciones individuales con estado 2
+      // Si el usuario es vendedor (rol === false), solo ve sus propias cotizaciones con estado 2
       cotizaciones = await CotizacionIndividual.findAll({
         where: { estado: 2 },
         attributes: [
