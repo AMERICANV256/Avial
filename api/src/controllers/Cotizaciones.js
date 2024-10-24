@@ -1459,12 +1459,15 @@ const filtrarCotizacionesPorFecha = async (req, res) => {
       return res.status(400).json({ error: "Se requiere el ID de usuario" });
     }
 
-    const usuario = await Usuarios.findByPk(idUsuario);
+    const usuario = await Usuarios.findByPk(idUsuario, {
+      attributes: ["rol", "distribuidor"],
+    });
 
     if (!usuario) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
+    const { rol, distribuidor } = usuario;
     const { fechaDesde, fechaHasta } = req.body;
 
     if (!fechaDesde || !fechaHasta) {
@@ -1473,11 +1476,19 @@ const filtrarCotizacionesPorFecha = async (req, res) => {
 
     const startDate = new Date(fechaDesde);
     const endDate = new Date(fechaHasta);
-    endDate.setDate(endDate.getDate() + 1);
+    endDate.setDate(endDate.getDate() + 1); // Para incluir todo el día de "fechaHasta"
 
     let filtroUsuario = {};
 
-    if (usuario.rol === false) {
+    // Filtro según el rol del usuario
+    if (rol === true) {
+      if (distribuidor) {
+        // Administrador con distribuidor: ver solo cotizaciones asociadas al mismo distribuidor
+        filtroUsuario = { idDistribuidor: distribuidor };
+      }
+      // Administrador sin distribuidor: ver todas las cotizaciones (no se aplica filtro)
+    } else {
+      // Vendedor: ver solo sus propias cotizaciones
       filtroUsuario = { idUsuario: idUsuario };
     }
 
