@@ -316,9 +316,9 @@ const verificarRol = async (req, res) => {
 
     let rolDescripcion = "comun";
 
-    if (usuario.rol === true) {
+    if (usuario.rol === true && !usuario.distribuidor) {
       rolDescripcion = "administrador";
-    } else if (usuario.rol === false && usuario.baneado === true) {
+    } else if (usuario.rol === true && usuario.distribuidor) {
       rolDescripcion = "gerente";
     } else if (usuario.rol === false) {
       rolDescripcion = "vendedor";
