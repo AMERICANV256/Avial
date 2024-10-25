@@ -320,6 +320,9 @@ export default function ProductosEdit() {
           <label htmlFor="caracteristicasGenerales">
             Características Generales
           </label>
+          <p style={{ fontSize: "10px" }}>
+            Poner cada característica una debajo de la otra
+          </p>
           <div>
             <textarea
               id="caracteristicasGenerales"
@@ -341,6 +344,9 @@ export default function ProductosEdit() {
           <label htmlFor="motoresDeTraslacionYZapatas">
             Motores de Traslación y Zapatas
           </label>
+          <p style={{ fontSize: "10px" }}>
+            Poner cada característica una debajo de la otra
+          </p>
           <div>
             <textarea
               id="motoresDeTraslacionYZapatas"
@@ -361,6 +367,9 @@ export default function ProductosEdit() {
         <div className="form-group">
           <label htmlFor="sistemaHidraulico">Sistema Hidráulico</label>
           <div>
+            <p style={{ fontSize: "10px" }}>
+              Poner cada característica una debajo de la otra
+            </p>
             <textarea
               id="sistemaHidraulico"
               name="sistemaHidraulico"
@@ -381,6 +390,9 @@ export default function ProductosEdit() {
         <div className="form-group">
           <label htmlFor="motor">Motor</label>
           <div>
+            <p style={{ fontSize: "10px" }}>
+              Poner cada característica una debajo de la otra
+            </p>
             <textarea
               id="motor"
               name="motor"
@@ -400,6 +412,9 @@ export default function ProductosEdit() {
         <div className="form-group">
           <label htmlFor="capacidades">Capacidades</label>
           <div>
+            <p style={{ fontSize: "10px" }}>
+              Poner cada característica una debajo de la otra
+            </p>
             <textarea
               id="capacidades"
               name="capacidades"
@@ -438,6 +453,9 @@ export default function ProductosEdit() {
         <div className="form-group">
           <label htmlFor="dimensionesGenerales">Dimensiones Generales</label>
           <div>
+            <p style={{ fontSize: "10px" }}>
+              Poner cada característica una debajo de la otra
+            </p>
             <textarea
               id="dimensionesGenerales"
               name="dimensionesGenerales"
