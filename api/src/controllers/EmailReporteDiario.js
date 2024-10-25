@@ -49,7 +49,7 @@ const generarReporteDiario = async (data) => {
 
   const mailOptions = {
     from: process.env.NODEMAILER_USER,
-    to: "matipineda85@live.com.ar",
+    to: `${process.env.NODEMAILER_ADMIN}, ${process.env.NODEMAILER_MAIL_PINEDA}`,
     subject: "Reporte Diario de Cotizaciones",
     html: template,
   };
