@@ -77,7 +77,7 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Cargar productos",
           path: "/admin/productos/cargar",
-          roles: ["administrador"],
+          roles: ["administrador", "gerente"],
         },
         {
           label: "Ver productos",
