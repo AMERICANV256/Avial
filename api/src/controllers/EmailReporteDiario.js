@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 
 const programarReporteDiario = () => {
   // Ejecuta el cron job diariamente a las 00:00
-  cron.schedule("* * * * *", async () => {
+  cron.schedule("0 0 * * *", async () => {
     // Ejecuta el cron job cada minuto (para pruebas)
     //   cron.schedule("* * * * *", async () => {
     try {
@@ -49,9 +49,7 @@ const generarReporteDiario = async (data) => {
 
   const mailOptions = {
     from: process.env.NODEMAILER_USER,
-    to: process.env.NODEMAILER_MAIL_PINEDA,
-    // `${process.env.NODEMAILER_ADMIN},
-    // ${process.env.NODEMAILER_MAIL_PINEDA}`,
+    to: `${process.env.NODEMAILER_ADMIN}, ${process.env.NODEMAILER_MAIL_PINEDA}`,
     subject: "Reporte Diario de Cotizaciones",
     html: template,
   };
