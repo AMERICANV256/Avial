@@ -76,74 +76,31 @@ const getClientesPorIdDeUsuario = async (req, res) => {
 
     let clientes;
 
-    // Lógica de rol y distribuidor
     if (usuario.rol === true) {
-      if (!usuario.distribuidor) {
-        // Si no hay distribuidor, obtener todos los clientes
-        clientes = await Clientes.findAll({
-          attributes: [
-            "id",
-            "nombre",
-            "apellido",
-            "mail",
-            "fechaDeCreacion",
-            "CUIT",
-            "razonSocial",
-            "telefono",
-            "provincia",
-            "ciudad",
-            "contactoAlternativo",
-            "telefonoAlternativo",
-            "mailAlternativo",
-            "contactoAlternativo1",
-            "telefonoAlternativo1",
-            "mailAlternativo1",
-          ],
-          order: [["apellido", "ASC"]],
-        });
-      } else {
-        // Si el distribuidor tiene un valor, obtener clientes del usuario y otros con mismo distribuidor
-        clientes = await Clientes.findAll({
-          where: {
-            id: {
-              [Op.in]: conn.literal(
-                `(SELECT "idCliente" FROM "Cotizaciones"
-                  WHERE "idUsuario" = '${idUsuario}' OR 
-                  "idUsuario" IN (
-                    SELECT "id" FROM "Usuarios"
-                    WHERE "distribuidor" = '${usuario.distribuidor}'
-                  )
-                  AND (
-                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
-                  ))`
-              ),
-            },
-          },
-          attributes: [
-            "id",
-            "nombre",
-            "apellido",
-            "mail",
-            "fechaDeCreacion",
-            "CUIT",
-            "razonSocial",
-            "telefono",
-            "provincia",
-            "ciudad",
-            "contactoAlternativo",
-            "telefonoAlternativo",
-            "mailAlternativo",
-            "contactoAlternativo1",
-            "telefonoAlternativo1",
-            "mailAlternativo1",
-          ],
-          order: [["apellido", "ASC"]],
-        });
-      }
+      // Administrador: Ver todos los clientes
+      clientes = await Clientes.findAll({
+        attributes: [
+          "id",
+          "nombre",
+          "apellido",
+          "mail",
+          "fechaDeCreacion",
+          "CUIT",
+          "razonSocial",
+          "telefono",
+          "provincia",
+          "ciudad",
+          "contactoAlternativo",
+          "telefonoAlternativo",
+          "mailAlternativo",
+          "contactoAlternativo1",
+          "telefonoAlternativo1",
+          "mailAlternativo1",
+        ],
+        order: [["apellido", "ASC"]],
+      });
     } else {
-      // Para usuarios con rol false, obtener solo los clientes del usuario
+      // Vendedor: Ver clientes a los que les haya creado, modificado una cotización o realizado una venta
       clientes = await Clientes.findAll({
         where: {
           id: {
@@ -332,42 +289,28 @@ const getClientesParaCotizar = async (req, res) => {
 
     let clientes;
 
-    if (usuario.rol === true && !usuario.distribuidor) {
-      // Administrador sin distribuidor: Ver todos los clientes
-      clientes = await Clientes.findAll({
-        attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
-      });
-    } else if (usuario.rol === true && usuario.distribuidor) {
-      // Administrador con distribuidor: Ver clientes de su distribuidor y los que él mismo ha cargado
-      clientes = await Clientes.findAll({
-        where: {
-          [Op.or]: [
-            // Clientes asociados a usuarios del mismo distribuidor
-            {
-              id: {
-                [Op.in]: conn.literal(
-                  `(SELECT "idCliente" FROM "Cotizaciones"
-                   WHERE "idUsuario" IN (
-                     SELECT "id" FROM "Usuarios" 
-                     WHERE "distribuidor" = '${usuario.distribuidor}'
-                   ))`
-                ),
-              },
-            },
-            // Clientes creados por el mismo administrador
-            {
-              id: {
-                [Op.in]: conn.literal(
-                  `(SELECT "id" FROM "Clientes" WHERE "idUsuarioCreador" = '${idUsuario}')`
-                ),
-              },
-            },
-          ],
-        },
-        attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
-      });
+    if (usuario.rol === true) {
+      if (usuario.distribuidor) {
+        // Administrador con distribuidor: ver clientes que coinciden con el distribuidor y los que cargó el administrador
+        clientes = await Clientes.findAll({
+          where: {
+            [Op.or]: [
+              // Clientes que coinciden con el distribuidor del administrador
+              { distribuidor: usuario.distribuidor },
+              // Clientes que el administrador cargó personalmente
+              { idUsuario: idUsuario },
+            ],
+          },
+          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+        });
+      } else {
+        // Administrador sin distribuidor: Ver todos los clientes
+        clientes = await Clientes.findAll({
+          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+        });
+      }
     } else {
-      // Vendedor: Ver sus propios clientes y aquellos sin cotizaciones recientes
+      // Vendedor: Ver clientes exclusivos y aquellos sin cotizaciones recientes
       clientes = await Clientes.findAll({
         where: {
           [Op.or]: [
@@ -376,20 +319,25 @@ const getClientesParaCotizar = async (req, res) => {
               id: {
                 [Op.in]: conn.literal(
                   `(SELECT "idCliente" FROM "Cotizaciones"
-                   WHERE "idUsuario" = '${idUsuario}' 
-                   AND (
-                     "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
-                     "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
-                     "fechaVenta" > '${tresMesesAtras.toISOString()}'
-                   ))`
+                  WHERE "idUsuario" = '${idUsuario}' 
+                  AND (
+                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
+                  ))`
                 ),
               },
             },
-            // Clientes sin cotizaciones (visibles para todos los vendedores)
+            // Clientes que no tienen cotizaciones recientes (más de 3 meses) y no están asociados a otros usuarios
             {
               id: {
                 [Op.notIn]: conn.literal(
-                  `(SELECT "idCliente" FROM "Cotizaciones")`
+                  `(SELECT "idCliente" FROM "Cotizaciones"
+                  WHERE (
+                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
+                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
+                  ))`
                 ),
               },
             },
