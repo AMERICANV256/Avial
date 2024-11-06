@@ -332,31 +332,42 @@ const getClientesParaCotizar = async (req, res) => {
 
     let clientes;
 
-    if (usuario.rol === true) {
-      if (!usuario.distribuidor) {
-        // Administrador sin distribuidor: Ver todos los clientes
-        clientes = await Clientes.findAll({
-          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
-        });
-      } else {
-        // Administrador con distribuidor: Ver sus clientes y aquellos asociados al mismo distribuidor
-        clientes = await Clientes.findAll({
-          where: {
-            id: {
-              [Op.in]: conn.literal(
-                `(SELECT "idCliente" FROM "Cotizaciones"
-                WHERE "idUsuario" IN (
-                  SELECT "id" FROM "Usuarios" 
-                  WHERE "distribuidor" = '${usuario.distribuidor}' OR "id" = '${idUsuario}'
-                ))`
-              ),
+    if (usuario.rol === true && !usuario.distribuidor) {
+      // Administrador sin distribuidor: Ver todos los clientes
+      clientes = await Clientes.findAll({
+        attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+      });
+    } else if (usuario.rol === true && usuario.distribuidor) {
+      // Administrador con distribuidor: Ver clientes de su distribuidor y los que él mismo ha cargado
+      clientes = await Clientes.findAll({
+        where: {
+          [Op.or]: [
+            // Clientes asociados a usuarios del mismo distribuidor
+            {
+              id: {
+                [Op.in]: conn.literal(
+                  `(SELECT "idCliente" FROM "Cotizaciones"
+                   WHERE "idUsuario" IN (
+                     SELECT "id" FROM "Usuarios" 
+                     WHERE "distribuidor" = '${usuario.distribuidor}'
+                   ))`
+                ),
+              },
             },
-          },
-          attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
-        });
-      }
+            // Clientes creados por el mismo administrador
+            {
+              id: {
+                [Op.in]: conn.literal(
+                  `(SELECT "id" FROM "Clientes" WHERE "idUsuarioCreador" = '${idUsuario}')`
+                ),
+              },
+            },
+          ],
+        },
+        attributes: ["id", "nombre", "apellido", "mail", "CUIT"],
+      });
     } else {
-      // Vendedor: Ver clientes exclusivos y aquellos sin cotizaciones recientes
+      // Vendedor: Ver sus propios clientes y aquellos sin cotizaciones recientes
       clientes = await Clientes.findAll({
         where: {
           [Op.or]: [
@@ -365,25 +376,20 @@ const getClientesParaCotizar = async (req, res) => {
               id: {
                 [Op.in]: conn.literal(
                   `(SELECT "idCliente" FROM "Cotizaciones"
-                  WHERE "idUsuario" = '${idUsuario}' 
-                  AND (
-                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
-                  ))`
+                   WHERE "idUsuario" = '${idUsuario}' 
+                   AND (
+                     "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
+                     "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
+                     "fechaVenta" > '${tresMesesAtras.toISOString()}'
+                   ))`
                 ),
               },
             },
-            // Clientes que no tienen cotizaciones recientes (más de 3 meses) y no están asociados a otros usuarios
+            // Clientes sin cotizaciones (visibles para todos los vendedores)
             {
               id: {
                 [Op.notIn]: conn.literal(
-                  `(SELECT "idCliente" FROM "Cotizaciones"
-                  WHERE (
-                    "fechaDeCreacion" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaModi" > '${tresMesesAtras.toISOString()}' OR 
-                    "fechaVenta" > '${tresMesesAtras.toISOString()}'
-                  ))`
+                  `(SELECT "idCliente" FROM "Cotizaciones")`
                 ),
               },
             },
