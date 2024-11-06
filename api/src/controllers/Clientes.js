@@ -291,12 +291,21 @@ const getClientesParaCotizar = async (req, res) => {
 
     if (usuario.rol === true) {
       if (usuario.distribuidor) {
-        // Administrador con distribuidor: ver clientes que coinciden con el distribuidor y los que cargó el administrador
+        // Administrador con distribuidor: ver clientes filtrados por distribuidor o cargados por el mismo administrador
         clientes = await Clientes.findAll({
           where: {
             [Op.or]: [
-              // Clientes que coinciden con el distribuidor del administrador
-              { distribuidor: usuario.distribuidor },
+              // Clientes que coinciden con el distribuidor del administrador en la tabla Usuarios
+              {
+                id: {
+                  [Op.in]: conn.literal(
+                    `(SELECT "id" FROM "Clientes" 
+                      WHERE "idUsuario" IN 
+                      (SELECT "id" FROM "Usuarios" WHERE "distribuidor" = '${usuario.distribuidor}')
+                    )`
+                  ),
+                },
+              },
               // Clientes que el administrador cargó personalmente
               { idUsuario: idUsuario },
             ],
