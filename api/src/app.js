@@ -34,10 +34,10 @@ server.use("/", routes);
 
 iniciarCronJob();
 programarReporteDiario();
-cron.schedule("*/2 * * * *", () => {
-  console.log("Iniciando backup de la base de datos...");
-  backupDatabase();
-});
+// cron.schedule("*/2 * * * *", () => {
+//   console.log("Iniciando backup de la base de datos...");
+//   backupDatabase();
+// });
 
 // Error catching endware.
 server.use((err, req, res, next) => {
