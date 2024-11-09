@@ -2305,11 +2305,12 @@ button:focus-visible {
   color: white;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   width: 190px;
-  min-height: 650px;
-  height: 800px;
+  min-height: 650px; 
+  height: auto; 
   transition: transform 0.3s ease;
   transform: translateX(0);
 }
+
 
 @media (max-width: 600px) {
   .sidebarAdmin {
