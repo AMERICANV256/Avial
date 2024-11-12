@@ -28,6 +28,7 @@ export default function Repuestos() {
     label: `${user.nombre} ${user.apellido} (${user.email})`,
   }));
 
+  // probando //
   useEffect(() => {
     if (data) {
       setRepuestos(data);
