@@ -10,14 +10,10 @@ const cotizacionEmail = (cotizacion) => {
 
   // Filtrar cotizacionesIndividuales para incluir solo aquellas con más de 1 cuota
   const cotizacionesIndividuales = cotizacion.cotizacionesIndividuales
-    .filter((item) => item.cuotas > 1) // Filtra las que tienen más de 1 cuota
     .map((item, index) => {
-      const cuotasOption =
-        item.cuotas > 1
-          ? `Opción ${index + 1}: ${item.anticipoPorcentaje}% anticipo y ${
-              item.cuotas
-            } E-Cheq`
-          : `${item.anticipoPorcentaje}% anticipo y ${item.cuotas} E-Cheq`;
+      const cuotasOption = `Opción ${index + 1}: ${
+        item.anticipoPorcentaje
+      }% anticipo y ${item.cuotas} E-Cheq`;
       const saldoConInteres = item.saldoConInteres || 0;
       const cuotaValorEnPesos = item.cuotaValorEnPesos || 0;
 
@@ -25,14 +21,22 @@ const cotizacionEmail = (cotizacion) => {
       <li style="margin-bottom: 30px; list-style: none; padding: 10px 0; text-align: left; position: relative;">
         <span style="position: absolute; left: -20px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background-color: #000;"></span>
         <strong style="text-decoration: underline; margin-bottom: 5px; display: block;">${cuotasOption}:</strong> 
-        <strong>${cotizacion.formaPago}</strong>  ${
-        item.anticipoPorcentaje
-      }% - Anticipo USD: ${item.anticipo} equivalentes a $ ${(
-        item.anticipo * item.cotizacionDolar
-      ).toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}
+        
+       ${
+         item.cuotas > 1
+           ? `
+        <strong>${cotizacion.formaPago}</strong>
+        ${item.anticipoPorcentaje}% - Anticipo USD: ${
+               item.anticipo
+             } equivalentes a $ ${(
+               item.anticipo * item.cotizacionDolar
+             ).toLocaleString("es-ES", {
+               minimumFractionDigits: 2,
+               maximumFractionDigits: 2,
+             })}
+      `
+           : ""
+       }
          <br />
         <span style="background-color: #ffeaa7;  border-radius: 3px;">
          <strong>Saldo en</strong> ${item.cuotas} E-Cheq de U$D ${Math.trunc(
@@ -45,16 +49,20 @@ const cotizacionEmail = (cotizacion) => {
         }
       )} cada 30 días fijos
         </span> en pesos. <br />
-      <strong>IVA con otro E-Cheq a 30 días de:</strong> $${(item.anticipo > 0
-        ? (item.cuotaValorEnPesos * item.cuotas +
-            item.anticipo * item.cotizacionDolar) *
-          (item.IVA / 100)
-        : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
-      ).toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}
-       <br />
+      ${
+        item.cuotas > 1
+          ? `<strong>IVA con otro E-Cheq a 30 días de: $$${(item.anticipo > 0
+              ? (item.cuotaValorEnPesos * item.cuotas +
+                  item.anticipo * item.cotizacionDolar) *
+                (item.IVA / 100)
+              : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
+            ).toLocaleString("es-ES", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}</strong>`
+          : ""
+      }
+    <br />
       </li>`;
     })
     .join("");
@@ -125,13 +133,12 @@ const cotizacionEmail = (cotizacion) => {
         </div>
       </div>
         <hr style="margin-top: 30px; margin-bottom: 10px;" />
-      <div style="margin-top: 30px; ">
-        <img src="${firmaUsuario}" alt="Firma o American Vial" style="width: 300px; height: auto; display: block; margin-left: 50px;" />
-       
-        <a href="http://www.americanvial.com" style="display: block; margin-bottom: 20px; font-weight: bold;margin-left: 70px;">
-          www.americanvial.com
-        </a>
-      </div>
+      <div style="margin-top: 30px; text-align: center;">
+  <img src="${firmaUsuario}" alt="Firma o American Vial" style="width: 300px; height: auto; display: block; margin: 0 auto;" />
+  <a href="http://www.americanvial.com.ar" style="display: inline-block; margin-top: 20px; font-weight: bold;">
+    www.americanvial.com.ar
+  </a>
+</div>
     </div>
   `;
 };

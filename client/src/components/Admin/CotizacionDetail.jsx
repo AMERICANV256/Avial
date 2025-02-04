@@ -291,26 +291,18 @@ export default function CotizacionDetail() {
 
   const cotizacionUnicoElemento = cotizacionesIndividuales[0];
 
-  const cotizacionesIndividualPDF = cotizacionDetalle.cotizacionesIndividuales
-    .filter((item) => item.cuotas > 1)
-    .map((item, index) => {
-      const cuotasOption =
-        item.cuotas > 1
-          ? `Opción ${index + 1}: ${item.anticipoPorcentaje}% anticipo y ${
-              item.cuotas
-            } E-Cheq`
-          : `${item.anticipoPorcentaje}% anticipo y ${item.cuotas} E-Cheq`;
+  const cotizacionesIndividualPDF =
+    cotizacionDetalle.cotizacionesIndividuales.map((item, index) => {
+      const cuotasOption = `Opción ${index + 1}: ${
+        item.anticipoPorcentaje
+      }% anticipo y ${item.cuotas} E-Cheq`;
       const saldoConInteres = item.saldoConInteres || 0;
       const cuotaValorEnPesos = item.cuotaValorEnPesos || 0;
 
       return (
         <View
           key={index}
-          style={{
-            padding: 10,
-            textAlign: "left",
-            position: "relative",
-          }}
+          style={{ padding: 10, textAlign: "left", position: "relative" }}
         >
           <Text
             style={{
@@ -321,41 +313,47 @@ export default function CotizacionDetail() {
           >
             {cuotasOption}:
           </Text>
-          <Text style={{ fontSize: 12 }}>
-            {cotizacionDetalle.formaPago} ${item.anticipoPorcentaje}% - Anticipo
-            USD: {item.anticipo} equivalentes a $
-            {(item.anticipo * item.cotizacionDolar).toLocaleString("es-ES", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text>
-          <Text
-            style={{
-              backgroundColor: "#ffeaa7",
-              borderRadius: 3,
-              fontSize: 12,
-            }}
-          >
-            Saldo en {item.cuotas} E-Cheq de U$D {Math.trunc(item.cuotaValor)}{" "}
-            equivalentes a $
-            {(Number(cuotaValorEnPesos) || 0).toLocaleString("es-ES", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}{" "}
-            cada 30 días fijos
-          </Text>
-          <Text style={{ fontSize: 12 }}>
-            IVA con otro E-Cheq a 30 días de: $
-            {(item.anticipo > 0
-              ? (item.cuotaValorEnPesos * item.cuotas +
-                  item.anticipo * item.cotizacionDolar) *
-                (item.IVA / 100)
-              : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
-            ).toLocaleString("es-ES", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
-          </Text>
+          {item.anticipo > 1 && (
+            <Text style={{ fontSize: 12 }}>
+              {cotizacionDetalle.formaPago} ${item.anticipoPorcentaje}% -
+              Anticipo USD: {item.anticipo} equivalentes a $
+              {(item.anticipo * item.cotizacionDolar).toLocaleString("es-ES", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Text>
+          )}
+          {item.cuotas > 0 && ( // 🔹 Solo muestra este bloque si hay cuotas
+            <Text
+              style={{
+                backgroundColor: "#ffeaa7",
+                borderRadius: 3,
+                fontSize: 12,
+              }}
+            >
+              Saldo en {item.cuotas} E-Cheq de U$D {Math.trunc(item.cuotaValor)}{" "}
+              equivalentes a $
+              {(Number(cuotaValorEnPesos) || 0).toLocaleString("es-ES", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{" "}
+              cada 30 días fijos
+            </Text>
+          )}
+          {item.cuotas > 1 && ( // 🔹 Asegura que solo muestre el IVA si hay más de una cuota
+            <Text style={{ fontSize: 12 }}>
+              IVA con otro E-Cheq a 30 días de: $
+              {(item.anticipo > 0
+                ? (item.cuotaValorEnPesos * item.cuotas +
+                    item.anticipo * item.cotizacionDolar) *
+                  (item.IVA / 100)
+                : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
+              ).toLocaleString("es-ES", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </Text>
+          )}
         </View>
       );
     });
@@ -525,8 +523,8 @@ export default function CotizacionDetail() {
           <Text>Tel./Fax: (5411) 4748-5900 </Text>{" "}
           <Text>www.americanvial.com</Text>
         </View>
-      </Page>
-      <Page size="A4" style={styles.page}>
+        {/* </Page>
+      <Page size="A4" style={styles.page}> */}
         <Image style={styles.watermark} src={americanvialDEGRADE} />
         {/* Logos */}
         <View style={styles.imagenesPDF}>

@@ -10,33 +10,37 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
 
   // Filtrar cotizacionesIndividuales para incluir solo aquellas con más de 1 cuota
   const cotizacionesIndividuales = cotizacionDetalle.cotizacionesIndividuales
-    .filter((item) => item.cuotas > 1)
     .map((item, index) => {
-      const cuotasOption =
-        item.cuotas > 1
-          ? `Opción ${index + 1}: ${item.anticipoPorcentaje}% anticipo y ${
-              item.cuotas
-            } E-Cheq`
-          : `${item.anticipoPorcentaje}% anticipo y ${item.cuotas} E-Cheq`;
+      const cuotasOption = `Opción ${index + 1}: ${
+        item.anticipoPorcentaje
+      }% anticipo y ${item.cuotas} E-Cheq`;
       const saldoConInteres = item.saldoConInteres || 0;
       const cuotaValorEnPesos = item.cuotaValorEnPesos || 0;
 
       return `        
-      <div style="margin-bottom: 5px; ; padding: 10px 0; text-align: left; position: relative;">
+        <div style="margin-bottom: 5px; ; padding: 10px 0; text-align: left; position: relative;">
+       
      
-        <strong style="text-decoration: underline; margin-bottom: 5px; display: block;">${cuotasOption}:</strong> 
-         <strong>${cotizacionDetalle.formaPago}</strong>
-       ${item.anticipoPorcentaje}% - Anticipo USD: ${
-        item.anticipo
-      } equivalentes a $ ${(
-        item.anticipo * item.cotizacionDolar
-      ).toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}
-         <br />
-        <span style="background-color: #ffeaa7; border-radius: 3px;">
-          <strong>Saldo en</strong> ${item.cuotas} E-Cheq de U$D ${Math.trunc(
+          <strong style="text-decoration: underline; margin-bottom: 5px; display: block;">${cuotasOption}:</strong>
+             ${
+               item.anticipo > 1
+                 ? `
+          <strong>${cotizacionDetalle.formaPago}</strong>
+          ${item.anticipoPorcentaje}% - Anticipo USD: ${
+                     item.anticipo
+                   } equivalentes a $ ${(
+                     item.anticipo * item.cotizacionDolar
+                   ).toLocaleString("es-ES", {
+                     minimumFractionDigits: 2,
+                     maximumFractionDigits: 2,
+                   })}
+        `
+                 : ""
+             }
+        
+           <br />
+          <span style="background-color: #ffeaa7; border-radius: 3px;">
+            <strong>Saldo en</strong> ${item.cuotas} E-Cheq de U$D ${Math.trunc(
         item.cuotaValor
       )} equivalentes a ${(Number(cuotaValorEnPesos) || 0).toLocaleString(
         "es-ES",
@@ -45,19 +49,24 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
           maximumFractionDigits: 2,
         }
       )} cada 30 días fijos
-        </span> en pesos. <br />
-      <strong>IVA con otro E-Cheq a 30 días de:</strong> $${(item.anticipo > 0
-        ? (item.cuotaValorEnPesos * item.cuotas +
-            item.anticipo * item.cotizacionDolar) *
-          (item.IVA / 100)
-        : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
-      ).toLocaleString("es-ES", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      })}
-
-       <br />
-      </li>`;
+          </span> en pesos. <br />
+          
+        
+        ${
+          item.cuotas > 1
+            ? `<strong>IVA con otro E-Cheq a 30 días de: $${(item.anticipo > 0
+                ? (item.cuotaValorEnPesos * item.cuotas +
+                    item.anticipo * item.cotizacionDolar) *
+                  (item.IVA / 100)
+                : item.cuotaValorEnPesos * item.cuotas * (item.IVA / 100)
+              ).toLocaleString("es-ES", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}</strong>`
+            : ""
+        }
+      <br />
+        </li>`;
     })
     .join("");
 
@@ -218,13 +227,14 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
       <div
         style={{
           marginTop: "30px",
-          textAlign: "left",
+          textAlign: "center",
         }}
       >
         <div
           style={{
             display: "inline-block",
-            textAlign: "left",
+            justifyContent: "center",
+            textAlign: "center",
           }}
         >
           <img
@@ -239,22 +249,23 @@ export default function PreviewCotizacionEmail({ cotizacionDetalle }) {
               height: "auto",
               border: "none",
               display: "inline-block",
-              marginLeft: "50px",
+              // marginLeft: "50px",
             }}
           />
 
           <a
-            href="http://www.americanvial.com"
+            href="http://www.americanvial.com.ar"
             style={{
               display: "block",
               marginBottom: "20px",
               fontWeight: "bold",
               color: "blue",
-              textAlign: "left",
-              marginLeft: "65px",
+              textAlign: "center",
+              // marginLeft: "65px",
+              marginTop: "15px",
             }}
           >
-            www.americanvial.com
+            www.americanvial.com.ar
           </a>
         </div>
       </div>
