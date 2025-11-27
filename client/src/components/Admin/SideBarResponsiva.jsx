@@ -50,8 +50,19 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
     {
       label: "Usuarios",
       icon: MdPerson,
-      subCategories: [],
-      roles: ["administrador", "gerente"],
+      subCategories: [
+        {
+          label: "Ver usuarios",
+          path: "/admin/usuarios",
+          roles: ["administrador"],
+        },
+        {
+          label: "Cargar usuarios",
+          path: "/admin/usuarios/cargar",
+          roles: ["administrador"],
+        },
+      ],
+      roles: ["administrador"],
     },
     {
       label: "Clientes",
