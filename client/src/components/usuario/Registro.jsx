@@ -1,14 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import logo from "../../assets/img/welcomefondoblanco.png";
+import BackButton from "../../UI/BackButton";
+import Select from "react-select";
+import Spinner from "../../UI/Spinner";
 
 export default function Registro({ handleCerrarModalRegistro }) {
+  // Opciones de tipo de usuario
+  const tipoUsuarioOptions = [
+    { value: "admin", label: "Administrador" },
+    { value: "distribuidor", label: "Distribuidor" },
+    { value: "vendedor", label: "Vendedor" },
+  ];
+
+  // Opciones de distribuidor/región
+  const distribuidorOptions = [
+    { value: 1, label: "Buenos Aires" },
+    { value: 2, label: "Córdoba" },
+  ];
+
   const { form, changed } = useForm({});
   const [saved, setSaved] = useState("not_sended");
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [tipoUsuario, setTipoUsuario] = useState(null);
+  const [rol, setRol] = useState(null);
+  const [distribuidor, setDistribuidor] = useState(null);
 
   const saveUser = async (e) => {
     e.preventDefault();
@@ -18,7 +37,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
       return;
     }
 
-    let newUser = { ...form, password };
+    let newUser = { ...form, password, rol, distribuidor };
     setErrorMessage("");
 
     const request = await fetch(
@@ -58,14 +77,15 @@ export default function Registro({ handleCerrarModalRegistro }) {
   }, [showWelcomeMessage]);
 
   return (
-    <div className="registro-container">
-      <div className="button-close-login">
-        <button onClick={handleCerrarModalRegistro} style={{ color: "black" }}>
-          X
-        </button>
-      </div>
+    <div className="postVentaContainer1">
+      <BackButton />
 
-      <h4>Ingresá tus datos</h4>
+      <h3
+        className="tituloCompo"
+        style={{ display: "flex", justifyContent: "center" }}
+      >
+        Ingresá los datos del Usuario
+      </h3>
 
       <br />
       <form className="registro" onSubmit={saveUser}>
@@ -127,6 +147,58 @@ export default function Registro({ handleCerrarModalRegistro }) {
             <input type="number" name="telefono" onChange={changed} />
           </div>
         </div>
+
+        <div className="registroform">
+          <label htmlFor="tipoUsuario">
+            Tipo de Usuario<span className="required">*</span>
+          </label>
+          <br />
+          <br />
+          <Select
+            options={tipoUsuarioOptions}
+            onChange={(option) => {
+              setTipoUsuario(option.value);
+
+              if (option.value === "admin") {
+                setRol(true);
+                setDistribuidor(null);
+                changed({ target: { name: "rol", value: true } });
+                changed({ target: { name: "distribuidor", value: null } });
+              }
+
+              if (option.value === "distribuidor") {
+                setRol(true);
+                setDistribuidor(null); // se setea luego con el select de región
+                changed({ target: { name: "rol", value: true } });
+              }
+
+              if (option.value === "vendedor") {
+                setRol(false);
+                setDistribuidor(null);
+                changed({ target: { name: "rol", value: false } });
+              }
+            }}
+            placeholder="Selecciona el tipo de usuario"
+          />
+        </div>
+
+        {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
+          <div className="registroform">
+            <label htmlFor="distribuidor">
+              Región<span className="required">*</span>
+            </label>
+            <Select
+              options={distribuidorOptions}
+              onChange={(option) => {
+                setDistribuidor(option.value);
+                changed({
+                  target: { name: "distribuidor", value: option.value },
+                });
+              }}
+              placeholder="Selecciona la región"
+            />
+          </div>
+        )}
 
         {errorMessage && (
           <div className="error-message">

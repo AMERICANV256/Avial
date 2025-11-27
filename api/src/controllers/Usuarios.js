@@ -28,6 +28,9 @@ const registro = async (req, res) => {
     // Genera un id de 10 caracteres
     const userId = crypto.randomBytes(30).toString("hex").substring(0, 60);
 
+    const distribuidor = req.body.distribuidor || null; // 1 = BsAs, 2 = Córdoba
+    const rol = req.body.rol; // true = admin/superadmin, false = vendedor
+
     const [instance, created] = await Usuarios.findOrCreate({
       where: { email: req.body.email.toLowerCase() },
       defaults: {
@@ -37,6 +40,11 @@ const registro = async (req, res) => {
         apellido: req.body.apellido || null,
         direccion: req.body.direccion || null,
         telefono: req.body.telefono || null,
+        codigo: null,
+        distribuidor: distribuidor,
+        rol: rol,
+        activo: true,
+        baneado: false,
         codigo: null,
       },
     });

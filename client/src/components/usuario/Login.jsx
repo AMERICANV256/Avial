@@ -171,13 +171,13 @@ export default function Login({ handleCerrarModalLogin }) {
             </span> */}
           </div>
 
-          <button
+          {/* <button
             className="submit-button"
             style={{ color: "black" }}
             onClick={handleMostrarModalRegistro}
           >
             Registráte
-          </button>
+          </button> */}
         </div>
       )}
 

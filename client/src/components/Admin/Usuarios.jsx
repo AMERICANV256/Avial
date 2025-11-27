@@ -74,6 +74,7 @@ export default function Usuarios() {
           variant="secondary"
           size="sm"
           className="acciones-dropdown acciones-dropdown-custom"
+          container={document.body}
         >
           <Dropdown.Item
             as={Link}
@@ -81,6 +82,13 @@ export default function Usuarios() {
             className="dropdown-item dropdown-item-ver"
           >
             Ver Detalle
+          </Dropdown.Item>
+          <Dropdown.Item
+            as={Link}
+            to={`/admin/usuarios/roles/${row.id}`}
+            className="dropdown-item dropdown-item-modificar"
+          >
+            Modificar Usuario / Roles
           </Dropdown.Item>
         </DropdownButton>
       ),
@@ -128,6 +136,7 @@ export default function Usuarios() {
                 pagination
                 striped
                 responsive
+                className="mi-datatable"
                 paginationComponentOptions={paginationOptions}
                 noDataComponent={
                   <div className="noData">Aún no hay registros ingresados</div>

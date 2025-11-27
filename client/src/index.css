@@ -3393,6 +3393,21 @@ button:focus-visible {
   background-color: #f4f4f4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
+  overflow: visible !important;
+}
+
+.mi-datatable {
+  overflow: visible !important;
+  position: relative;
+}
+
+
+.rdt_TableRow {
+  overflow: visible !important;
+}
+
+.dropdown-menu {
+  z-index: 2000; 
 }
 
 /* Efecto hover para dar una sensación interactiva */
@@ -4210,27 +4225,27 @@ button:focus-visible {
   }
 }
 
-.postVentaContainer1 {
-  padding: 40px;
-  background-color: white;
-  margin: auto;
-  font-family: "Merri", sans-serif;
-  text-align: center;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  border: 3px solid #ddd;
-  max-width: 100%;
-  margin: 0 auto;
-  margin-top: 1rem;
-  width: 50%;
-  color: black;
-}
-
-@media screen and (max-width: 600px) {
   .postVentaContainer1 {
-    width: 95%;
+    padding: 40px;
+    background-color: white;
+    margin: auto;
+    font-family: "Merri", sans-serif;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 3px solid #ddd;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    width: 50%;
+    color: black;
   }
-}
+
+  @media screen and (max-width: 600px) {
+    .postVentaContainer1 {
+      width: 95%;
+    }
+  }
 
 .formClientes {
   display: grid;

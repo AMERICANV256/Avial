@@ -49,7 +49,13 @@ const SideBarAdmin = () => {
     {
       label: "Usuarios",
       icon: MdPerson,
-      subCategories: [],
+      subCategories: [
+        {
+          label: "Cargar usuarios",
+          path: "/admin/usuarios/cargar",
+          roles: ["administrador"],
+        },
+      ],
       roles: ["administrador"],
     },
     {
