@@ -60,6 +60,12 @@ export default function Login({ handleCerrarModalLogin }) {
           email: data.loggedUser.email,
           nombre: data.loggedUser.nombre,
           telefono: data.loggedUser.telefono,
+          rol: data.loggedUser.rol,
+          activo: data.loggedUser.activo,
+          baneado: data.loggedUser.baneado,
+          firma: data.loggedUser.firma,
+          distribuidor: data.loggedUser.distribuidor,
+          codigo: data.loggedUser.codigo,
         };
 
         // Persistir los datos en el LocalStorage

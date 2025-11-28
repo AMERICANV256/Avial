@@ -119,9 +119,25 @@ const login = async (req, res) => {
       returnedUsers = await Usuarios.findAll();
     }
 
+    // Crear objeto loggedUser sin password y uno por uno
+    const loggedUser = {
+      id: requestUser.id,
+      email: requestUser.email,
+      distribuidor: requestUser.distribuidor,
+      nombre: requestUser.nombre,
+      apellido: requestUser.apellido,
+      direccion: requestUser.direccion,
+      telefono: requestUser.telefono,
+      codigo: requestUser.codigo,
+      rol: requestUser.rol,
+      activo: requestUser.activo,
+      baneado: requestUser.baneado,
+      firma: requestUser.firma,
+    };
+
     // Devolver los usuarios encontrados
     res.status(200).send({
-      loggedUser: requestUser,
+      loggedUser,
       allUsers: returnedUsers,
       token: jwt.createToken(requestUser),
       status: "success",
@@ -210,56 +226,62 @@ const putUser = async (req, res) => {
     }
 
     // Verificar si se proporciona una modificación en la solicitud
-    const { email, password, nombre, apellido, direccion, telefono, firma } =
-      req.body;
+    const {
+      email,
+      currentPassword,
+      newPassword,
+      confirmPassword,
+      nombre,
+      apellido,
+      direccion,
+      telefono,
+      firma,
+      rol,
+      distribuidor,
+      baneado,
+      activo,
+    } = req.body;
 
-    if (
-      email ||
-      password ||
-      nombre ||
-      apellido ||
-      direccion ||
-      telefono ||
-      firma
-    ) {
-      // Si se proporciona un nuevo email, actualizarlo
-      if (email) {
-        user.email = email.toLowerCase();
-      }
-
-      // Si se proporciona una nueva contraseña, actualizarla
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
-      }
-
-      if (nombre !== undefined) {
-        user.nombre = nombre;
-      }
-      if (apellido !== undefined) {
-        user.apellido = apellido;
-      }
-      if (direccion !== undefined) {
-        user.direccion = direccion;
+    if (newPassword) {
+      if (!currentPassword) {
+        return res
+          .status(400)
+          .send({ error: "Debe ingresar la contraseña actual" });
       }
 
-      if (telefono !== undefined) {
-        user.telefono = telefono;
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(403)
+          .send({ error: "La contraseña actual es incorrecta" });
       }
 
-      if (firma !== undefined) {
-        user.firma = firma;
+      if (newPassword !== confirmPassword) {
+        return res
+          .status(400)
+          .send({ error: "Las contraseñas nuevas no coinciden" });
       }
-      // Guardar los cambios en la base de datos
-      await user.save();
-      return res
-        .status(200)
-        .send({ status: "success", user: await user.reload() });
-    } else {
-      return res
-        .status(400)
-        .send("Se debe proporcionar al menos un campo para actualizar.");
+
+      user.password = await bcrypt.hash(newPassword, 10);
     }
+
+    if (email) user.email = email.toLowerCase();
+    if (nombre !== undefined) user.nombre = nombre;
+    if (apellido !== undefined) user.apellido = apellido;
+    if (direccion !== undefined) user.direccion = direccion;
+    if (telefono !== undefined) user.telefono = telefono;
+    if (firma !== undefined) user.firma = firma;
+
+    if (rol !== undefined) user.rol = rol;
+    if (distribuidor !== undefined) user.distribuidor = distribuidor;
+    if (baneado !== undefined) user.baneado = baneado;
+    if (activo !== undefined) user.activo = activo;
+
+    await user.save();
+    return res.status(200).send({
+      status: "success",
+      user: await user.reload(),
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);
