@@ -33,6 +33,28 @@ export default function UsuariosPost() {
   useEffect(() => {
     if (usuariosDetail) {
       setForm(usuariosDetail);
+
+      let tipo = "";
+
+      // ADMIN
+      if (usuariosDetail.rol === true && usuariosDetail.distribuidor === null) {
+        tipo = "admin";
+      }
+
+      // GERENTE / DISTRIBUIDOR
+      if (usuariosDetail.rol === true && usuariosDetail.distribuidor !== null) {
+        tipo = "distribuidor";
+      }
+
+      // VENDEDOR
+      if (
+        usuariosDetail.rol === false &&
+        usuariosDetail.distribuidor !== null
+      ) {
+        tipo = "vendedor";
+      }
+
+      setTipoUsuario(tipo);
     }
   }, [usuariosDetail]);
 
@@ -287,12 +309,12 @@ export default function UsuariosPost() {
             <Select
               options={tipoUsuarioOptions}
               value={
-                tipoUsuarioOptions.find(
-                  (opt) => opt.value === tipoUsuarioValue
-                ) || null
+                tipoUsuarioOptions.find((opt) => opt.value === tipoUsuario) ||
+                null
               }
               onChange={(option) => {
                 setTipoUsuario(option.value);
+
                 if (option.value === "admin") {
                   setRol(true);
                   setDistribuidor(null);

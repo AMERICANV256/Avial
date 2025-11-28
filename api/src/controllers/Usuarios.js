@@ -202,31 +202,16 @@ const getLastLoggedInUsers = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).send({ error: "Token no proporcionado" });
-  }
-
   try {
-    // Decodificar el token para obtener el ID del usuario
-    const decodedToken = jwt.decodeToken(
-      token.replace("Bearer ", ""),
-      JWTSECRET
-    );
+    const token = req.headers.authorization;
 
-    // Obtener el ID del usuario desde el token decodificado
-    const userId = decodedToken.id;
-
-    // Buscar el usuario por ID (obtenido del token)
-    const user = await Usuarios.findByPk(userId);
-
-    if (!user) {
-      return res.status(404).send("No se encontró el usuario");
+    if (!token) {
+      return res.status(401).send({ error: "Token no proporcionado" });
     }
 
-    // Verificar si se proporciona una modificación en la solicitud
+    // Desestructurar body
     const {
+      id,
       email,
       currentPassword,
       newPassword,
@@ -242,6 +227,24 @@ const putUser = async (req, res) => {
       activo,
     } = req.body;
 
+    // Si no viene id en el body, lo saco del token
+    let userId = id;
+    if (!userId) {
+      const decodedToken = jwt.decodeToken(
+        token.replace("Bearer ", ""),
+        JWTSECRET
+      );
+      userId = decodedToken.id;
+    }
+
+    // Buscar el usuario por ID
+    const user = await Usuarios.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).send("No se encontró el usuario");
+    }
+
+    // Lógica de cambio de contraseña
     if (newPassword) {
       if (!currentPassword) {
         return res
@@ -265,6 +268,7 @@ const putUser = async (req, res) => {
       user.password = await bcrypt.hash(newPassword, 10);
     }
 
+    // Actualizar otros campos
     if (email) user.email = email.toLowerCase();
     if (nombre !== undefined) user.nombre = nombre;
     if (apellido !== undefined) user.apellido = apellido;
