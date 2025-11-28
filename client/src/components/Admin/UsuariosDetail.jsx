@@ -8,6 +8,7 @@ export default function UsuariosDetail() {
   const { id } = useParams();
 
   const { data: usuariosDetail, isLoading } = useUsuario(id).UsuarioDetailQuery;
+  4;
 
   if (isLoading) {
     return (
@@ -23,12 +24,12 @@ export default function UsuariosDetail() {
   return (
     <div className="postVentaContainer1">
       <BackButton />
-      <h2
+      <h3
         className="tituloCompo"
         style={{ display: "flex", justifyContent: "center" }}
       >
         Detalle del Usuario
-      </h2>
+      </h3>
       <br />
       <div>
         <strong>Email:</strong> {email}

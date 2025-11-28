@@ -18,6 +18,15 @@ export default function Usuarios() {
 
   const [usuarios, setUsuarios] = useState(allUsers);
 
+  const conditionalRowStyles = [
+    {
+      when: (row) => row.baneado === true,
+      style: {
+        backgroundColor: "lightgreen",
+      },
+    },
+  ];
+
   useEffect(() => {
     if (!isLoading) {
       setUsuarios(allUsers);
@@ -51,14 +60,40 @@ export default function Usuarios() {
     { name: "Email", selector: (row) => row.email, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     { name: "Apellido", selector: (row) => row.apellido, sortable: true },
+    // {
+    //   name: "Dirección",
+    //   selector: (row) => row.direccion || "N/A",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Teléfono",
+    //   selector: (row) => row.telefono || "N/A",
+    //   sortable: true,
+    // },
     {
-      name: "Dirección",
-      selector: (row) => row.direccion || "N/A",
+      name: "Rol",
+      selector: (row) => {
+        if (
+          row.rol === true &&
+          row.distribuidor === null &&
+          row.activo === false
+        )
+          return "Super Administrador";
+        if (row.rol === true && row.distribuidor !== null)
+          return "Distribuidor Regional";
+        if (row.rol === false) return "Vendedor";
+        return "N/A";
+      },
       sortable: true,
     },
     {
-      name: "Teléfono",
-      selector: (row) => row.telefono || "N/A",
+      name: "Región",
+      selector: (row) => {
+        if (!row.distribuidor) return "N/A";
+        if (row.distribuidor === 1) return "Buenos Aires";
+        if (row.distribuidor === 2) return "Córdoba";
+        return row.distribuidor;
+      },
       sortable: true,
     },
     {
@@ -68,12 +103,13 @@ export default function Usuarios() {
     },
     {
       name: "Acciones",
+
       cell: (row) => (
         <DropdownButton
           id={`dropdown-acciones-${row.id}`}
           variant="secondary"
           size="sm"
-          className="acciones-dropdown acciones-dropdown-custom"
+          className="acciones-dropdown acciones-dropdown-custom mi-datatable"
           container={document.body}
         >
           <Dropdown.Item
@@ -129,14 +165,17 @@ export default function Usuarios() {
             />
           </div>
           <div className="datatable-container">
+            <p style={{ color: "green", fontWeight: "bold" }}>
+              Los usuarios con marca verde clara han sido dados de baja.
+            </p>
             {!showSpinner ? (
               <DataTable
                 columns={columns}
                 data={usuarios}
                 pagination
                 striped
+                conditionalRowStyles={conditionalRowStyles}
                 responsive
-                className="mi-datatable"
                 paginationComponentOptions={paginationOptions}
                 noDataComponent={
                   <div className="noData">Aún no hay registros ingresados</div>

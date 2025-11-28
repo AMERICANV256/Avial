@@ -3393,7 +3393,7 @@ button:focus-visible {
   background-color: #f4f4f4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
-  overflow: visible !important;
+ 
 }
 
 .mi-datatable {
@@ -3402,13 +3402,7 @@ button:focus-visible {
 }
 
 
-.rdt_TableRow {
-  overflow: visible !important;
-}
 
-.dropdown-menu {
-  z-index: 2000; 
-}
 
 /* Efecto hover para dar una sensación interactiva */
 .datatable-container:hover {

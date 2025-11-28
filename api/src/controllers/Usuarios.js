@@ -476,6 +476,33 @@ const getUsuariosChart = async (req, res) => {
   }
 };
 
+const darDeBajaUsuario = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).send("Falta el ID del usuario");
+    }
+
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    await usuario.update({ baneado: true });
+
+    res.send({
+      status: "success",
+      message: "Usuario dado de baja correctamente",
+      data: usuario,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al dar de baja al usuario");
+  }
+};
+
 module.exports = {
   login,
   registro,
@@ -488,4 +515,5 @@ module.exports = {
   obtenerDetalleUsuario,
   getUsuariosConRolFalse,
   getUsuariosChart,
+  darDeBajaUsuario,
 };
