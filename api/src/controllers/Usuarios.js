@@ -107,6 +107,11 @@ const login = async (req, res) => {
       }
     }
 
+    // 🚨 Validar si está baneado
+    if (requestUser.baneado === true) {
+      return res.status(403).send({ error: "El usuario está dado de baja" });
+    }
+
     // Buscar todos los usuarios si el usuario logueado tiene un rol específico
     let returnedUsers = [];
 
