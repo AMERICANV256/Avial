@@ -383,6 +383,11 @@ const obtenerDetalleUsuario = async (req, res) => {
         "apellido",
         "direccion",
         "telefono",
+        "firma",
+        "rol",
+        "distribuidor",
+        "activo",
+        "baneado",
         "createdAt",
       ],
     });
@@ -399,6 +404,11 @@ const obtenerDetalleUsuario = async (req, res) => {
       apellido: usuario.apellido,
       direccion: usuario.direccion || "N/A",
       telefono: usuario.telefono || "N/A",
+      firma: usuario.firma || "N/A",
+      rol: usuario.rol,
+      distribuidor: usuario.distribuidor || null,
+      activo: usuario.activo,
+      baneado: usuario.baneado,
       fechaDeRegistro: new Date(usuario.createdAt),
     };
 

@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import useAuth from "../../hooks/useAuth";
+import Spinner from "../../UI/Spinner";
 import BackButton from "../../UI/BackButton";
 import Select from "react-select";
+import { useUsuario } from "../../hooks/useUsuarios";
+import { useParams } from "react-router-dom";
 
 export default function UsuariosPost() {
-  const { form, changed } = useForm({});
+  const { id } = useParams();
+  const { data: usuariosDetail, isLoading } = useUsuario(id).UsuarioDetailQuery;
+
+  const { form, changed, setForm } = useForm({});
   const [saved, setSaved] = useState("not_sended");
   const { auth, setAuth } = useAuth();
   const [tipoUsuario, setTipoUsuario] = useState(null);
@@ -23,6 +29,12 @@ export default function UsuariosPost() {
 
   const [loading, setLoading] = useState(false);
   const [producto, setProducto] = useState({ imagen: "" });
+
+  useEffect(() => {
+    if (usuariosDetail) {
+      setForm(usuariosDetail);
+    }
+  }, [usuariosDetail]);
 
   const tipoUsuarioOptions = [
     { value: "admin", label: "Administrador" },
@@ -69,21 +81,20 @@ export default function UsuariosPost() {
 
   const saveUser = async (e) => {
     e.preventDefault();
-    let newUser = form;
+    let newUser = { ...form };
 
-    // Asegúrate de que no estás estableciendo el id en el frontend
-    // Si el id no está en el localStorage, no lo necesitas aquí
-    newUser.firma = producto.imagen; // Asegúrate de que la imagen está asignada correctamente
+    newUser.id = usuariosDetail.id;
+    newUser.firma = producto.imagen || usuariosDetail.firma;
 
     try {
       const request = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}usuarios`,
         {
           method: "PUT",
-          body: JSON.stringify(newUser), // no se está enviando el id
+          body: JSON.stringify(newUser),
           headers: {
             "Content-type": "application/json",
-            Authorization: localStorage.getItem("token"), // Pasar el token en el header
+            Authorization: localStorage.getItem("token"),
           },
         }
       );
@@ -91,13 +102,6 @@ export default function UsuariosPost() {
       const response = await request.json();
 
       if (response.status === "success") {
-        const updatedUser = { ...auth, ...newUser };
-
-        // Actualizar el objeto en el localStorage
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-
-        // Actualizar el estado local
-        setAuth(updatedUser);
         setSaved("saved");
         setErrorMessage("");
       } else {
@@ -111,18 +115,32 @@ export default function UsuariosPost() {
     }
   };
 
+  const tipoUsuarioValue =
+    form?.rol === true && form?.distribuidor
+      ? "distribuidor"
+      : form?.rol === true && !form?.distribuidor
+      ? "admin"
+      : form?.rol === false
+      ? "vendedor"
+      : null;
+
   return (
     <div className="postVentaContainer">
       <BackButton />
       <div className="datos">
         <h4>
-          Modificando los datos del Usuario {auth.nombre} {auth.apellido}
+          Modificando los datos del Usuario {form?.nombre} {form?.apellido}
         </h4>
       </div>
       <br />
       <form className="registro" onSubmit={saveUser}>
         <div className="columna">
-          <input type="text" name="id" hidden defaultValue={auth.id} />
+          <input
+            type="text"
+            name="id"
+            hidden
+            defaultValue={usuariosDetail?.id}
+          />
 
           <div className="registroform">
             <label htmlFor="email">Email</label>
@@ -130,8 +148,8 @@ export default function UsuariosPost() {
               type="email"
               name="email"
               onChange={changed}
-              placeholder={auth.email}
               disabled
+              value={form.email || ""}
             />
           </div>
 
@@ -227,7 +245,7 @@ export default function UsuariosPost() {
               type="text"
               name="nombre"
               onChange={changed}
-              placeholder={auth.nombre}
+              value={form.nombre || ""}
             />
           </div>
         </div>
@@ -240,7 +258,7 @@ export default function UsuariosPost() {
               type="text"
               name="apellido"
               onChange={changed}
-              placeholder={auth.apellido}
+              value={form.apellido || ""}
             />
           </div>
           <div className="registroform">
@@ -249,7 +267,7 @@ export default function UsuariosPost() {
               type="text"
               name="telefono"
               onChange={changed}
-              placeholder={auth.telefono}
+              value={form.telefono || ""}
             />
           </div>
           <div className="registroform">
@@ -258,7 +276,7 @@ export default function UsuariosPost() {
               type="text"
               name="direccion"
               onChange={changed}
-              placeholder={auth.direccion}
+              value={form.direccion || ""}
             />
           </div>
 
@@ -268,15 +286,11 @@ export default function UsuariosPost() {
             </label>
             <Select
               options={tipoUsuarioOptions}
-              defaultValue={tipoUsuarioOptions.find((opt) =>
-                auth.rol === true && !auth.distribuidor
-                  ? opt.value === "admin"
-                  : auth.rol === true && auth.distribuidor
-                  ? opt.value === "distribuidor"
-                  : auth.rol === false
-                  ? opt.value === "vendedor"
-                  : null
-              )}
+              value={
+                tipoUsuarioOptions.find(
+                  (opt) => opt.value === tipoUsuarioValue
+                ) || null
+              }
               onChange={(option) => {
                 setTipoUsuario(option.value);
                 if (option.value === "admin") {
@@ -287,12 +301,10 @@ export default function UsuariosPost() {
                 }
                 if (option.value === "distribuidor") {
                   setRol(true);
-                  setDistribuidor(null);
                   changed({ target: { name: "rol", value: true } });
                 }
                 if (option.value === "vendedor") {
                   setRol(false);
-                  setDistribuidor(null);
                   changed({ target: { name: "rol", value: false } });
                 }
               }}
@@ -300,18 +312,25 @@ export default function UsuariosPost() {
           </div>
           {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
             <div className="registroform">
-              <label htmlFor="distribuidor">Región</label>
+              <label htmlFor="tipoUsuario">
+                Región <span className="requiredRed">*</span>
+              </label>
               <Select
                 options={distribuidorOptions}
-                defaultValue={distribuidorOptions.find(
-                  (opt) => opt.value === auth.distribuidor
-                )}
+                value={
+                  distribuidorOptions.find(
+                    (opt) => opt.value === form?.distribuidor
+                  ) || null
+                }
                 onChange={(option) => {
-                  setDistribuidor(option.value);
                   changed({
-                    target: { name: "distribuidor", value: option.value },
+                    target: {
+                      name: "distribuidor",
+                      value: option ? option.value : null,
+                    },
                   });
                 }}
+                placeholder="Selecciona región"
               />
             </div>
           )}
@@ -322,9 +341,7 @@ export default function UsuariosPost() {
             </label>
             <Select
               options={activoOptions}
-              defaultValue={activoOptions.find(
-                (opt) => opt.value === auth.activo
-              )}
+              value={activoOptions.find((opt) => opt.value === form?.activo)}
               onChange={(option) => {
                 changed({ target: { name: "activo", value: option.value } });
               }}
@@ -354,7 +371,7 @@ export default function UsuariosPost() {
 
       <br />
       <span style={{ color: "green" }}>
-        {saved === "saved" ? "Usuario modificado Correctamente" : null}
+        {saved === "saved" ? "Usuario modificado Corréctamente" : null}
       </span>
 
       {saved === "error" && (

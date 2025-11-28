@@ -8,7 +8,6 @@ export default function UsuariosDetail() {
   const { id } = useParams();
 
   const { data: usuariosDetail, isLoading } = useUsuario(id).UsuarioDetailQuery;
-  4;
 
   if (isLoading) {
     return (

@@ -107,17 +107,21 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
           </div>
 
           <div className="registroform">
-            <label htmlFor="contraseña">Contraseña</label>
-            <input type="password" name="password" onChange={changed} />
-          </div>
-
-          <div className="registroform">
             <label htmlFor="nombre">Nombre</label>
             <input
               type="text"
               name="nombre"
               onChange={changed}
               placeholder={auth.nombre}
+            />
+          </div>
+          <div className="registroform">
+            <label htmlFor="direccion">Dirección</label>
+            <input
+              type="text"
+              name="direccion"
+              onChange={changed}
+              placeholder={auth.direccion}
             />
           </div>
         </div>
@@ -138,15 +142,6 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
               name="telefono"
               onChange={changed}
               placeholder={auth.telefono}
-            />
-          </div>
-          <div className="registroform">
-            <label htmlFor="direccion">Dirección</label>
-            <input
-              type="text"
-              name="direccion"
-              onChange={changed}
-              placeholder={auth.direccion}
             />
           </div>
         </div>
