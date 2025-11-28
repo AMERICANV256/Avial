@@ -8,11 +8,15 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Link } from "react-router-dom";
 import BackButton from "../../UI/BackButton";
 import { paginationOptions } from "../../utils/Datatable";
+import { useDarDeBajaUsuario } from "../../hooks/useUsuarios";
+import { useDarDeAltaUsuario } from "../../hooks/useUsuarios";
 
 export default function Usuarios() {
   const [search, setSearch] = useState("");
   const { auth } = useAuth();
   const { data, isLoading } = useUsuario().usuariosQuery;
+  const { mutate: darDeBaja } = useDarDeBajaUsuario();
+  const { mutate: darDeAlta } = useDarDeAltaUsuario();
 
   const allUsers = data?.allUsers || [];
 
@@ -21,9 +25,7 @@ export default function Usuarios() {
   const conditionalRowStyles = [
     {
       when: (row) => row.baneado === true,
-      style: {
-        backgroundColor: "lightgreen",
-      },
+      classNames: ["row-baneado"],
     },
   ];
 
@@ -126,6 +128,24 @@ export default function Usuarios() {
           >
             Modificar Usuario / Roles
           </Dropdown.Item>
+          {!row.baneado && (
+            <Dropdown.Item
+              onClick={() => darDeBaja(row.id)}
+              className="dropdown-item dropdown-item-baja"
+            >
+              Dar de Baja
+            </Dropdown.Item>
+          )}
+
+          {/* Mostrar solo si SÍ está baneado */}
+          {row.baneado && (
+            <Dropdown.Item
+              onClick={() => darDeAlta(row.id)}
+              className="dropdown-item dropdown-item-alta"
+            >
+              Dar de Alta
+            </Dropdown.Item>
+          )}
         </DropdownButton>
       ),
     },
@@ -174,8 +194,8 @@ export default function Usuarios() {
                 data={usuarios}
                 pagination
                 striped
-                conditionalRowStyles={conditionalRowStyles}
                 responsive
+                conditionalRowStyles={conditionalRowStyles}
                 paginationComponentOptions={paginationOptions}
                 noDataComponent={
                   <div className="noData">Aún no hay registros ingresados</div>

@@ -178,7 +178,7 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
         />
       </form>
       <br />
-      <span>
+      <span style={{ color: "green" }}>
         {saved == "saved" ? "Usuario modificado Correctamente" : null}
       </span>
       <span>{saved == "error" ? "Error Interno del Servidor" : null}</span>

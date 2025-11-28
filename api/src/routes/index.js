@@ -13,6 +13,7 @@ const {
   getUsuariosConRolFalse,
   getUsuariosChart,
   darDeBajaUsuario,
+  darDeAltaUsuario,
 } = require("../controllers/Usuarios");
 const {
   enviarMailsMasivos,
@@ -150,6 +151,7 @@ router.post("/usuarios/registro", registro);
 router.post("/usuarios/rol", check.auth, verificarRol);
 router.put("/usuarios", check.auth, putUser);
 router.put("/usuarios/baja", check.auth, darDeBajaUsuario);
+router.put("/usuarios/alta", check.auth, darDeAltaUsuario);
 router.get("/usuarios/lastFive", check.auth, getLastLoggedInUsers);
 router.get("/usuarios/chart", check.auth, getUsuariosChart);
 router.get("/usuarios/detail/:idUsuario", check.auth, obtenerDetalleUsuario);

@@ -503,6 +503,33 @@ const darDeBajaUsuario = async (req, res) => {
   }
 };
 
+const darDeAltaUsuario = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).send("Falta el ID del usuario");
+    }
+
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    await usuario.update({ baneado: false });
+
+    res.send({
+      status: "success",
+      message: "Usuario dado de alta correctamente",
+      data: usuario,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al dar de alta al usuario");
+  }
+};
+
 module.exports = {
   login,
   registro,
@@ -516,4 +543,5 @@ module.exports = {
   getUsuariosConRolFalse,
   getUsuariosChart,
   darDeBajaUsuario,
+  darDeAltaUsuario,
 };

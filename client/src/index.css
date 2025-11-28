@@ -6005,3 +6005,18 @@ p {
     font-size: 0.8rem;
   }
 }
+
+.rdt_TableRow.row-baneado {
+  background-color: lightgreen !important;
+}
+
+.dropdown-item-baja {
+  color: #dc3545; 
+  font-weight: bold;
+}
+
+
+.dropdown-item-alta {
+  color: #198754; 
+  font-weight: bold;
+}
