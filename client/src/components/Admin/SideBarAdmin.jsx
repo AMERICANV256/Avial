@@ -53,15 +53,15 @@ const SideBarAdmin = () => {
         {
           label: "Ver usuarios",
           path: "/admin/usuarios",
-          roles: ["administrador"],
+          roles: ["superAdmin"],
         },
         {
           label: "Cargar usuarios",
           path: "/admin/usuarios/cargar",
-          roles: ["administrador"],
+          roles: ["superAdmin"],
         },
       ],
-      roles: ["administrador"],
+      roles: ["superAdmin"],
     },
     {
       label: "Clientes",
@@ -70,15 +70,15 @@ const SideBarAdmin = () => {
         {
           label: "Cargar clientes",
           path: "/admin/clientes/cargar",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Ver clientes",
           path: "/admin/clientes/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Productos",
@@ -87,15 +87,15 @@ const SideBarAdmin = () => {
         {
           label: "Cargar productos",
           path: "/admin/productos/cargar",
-          roles: ["administrador", "gerente"],
+          roles: ["administrador", "gerente", "superAdmin"],
         },
         {
           label: "Ver productos",
           path: "/admin/productos/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Cotizaciones",
@@ -104,20 +104,20 @@ const SideBarAdmin = () => {
         {
           label: "Crear Cotizacion",
           path: "/admin/cotizaciones/crear",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Ver Cotizaciones",
           path: "/admin/cotizaciones/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Historial Cotizaciones",
           path: "/admin/cotizaciones/historial",
-          roles: ["administrador", "gerente", "vendedor"],
+          roles: ["administrador", "gerente", "vendedor", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Ventas",
@@ -126,16 +126,16 @@ const SideBarAdmin = () => {
         {
           label: "Mis Ventas",
           path: "/admin/ventas/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Pendientes de Aprobación",
 
           path: "/admin/ventas/aprobar",
-          roles: ["administrador"],
+          roles: ["administrador", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Notificar",
@@ -144,7 +144,7 @@ const SideBarAdmin = () => {
         {
           label: "Emails",
           path: "/admin/Notificaciones/Emails",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         // {
         //   label: "WhatsApp",
@@ -152,7 +152,7 @@ const SideBarAdmin = () => {
         //   roles: ["administrador", "vendedor", "gerente"],
         // },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
   ];
 

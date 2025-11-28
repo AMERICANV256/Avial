@@ -4,12 +4,15 @@ import logo from "../../assets/img/welcomefondoblanco.png";
 import BackButton from "../../UI/BackButton";
 import Select from "react-select";
 import Spinner from "../../UI/Spinner";
+import { useNavigate } from "react-router-dom";
 
 export default function Registro({ handleCerrarModalRegistro }) {
+  const navigate = useNavigate();
+
   // Opciones de tipo de usuario
   const tipoUsuarioOptions = [
     { value: "admin", label: "Administrador" },
-    { value: "distribuidor", label: "Distribuidor" },
+    { value: "distribuidor", label: "Gerente" },
     { value: "vendedor", label: "Vendedor" },
   ];
 
@@ -60,6 +63,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
     if (data.status === "success") {
       setSaved("saved");
       setShowWelcomeMessage(true);
+      navigate("/admin/Usuarios");
     } else {
       setSaved("error");
     }
@@ -75,6 +79,14 @@ export default function Registro({ handleCerrarModalRegistro }) {
       return () => clearTimeout(timer);
     }
   }, [showWelcomeMessage]);
+
+  const isFormValid =
+    form.email &&
+    password &&
+    confirmPassword &&
+    form.nombre &&
+    form.apellido &&
+    tipoUsuario;
 
   return (
     <div className="postVentaContainer1">
@@ -97,14 +109,14 @@ export default function Registro({ handleCerrarModalRegistro }) {
             style={{ display: "flex", justifyContent: "center" }}
             htmlFor="email"
           >
-            Email<span className="required">*</span>
+            Email<span className="requiredRed">*</span>
           </label>
           <input type="email" name="email" onChange={changed} required />
         </div>
         <div className="columna">
           <div className="registroform">
             <label htmlFor="contraseña">
-              Contraseña<span className="required">*</span>
+              Contraseña<span className="requiredRed">*</span>
             </label>
             <input
               type="password"
@@ -117,7 +129,9 @@ export default function Registro({ handleCerrarModalRegistro }) {
             />
           </div>
           <div className="registroform">
-            <label htmlFor="nombre">Nombre</label>
+            <label htmlFor="nombre">
+              Nombre<span className="requiredRed">*</span>
+            </label>
             <input type="text" name="nombre" onChange={changed} />
           </div>
           <div className="registroform">
@@ -128,7 +142,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
         <div className="columna">
           <div className="registroform">
             <label htmlFor="confirmarContraseña">
-              Repetir Contraseña<span className="required">*</span>
+              Repetir Contraseña<span className="requiredRed">*</span>
             </label>
             <input
               type="password"
@@ -139,7 +153,9 @@ export default function Registro({ handleCerrarModalRegistro }) {
           </div>
 
           <div className="registroform">
-            <label htmlFor="apellidos">Apellidos</label>
+            <label htmlFor="apellidos">
+              Apellidos <span className="requiredRed">*</span>
+            </label>
             <input type="text" name="apellido" onChange={changed} />
           </div>
           <div className="registroform">
@@ -150,7 +166,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
 
         <div className="registroform">
           <label htmlFor="tipoUsuario">
-            Tipo de Usuario<span className="required">*</span>
+            Tipo de Usuario<span className="requiredRed">*</span>
           </label>
           <br />
           <br />
@@ -184,9 +200,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
 
         {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
           <div className="registroform">
-            <label htmlFor="distribuidor">
-              Región<span className="required">*</span>
-            </label>
+            <label htmlFor="distribuidor">Región</label>
             <Select
               options={distribuidorOptions}
               onChange={(option) => {
@@ -214,7 +228,12 @@ export default function Registro({ handleCerrarModalRegistro }) {
           </div>
         )}
 
-        <input type="submit" value="Registrate" className="button-registro" />
+        <input
+          type="submit"
+          value="Registrate"
+          className="button-registro"
+          disabled={!isFormValid}
+        />
       </form>
       <br />
       {showWelcomeMessage && (

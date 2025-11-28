@@ -1842,6 +1842,11 @@ button:focus-visible {
   margin-left: 5px;
 }
 
+.requiredRed {
+  color: red;
+  margin-left: 5px;
+}
+
 /* ESTILOS PARA EL FORMULARIO DE LOGUEO DE USUARIO */
 
 .login-container {
@@ -6019,4 +6024,9 @@ p {
 .dropdown-item-alta {
   color: #198754; 
   font-weight: bold;
+}
+
+.button-registro:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
