@@ -32,8 +32,6 @@ export default function UsuariosPost() {
   const [loading, setLoading] = useState(false);
   const [producto, setProducto] = useState({ imagen: "" });
 
-  console.log(form);
-
   useEffect(() => {
     if (usuariosDetail) {
       setForm(usuariosDetail);
@@ -61,6 +59,16 @@ export default function UsuariosPost() {
       setTipoUsuario(tipo);
     }
   }, [usuariosDetail]);
+
+  useEffect(() => {
+    if (tipoUsuario === "admin") {
+      setForm((prev) => ({
+        ...prev,
+        distribuidor: null,
+        rol: true,
+      }));
+    }
+  }, [tipoUsuario]);
 
   const tipoUsuarioOptions = [
     { value: "admin", label: "Administrador" },

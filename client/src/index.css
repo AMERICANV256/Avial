@@ -4245,13 +4245,13 @@ button:focus-visible {
 .postVentaContainer {
   padding: 10px;
   margin: 10px;
-  background-color: white;
-  color: #ffc107;
+ background-color: #fdfaf6; 
+ color: #cc9900;
   font-family: "Merri", sans-serif;
   text-align: center;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
-  border: 3px solid #ddd;
+  border: 2px solid #ddd;
   max-width: 100%;
   width: 98%;
   font-weight: bold;
