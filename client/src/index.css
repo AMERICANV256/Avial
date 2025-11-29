@@ -4225,7 +4225,7 @@ button:focus-visible {
   border-radius: 10px;
   border: 3px solid #ddd;
   max-width: 100%;
-  width: 100%;
+  width: 98%;
   
   font-weight: bold;
 }
@@ -4489,6 +4489,7 @@ button:focus-visible {
 
 .obligatorio {
   color: red;
+  margin-left: 10px;
 }
 
 .white-bar.fixed .dropdownEquipos {
