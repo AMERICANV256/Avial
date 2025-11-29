@@ -142,42 +142,54 @@ export default function Historial() {
   }));
 
   return (
-    <div className="postVentaContainer1">
+    <div className="postVentaContainer">
       <BackButton />
       {role === "administrador" && <HistorialRanking />}
       <h3 className="tituloCompo">Historial de cotizaciones</h3>
       <br />
-      <hr />
-      <h4> Filtrar por Vendedor</h4>
-      <hr />
+
+      <span className="badge bg-secondary rounded-pill px-4 py-3 shadow-sm">
+        Filtrar por Vendedor
+      </span>
       <br />
       {isLoadingVendedores ? (
         <Spinner />
       ) : (
         <form onSubmit={handleSubmit}>
-          <div>
-            <Select
-              id="vendedor"
-              options={options}
-              value={selectedVendedor}
-              onChange={handleVendedorChange}
-            />
+          <div
+            style={{ display: "flex", justifyContent: "center", gap: "10px" }}
+          >
+            <div className="registroform">
+              <Select
+                id="vendedor"
+                options={options}
+                value={selectedVendedor}
+                onChange={handleVendedorChange}
+                placeholder="Seleccionar"
+              />
+            </div>
           </div>
           <br />
           <div>
-            <label htmlFor="numeroCotizacion">Número de Cotización: </label>
+            <label
+              htmlFor="numeroCotizacion"
+              style={{ marginRight: "10px", color: "black" }}
+            >
+              Número de Cotización:{" "}
+            </label>
             <input
+              style={{ borderRadius: "10px" }}
               type="number"
               id="numeroCotizacion"
               value={numeroCotizacion}
               onChange={handleNumeroCotizacionChange}
             />
           </div>
-          <button className="form-submit" type="submit">
+          <button className="btn-elegante" type="submit">
             Buscar por Vendedor
           </button>
           <button
-            className="form-submit"
+            className="btn-elegante"
             type="button"
             onClick={handleClear}
             style={{ marginLeft: "10px" }}
@@ -188,6 +200,7 @@ export default function Historial() {
       )}
       <br />
       <div>
+        <span>Descargar</span>
         <HistorialVendedorExcel data={historialData} />
       </div>
       <br />
@@ -298,24 +311,28 @@ export default function Historial() {
           <p></p>
         )}
       </div>
-      <hr />
-      <h4> Filtrar por Producto</h4>
-      <hr />
+      <span className="badge bg-secondary rounded-pill px-4 py-3 shadow-sm">
+        Filtrar por Producto
+      </span>
       <br />
       <form onSubmit={handleProductoSubmit}>
-        <div>
-          <Select
-            id="producto"
-            options={productoOptions}
-            value={selectedProducto}
-            onChange={handleProductoChange}
-          />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <Select
+              id="producto"
+              options={productoOptions}
+              value={selectedProducto}
+              onChange={handleProductoChange}
+              style={{ borderRadius: "10px" }}
+              placeholder="Seleccionar"
+            />
+          </div>
         </div>
-        <button className="form-submit" type="submit">
+        <button className="btn-elegante" type="submit">
           Buscar por Producto
         </button>
         <button
-          className="form-submit"
+          className="btn-elegante"
           type="button"
           onClick={handleClear}
           style={{ marginLeft: "10px" }}
@@ -326,6 +343,7 @@ export default function Historial() {
       <div>
         <br />
         <div>
+          <span>Descargar</span>
           <HistorialProductoExcel data={ModeloData} />
         </div>
         {isLoadingModelo ? (
@@ -446,9 +464,10 @@ export default function Historial() {
           <p></p>
         )}
       </div>
-      <hr />
-      <h4> Filtrar por Fecha</h4>
-      <hr />
+      <br />
+      <span className="badge bg-secondary rounded-pill px-4 py-3 shadow-sm">
+        Filtrar por Fecha
+      </span>
       <br />
       <form onSubmit={handleSubmitFechas}>
         <div>
@@ -456,6 +475,7 @@ export default function Historial() {
           <input
             type="date"
             id="fechaDesde"
+            style={{ borderRadius: "10px", marginLeft: "10px" }}
             value={fechaDesde}
             onChange={(e) => setFechaDesde(e.target.value)}
           />
@@ -466,25 +486,30 @@ export default function Historial() {
           <input
             type="date"
             id="fechaHasta"
+            style={{ borderRadius: "10px", marginLeft: "10px" }}
             value={fechaHasta}
             onChange={(e) => setFechaHasta(e.target.value)}
           />
         </div>
         <br />
-        <button className="form-submit" type="submit">
-          Buscar por Fechas
-        </button>
-        <button
-          className="form-submit"
-          type="button"
-          onClick={handleClear}
-          style={{ marginLeft: "10px" }}
-        >
-          Limpiar búsqueda
-        </button>
+        <div>
+          <button className="btn-elegante" type="submit">
+            Buscar por Fechas
+          </button>
+          <button
+            className="btn-elegante"
+            type="button"
+            onClick={handleClear}
+            style={{ marginLeft: "10px" }}
+          >
+            Limpiar búsqueda
+          </button>
+        </div>
       </form>
+
       <br />
       <div>
+        <span>Descargar</span>
         <HistorialFechaExcel
           data={fechasData}
           fechaDesde={fechaDesde}
