@@ -148,19 +148,14 @@ export default function ClientesEdit() {
   };
 
   return (
-    <div className="postVentaContainer1">
+    <div className="postVentaContainer">
       <BackButton />
-      <h2
-        className="tituloCompo"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        Modificar Cliente
-      </h2>
+      <h3 className="tituloCompo">Modificar Cliente</h3>
       <br />
       <br />
       <form onSubmit={handleSubmit}>
         <div className="formClientes">
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="CUIT">
               CUIT <span className="obligatorio">*</span>
             </label>
@@ -173,7 +168,7 @@ export default function ClientesEdit() {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="razonSocial"> Razón Social</label>
             <input
               type="text"
@@ -184,7 +179,7 @@ export default function ClientesEdit() {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="nombre">
               Nombre<span className="obligatorio">*</span>
             </label>
@@ -197,7 +192,7 @@ export default function ClientesEdit() {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="apellido">
               Apellido<span className="obligatorio">*</span>
             </label>
@@ -210,7 +205,7 @@ export default function ClientesEdit() {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="provincia">Provincia</label>
             <Select
               id="provincia"
@@ -234,7 +229,7 @@ export default function ClientesEdit() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="ciudad">Ciudad</label>
             <Select
               id="ciudad"
@@ -257,7 +252,7 @@ export default function ClientesEdit() {
               isClearable
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="domicilio">Domicilio</label>
             <input
               type="text"
@@ -267,7 +262,7 @@ export default function ClientesEdit() {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="mail">
               Email<span className="obligatorio">*</span>
             </label>
@@ -280,7 +275,7 @@ export default function ClientesEdit() {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="telefono">
               Teléfono<span className="obligatorio">*</span>
             </label>
@@ -294,7 +289,7 @@ export default function ClientesEdit() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="contactoAlternativo">Contacto Alternativo</label>
             <input
               type="contactoAlternativo"
@@ -304,7 +299,7 @@ export default function ClientesEdit() {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="mailAlternativo">Email</label>
             <input
               type="email"
@@ -314,7 +309,7 @@ export default function ClientesEdit() {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="telefonoAlternativo">Teléfono</label>
             <input
               type="number"
@@ -324,7 +319,7 @@ export default function ClientesEdit() {
               onChange={(e) => handleChange(soloNumeros(e))}
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="contactoAlternativo1">Contacto Alternativo</label>
             <input
               type="contactoAlternativo1"
@@ -334,7 +329,7 @@ export default function ClientesEdit() {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="mailAlternativo1">Email</label>
             <input
               type="email"
@@ -345,7 +340,7 @@ export default function ClientesEdit() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="telefonoAlternativo1">Teléfono</label>
             <input
               type="number"
