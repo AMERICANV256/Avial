@@ -8,15 +8,26 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import { Link } from "react-router-dom";
 import BackButton from "../../UI/BackButton";
 import { paginationOptions } from "../../utils/Datatable";
+import { useDarDeBajaUsuario } from "../../hooks/useUsuarios";
+import { useDarDeAltaUsuario } from "../../hooks/useUsuarios";
 
 export default function Usuarios() {
   const [search, setSearch] = useState("");
   const { auth } = useAuth();
   const { data, isLoading } = useUsuario().usuariosQuery;
+  const { mutate: darDeBaja } = useDarDeBajaUsuario();
+  const { mutate: darDeAlta } = useDarDeAltaUsuario();
 
   const allUsers = data?.allUsers || [];
 
   const [usuarios, setUsuarios] = useState(allUsers);
+
+  const conditionalRowStyles = [
+    {
+      when: (row) => row.baneado === true,
+      classNames: ["row-baneado"],
+    },
+  ];
 
   useEffect(() => {
     if (!isLoading) {
@@ -51,14 +62,40 @@ export default function Usuarios() {
     { name: "Email", selector: (row) => row.email, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     { name: "Apellido", selector: (row) => row.apellido, sortable: true },
+    // {
+    //   name: "Dirección",
+    //   selector: (row) => row.direccion || "N/A",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Teléfono",
+    //   selector: (row) => row.telefono || "N/A",
+    //   sortable: true,
+    // },
     {
-      name: "Dirección",
-      selector: (row) => row.direccion || "N/A",
+      name: "Rol",
+      selector: (row) => {
+        if (
+          row.rol === true &&
+          row.distribuidor === null &&
+          row.activo === false
+        )
+          return "Super Administrador";
+        if (row.rol === true && row.distribuidor !== null)
+          return "Distribuidor Regional";
+        if (row.rol === false) return "Vendedor";
+        return "N/A";
+      },
       sortable: true,
     },
     {
-      name: "Teléfono",
-      selector: (row) => row.telefono || "N/A",
+      name: "Región",
+      selector: (row) => {
+        if (!row.distribuidor) return "N/A";
+        if (row.distribuidor === 1) return "Buenos Aires";
+        if (row.distribuidor === 2) return "Córdoba";
+        return row.distribuidor;
+      },
       sortable: true,
     },
     {
@@ -68,12 +105,14 @@ export default function Usuarios() {
     },
     {
       name: "Acciones",
+
       cell: (row) => (
         <DropdownButton
           id={`dropdown-acciones-${row.id}`}
           variant="secondary"
           size="sm"
-          className="acciones-dropdown acciones-dropdown-custom"
+          className="acciones-dropdown acciones-dropdown-custom mi-datatable"
+          container={document.body}
         >
           <Dropdown.Item
             as={Link}
@@ -82,6 +121,31 @@ export default function Usuarios() {
           >
             Ver Detalle
           </Dropdown.Item>
+          <Dropdown.Item
+            as={Link}
+            to={`/admin/usuarios/roles/${row.id}`}
+            className="dropdown-item dropdown-item-modificar"
+          >
+            Modificar Usuario / Roles
+          </Dropdown.Item>
+          {!row.baneado && (
+            <Dropdown.Item
+              onClick={() => darDeBaja(row.id)}
+              className="dropdown-item dropdown-item-baja"
+            >
+              Dar de Baja
+            </Dropdown.Item>
+          )}
+
+          {/* Mostrar solo si SÍ está baneado */}
+          {row.baneado && (
+            <Dropdown.Item
+              onClick={() => darDeAlta(row.id)}
+              className="dropdown-item dropdown-item-alta"
+            >
+              Dar de Alta
+            </Dropdown.Item>
+          )}
         </DropdownButton>
       ),
     },
@@ -121,6 +185,9 @@ export default function Usuarios() {
             />
           </div>
           <div className="datatable-container">
+            <p style={{ color: "green", fontWeight: "bold" }}>
+              Los usuarios con marca verde clara han sido dados de baja.
+            </p>
             {!showSpinner ? (
               <DataTable
                 columns={columns}
@@ -128,6 +195,7 @@ export default function Usuarios() {
                 pagination
                 striped
                 responsive
+                conditionalRowStyles={conditionalRowStyles}
                 paginationComponentOptions={paginationOptions}
                 noDataComponent={
                   <div className="noData">Aún no hay registros ingresados</div>

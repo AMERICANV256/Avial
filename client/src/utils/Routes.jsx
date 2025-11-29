@@ -37,6 +37,8 @@ import VentasAprobar from "../components/Admin/VentasAprobar";
 import Wapp from "../components/Admin/Notificaciones/Wapp";
 import MailsMasivos from "../components/Admin/Notificaciones/MailsMasivos";
 import useTokenValidation from "../hooks/useTokenValidation";
+import UsuariosPost from "../components/Admin/UsuariosPost";
+import UsuariosPostNew from "../components/Admin/UsuariosPostNew";
 
 const AppRouter = () => {
   const InterceptorSetup = () => {
@@ -136,14 +138,14 @@ const AdminLayout = () => {
         <Routes>
           <Route index element={<AppAdmin />} />
           <Route path="/Usuarios" element={<Usuarios />} />
-
+          <Route path="/Usuarios/cargar" element={<UsuariosPostNew />} />
           <Route path="/Usuarios/:id" element={<UsuariosDetail />} />
+          <Route path="/Usuarios/roles/:id" element={<UsuariosPost />} />
           <Route path="/Clientes/ver" element={<Clientes />} />
           <Route path="/Clientes/ver/:id" element={<ClientesDetail />} />
           <Route path="/Clientes/modificar/:id" element={<ClientesEdit />} />
           <Route path="/Clientes/cargar" element={<CargaClientes />} />
           <Route path="/Productos/ver" element={<Productos />} />
-
           <Route path="/contacto/ver/:id" element={<ContactoDetail />} />
           <Route path="/Productos/cargar" element={<FormProduct />} />
           <Route path="/productos/modificar/:id" element={<ProductosEdit />} />

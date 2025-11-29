@@ -11,8 +11,6 @@ export default function WidgetLg() {
   const { data, isLoading } =
     useUltimasCotizaciones(idUsuario).ultimasCotizacionesQuery;
 
-  console.log(data);
-
   if (isLoading) {
     return (
       <div>

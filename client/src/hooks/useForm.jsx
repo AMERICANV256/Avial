@@ -13,5 +13,5 @@ export const useForm = (initialObj = {}) => {
     });
   };
 
-  return { form, changed };
+  return { form, changed, setForm };
 };

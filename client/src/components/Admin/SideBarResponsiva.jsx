@@ -50,8 +50,19 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
     {
       label: "Usuarios",
       icon: MdPerson,
-      subCategories: [],
-      roles: ["administrador", "gerente"],
+      subCategories: [
+        {
+          label: "Ver usuarios",
+          path: "/admin/usuarios",
+          roles: ["superAdmin"],
+        },
+        {
+          label: "Cargar usuarios",
+          path: "/admin/usuarios/cargar",
+          roles: ["superAdmin"],
+        },
+      ],
+      roles: ["superAdmin"],
     },
     {
       label: "Clientes",
@@ -60,15 +71,15 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Cargar clientes",
           path: "/admin/clientes/cargar",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Ver clientes",
           path: "/admin/clientes/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Productos",
@@ -77,15 +88,15 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Cargar productos",
           path: "/admin/productos/cargar",
-          roles: ["administrador", "gerente"],
+          roles: ["administrador", "gerente", "superAdmin"],
         },
         {
           label: "Ver productos",
           path: "/admin/productos/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Cotizaciones",
@@ -94,20 +105,20 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Crear Cotizacion",
           path: "/admin/cotizaciones/crear",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Ver Cotizaciones",
           path: "/admin/cotizaciones/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Historial Cotizaciones",
           path: "/admin/cotizaciones/historial",
-          roles: ["administrador", "gerente"],
+          roles: ["administrador", "gerente", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Ventas",
@@ -116,15 +127,15 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Mis Ventas",
           path: "/admin/ventas/ver",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         {
           label: "Pendientes de Aprobación",
           path: "/admin/ventas/aprobar",
-          roles: ["administrador"],
+          roles: ["administrador", "superAdmin"],
         },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
     {
       label: "Notificar",
@@ -133,7 +144,7 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         {
           label: "Emails",
           path: "/admin/Notificaciones/Emails",
-          roles: ["administrador", "vendedor", "gerente"],
+          roles: ["administrador", "vendedor", "gerente", "superAdmin"],
         },
         // {
         //   label: "WhatsApp",
@@ -141,7 +152,7 @@ const SideBarResponsiva = ({ handleCerrarModalSideBar }) => {
         //   roles: ["administrador", "vendedor", "gerente"],
         // },
       ],
-      roles: ["administrador", "vendedor", "gerente"],
+      roles: ["administrador", "vendedor", "gerente", "superAdmin"],
     },
   ];
 

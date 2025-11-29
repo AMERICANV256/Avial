@@ -16,6 +16,10 @@ const createToken = (user) => {
     direccion: user.direccion,
     email: user.email,
     rol: user.rol,
+    activo: user.activo,
+    baneado: user.baneado,
+    firma: user.firma,
+    distribuidor: user.distribuidor,
     iat: moment().unix(),
     exp: moment().add(40, "minutes").unix(),
   };

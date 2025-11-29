@@ -1,5 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UsuariosAPI } from "../components/api/UsuariosApi";
+import Swal from "sweetalert2";
 
 const getUsuarios = async () => {
   const { data } = await UsuariosAPI.get("/all");
@@ -82,4 +83,74 @@ export const useUsuario = (idUsuario) => {
     CheckRolMutation,
     usuariosChartQuery,
   };
+};
+
+const darDeBajaUsuario = async (idUsuario) => {
+  const { data } = await UsuariosAPI.put("/baja", { id: idUsuario });
+  return data;
+};
+
+export const useDarDeBajaUsuario = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: darDeBajaUsuario,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["usuarios"]);
+
+      Swal.fire({
+        icon: "success",
+        title: "Usuario dado de baja",
+        text: `El usuario ${
+          data?.data?.email || ""
+        } fue dado de baja correctamente.`,
+        confirmButtonColor: "#3085d6",
+      });
+    },
+    onError: (error) => {
+      console.error("Error al dar de baja usuario:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo dar de baja al usuario.",
+        confirmButtonColor: "#d33",
+      });
+    },
+  });
+};
+
+const darDeAltaUsuario = async (idUsuario) => {
+  const { data } = await UsuariosAPI.put("/alta", { id: idUsuario });
+  return data;
+};
+
+export const useDarDeAltaUsuario = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: darDeAltaUsuario,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["usuarios"]);
+
+      Swal.fire({
+        icon: "success",
+        title: "Usuario dado de alta",
+        text: `El usuario ${
+          data?.data?.email || ""
+        } fue dado de alta correctamente.`,
+        confirmButtonColor: "#3085d6",
+      });
+    },
+    onError: (error) => {
+      console.error("Error al dar de alta el usuario:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo dar de alta al usuario.",
+        confirmButtonColor: "#d33",
+      });
+    },
+  });
 };

@@ -28,6 +28,9 @@ const registro = async (req, res) => {
     // Genera un id de 10 caracteres
     const userId = crypto.randomBytes(30).toString("hex").substring(0, 60);
 
+    const distribuidor = req.body.distribuidor || null; // 1 = BsAs, 2 = Córdoba
+    const rol = req.body.rol; // true = admin/superadmin, false = vendedor
+
     const [instance, created] = await Usuarios.findOrCreate({
       where: { email: req.body.email.toLowerCase() },
       defaults: {
@@ -37,6 +40,11 @@ const registro = async (req, res) => {
         apellido: req.body.apellido || null,
         direccion: req.body.direccion || null,
         telefono: req.body.telefono || null,
+        codigo: null,
+        distribuidor: distribuidor,
+        rol: rol,
+        activo: true,
+        baneado: false,
         codigo: null,
       },
     });
@@ -99,6 +107,11 @@ const login = async (req, res) => {
       }
     }
 
+    // 🚨 Validar si está baneado
+    if (requestUser.baneado === true) {
+      return res.status(403).send({ error: "El usuario está dado de baja" });
+    }
+
     // Buscar todos los usuarios si el usuario logueado tiene un rol específico
     let returnedUsers = [];
 
@@ -106,9 +119,25 @@ const login = async (req, res) => {
       returnedUsers = await Usuarios.findAll();
     }
 
+    // Crear objeto loggedUser sin password y uno por uno
+    const loggedUser = {
+      id: requestUser.id,
+      email: requestUser.email,
+      distribuidor: requestUser.distribuidor,
+      nombre: requestUser.nombre,
+      apellido: requestUser.apellido,
+      direccion: requestUser.direccion,
+      telefono: requestUser.telefono,
+      codigo: requestUser.codigo,
+      rol: requestUser.rol,
+      activo: requestUser.activo,
+      baneado: requestUser.baneado,
+      firma: requestUser.firma,
+    };
+
     // Devolver los usuarios encontrados
     res.status(200).send({
-      loggedUser: requestUser,
+      loggedUser,
       allUsers: returnedUsers,
       token: jwt.createToken(requestUser),
       status: "success",
@@ -173,80 +202,90 @@ const getLastLoggedInUsers = async (req, res) => {
 };
 
 const putUser = async (req, res) => {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(401).send({ error: "Token no proporcionado" });
-  }
-
   try {
-    // Decodificar el token para obtener el ID del usuario
-    const decodedToken = jwt.decodeToken(
-      token.replace("Bearer ", ""),
-      JWTSECRET
-    );
+    const token = req.headers.authorization;
 
-    // Obtener el ID del usuario desde el token decodificado
-    const userId = decodedToken.id;
+    if (!token) {
+      return res.status(401).send({ error: "Token no proporcionado" });
+    }
 
-    // Buscar el usuario por ID (obtenido del token)
+    // Desestructurar body
+    const {
+      id,
+      email,
+      currentPassword,
+      newPassword,
+      confirmPassword,
+      nombre,
+      apellido,
+      direccion,
+      telefono,
+      firma,
+      rol,
+      distribuidor,
+      baneado,
+      activo,
+    } = req.body;
+
+    // Si no viene id en el body, lo saco del token
+    let userId = id;
+    if (!userId) {
+      const decodedToken = jwt.decodeToken(
+        token.replace("Bearer ", ""),
+        JWTSECRET
+      );
+      userId = decodedToken.id;
+    }
+
+    // Buscar el usuario por ID
     const user = await Usuarios.findByPk(userId);
 
     if (!user) {
       return res.status(404).send("No se encontró el usuario");
     }
 
-    // Verificar si se proporciona una modificación en la solicitud
-    const { email, password, nombre, apellido, direccion, telefono, firma } =
-      req.body;
-
-    if (
-      email ||
-      password ||
-      nombre ||
-      apellido ||
-      direccion ||
-      telefono ||
-      firma
-    ) {
-      // Si se proporciona un nuevo email, actualizarlo
-      if (email) {
-        user.email = email.toLowerCase();
+    // Lógica de cambio de contraseña
+    if (newPassword) {
+      if (!currentPassword) {
+        return res
+          .status(400)
+          .send({ error: "Debe ingresar la contraseña actual" });
       }
 
-      // Si se proporciona una nueva contraseña, actualizarla
-      if (password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        user.password = hashedPassword;
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res
+          .status(403)
+          .send({ error: "La contraseña actual es incorrecta" });
       }
 
-      if (nombre !== undefined) {
-        user.nombre = nombre;
-      }
-      if (apellido !== undefined) {
-        user.apellido = apellido;
-      }
-      if (direccion !== undefined) {
-        user.direccion = direccion;
+      if (newPassword !== confirmPassword) {
+        return res
+          .status(400)
+          .send({ error: "Las contraseñas nuevas no coinciden" });
       }
 
-      if (telefono !== undefined) {
-        user.telefono = telefono;
-      }
-
-      if (firma !== undefined) {
-        user.firma = firma;
-      }
-      // Guardar los cambios en la base de datos
-      await user.save();
-      return res
-        .status(200)
-        .send({ status: "success", user: await user.reload() });
-    } else {
-      return res
-        .status(400)
-        .send("Se debe proporcionar al menos un campo para actualizar.");
+      user.password = await bcrypt.hash(newPassword, 10);
     }
+
+    // Actualizar otros campos
+    if (email) user.email = email.toLowerCase();
+    if (nombre !== undefined) user.nombre = nombre;
+    if (apellido !== undefined) user.apellido = apellido;
+    if (direccion !== undefined) user.direccion = direccion;
+    if (telefono !== undefined) user.telefono = telefono;
+    if (firma !== undefined) user.firma = firma;
+
+    if (rol !== undefined) user.rol = rol;
+    if (distribuidor !== undefined) user.distribuidor = distribuidor;
+    if (baneado !== undefined) user.baneado = baneado;
+    if (activo !== undefined) user.activo = activo;
+
+    await user.save();
+    return res.status(200).send({
+      status: "success",
+      user: await user.reload(),
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).send(error);
@@ -316,7 +355,13 @@ const verificarRol = async (req, res) => {
 
     let rolDescripcion = "comun";
 
-    if (usuario.rol === true && !usuario.distribuidor) {
+    if (
+      usuario.rol === true &&
+      !usuario.distribuidor &&
+      usuario.activo === false
+    ) {
+      rolDescripcion = "superAdmin";
+    } else if (usuario.rol === true && !usuario.distribuidor) {
       rolDescripcion = "administrador";
     } else if (usuario.rol === true && usuario.distribuidor) {
       rolDescripcion = "gerente";
@@ -342,6 +387,11 @@ const obtenerDetalleUsuario = async (req, res) => {
         "apellido",
         "direccion",
         "telefono",
+        "firma",
+        "rol",
+        "distribuidor",
+        "activo",
+        "baneado",
         "createdAt",
       ],
     });
@@ -358,6 +408,11 @@ const obtenerDetalleUsuario = async (req, res) => {
       apellido: usuario.apellido,
       direccion: usuario.direccion || "N/A",
       telefono: usuario.telefono || "N/A",
+      firma: usuario.firma || "N/A",
+      rol: usuario.rol,
+      distribuidor: usuario.distribuidor || null,
+      activo: usuario.activo,
+      baneado: usuario.baneado,
       fechaDeRegistro: new Date(usuario.createdAt),
     };
 
@@ -468,6 +523,60 @@ const getUsuariosChart = async (req, res) => {
   }
 };
 
+const darDeBajaUsuario = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).send("Falta el ID del usuario");
+    }
+
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    await usuario.update({ baneado: true });
+
+    res.send({
+      status: "success",
+      message: "Usuario dado de baja correctamente",
+      data: usuario,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al dar de baja al usuario");
+  }
+};
+
+const darDeAltaUsuario = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id) {
+      return res.status(400).send("Falta el ID del usuario");
+    }
+
+    const usuario = await Usuarios.findByPk(id);
+
+    if (!usuario) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    await usuario.update({ baneado: false });
+
+    res.send({
+      status: "success",
+      message: "Usuario dado de alta correctamente",
+      data: usuario,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al dar de alta al usuario");
+  }
+};
+
 module.exports = {
   login,
   registro,
@@ -480,4 +589,6 @@ module.exports = {
   obtenerDetalleUsuario,
   getUsuariosConRolFalse,
   getUsuariosChart,
+  darDeBajaUsuario,
+  darDeAltaUsuario,
 };

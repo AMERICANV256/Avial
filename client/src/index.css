@@ -1842,6 +1842,11 @@ button:focus-visible {
   margin-left: 5px;
 }
 
+.requiredRed {
+  color: red;
+  margin-left: 5px;
+}
+
 /* ESTILOS PARA EL FORMULARIO DE LOGUEO DE USUARIO */
 
 .login-container {
@@ -3393,7 +3398,16 @@ button:focus-visible {
   background-color: #f4f4f4;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: box-shadow 0.3s ease;
+ 
 }
+
+.mi-datatable {
+  overflow: visible !important;
+  position: relative;
+}
+
+
+
 
 /* Efecto hover para dar una sensación interactiva */
 .datatable-container:hover {
@@ -4210,27 +4224,27 @@ button:focus-visible {
   }
 }
 
-.postVentaContainer1 {
-  padding: 40px;
-  background-color: white;
-  margin: auto;
-  font-family: "Merri", sans-serif;
-  text-align: center;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  border: 3px solid #ddd;
-  max-width: 100%;
-  margin: 0 auto;
-  margin-top: 1rem;
-  width: 50%;
-  color: black;
-}
-
-@media screen and (max-width: 600px) {
   .postVentaContainer1 {
-    width: 95%;
+    padding: 40px;
+    background-color: white;
+    margin: auto;
+    font-family: "Merri", sans-serif;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    border: 3px solid #ddd;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-top: 1rem;
+    width: 50%;
+    color: black;
   }
-}
+
+  @media screen and (max-width: 600px) {
+    .postVentaContainer1 {
+      width: 95%;
+    }
+  }
 
 .formClientes {
   display: grid;
@@ -5995,4 +6009,24 @@ p {
     padding: 8px 16px;
     font-size: 0.8rem;
   }
+}
+
+.rdt_TableRow.row-baneado {
+  background-color: lightgreen !important;
+}
+
+.dropdown-item-baja {
+  color: #dc3545; 
+  font-weight: bold;
+}
+
+
+.dropdown-item-alta {
+  color: #198754; 
+  font-weight: bold;
+}
+
+.button-registro:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

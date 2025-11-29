@@ -15,7 +15,6 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
 
   const uploadImage = async (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
     setLoading(true);
@@ -31,7 +30,8 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
       });
 
       const imageData = await res.json();
-      setProducto({ ...producto, imagen: imageData.secure_url });
+
+      changed({ target: { name: "firma", value: imageData.secure_url } });
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     } finally {
@@ -43,19 +43,15 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
     e.preventDefault();
     let newUser = form;
 
-    // Asegúrate de que no estás estableciendo el id en el frontend
-    // Si el id no está en el localStorage, no lo necesitas aquí
-    newUser.firma = producto.imagen; // Asegúrate de que la imagen está asignada correctamente
-
     try {
       const request = await fetch(
         `${import.meta.env.VITE_BACKEND_URL}usuarios`,
         {
           method: "PUT",
-          body: JSON.stringify(newUser), // no se está enviando el id
+          body: JSON.stringify(newUser),
           headers: {
             "Content-type": "application/json",
-            Authorization: localStorage.getItem("token"), // Pasar el token en el header
+            Authorization: localStorage.getItem("token"),
           },
         }
       );
@@ -65,10 +61,8 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
       if (response.status === "success") {
         const updatedUser = { ...auth, ...newUser };
 
-        // Actualizar el objeto en el localStorage
         localStorage.setItem("user", JSON.stringify(updatedUser));
 
-        // Actualizar el estado local
         setAuth(updatedUser);
         setSaved("saved");
       } else {
@@ -107,17 +101,21 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
           </div>
 
           <div className="registroform">
-            <label htmlFor="contraseña">Contraseña</label>
-            <input type="password" name="password" onChange={changed} />
-          </div>
-
-          <div className="registroform">
             <label htmlFor="nombre">Nombre</label>
             <input
               type="text"
               name="nombre"
               onChange={changed}
               placeholder={auth.nombre}
+            />
+          </div>
+          <div className="registroform">
+            <label htmlFor="direccion">Dirección</label>
+            <input
+              type="text"
+              name="direccion"
+              onChange={changed}
+              placeholder={auth.direccion}
             />
           </div>
         </div>
@@ -140,36 +138,23 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
               placeholder={auth.telefono}
             />
           </div>
-          <div className="registroform">
-            <label htmlFor="direccion">Dirección</label>
-            <input
-              type="text"
-              name="direccion"
-              onChange={changed}
-              placeholder={auth.direccion}
-            />
-          </div>
         </div>
         <div
           className="registroform"
           style={{ width: "100%", marginTop: "10px" }}
         >
           <h6 style={{ color: "black" }}>Adjuntar Firma</h6>
+          {auth?.firma && (
+            <span>El archivo guardado es {auth.firma.split("/").pop()}</span>
+          )}
+
           <input
             style={{ width: "100%", textAlign: "center" }}
             type="file"
             name="Agregar Firma"
-            placeholder="AGREGAR FIRMA"
+            placeholder={auth.firma}
             onChange={uploadImage}
           />
-          {/* {loading && <p>Subiendo imagen...</p>}
-          {producto.imagen && (
-            <img
-              src={producto.imagen}
-              alt="Firma"
-              style={{ width: "30%", height: "30%", marginTop: "10px" }}
-            />
-          )} */}
         </div>
         <input
           type="submit"
@@ -178,7 +163,7 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
         />
       </form>
       <br />
-      <span>
+      <span style={{ color: "green" }}>
         {saved == "saved" ? "Usuario modificado Correctamente" : null}
       </span>
       <span>{saved == "error" ? "Error Interno del Servidor" : null}</span>
