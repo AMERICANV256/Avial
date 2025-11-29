@@ -5,7 +5,7 @@ const path = require("path");
 const { DB_URL, DATABASE_URL } = process.env;
 
 const sequelize = new Sequelize(
-  DB_URL,
+  DATABASE_URL,
 
   {
     logging: false,
