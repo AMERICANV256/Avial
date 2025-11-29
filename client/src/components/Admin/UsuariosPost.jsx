@@ -294,7 +294,7 @@ export default function UsuariosPost() {
               value={form.direccion || ""}
             />
           </div>
-
+          <br />
           <div className="registroform">
             <label htmlFor="tipoUsuario">
               Tipo de Usuario <span className="requiredRed">*</span>
@@ -325,6 +325,7 @@ export default function UsuariosPost() {
               }}
             />
           </div>
+          <br />
           {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
             <div className="registroform">
               <label htmlFor="tipoUsuario">
@@ -349,7 +350,7 @@ export default function UsuariosPost() {
               />
             </div>
           )}
-
+          <br />
           <div className="registroform">
             <label htmlFor="activo">
               Estado <span className="requiredRed">*</span>
@@ -384,11 +385,15 @@ export default function UsuariosPost() {
             onChange={uploadImage}
           />
         </div>
-        <input
-          type="submit"
-          value="Guardar Cambios"
-          className="button-registro"
-        />
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+        >
+          <input
+            type="submit"
+            value="Guardar Cambios"
+            className="button-centrado"
+          />
+        </div>
       </form>
 
       <br />

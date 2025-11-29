@@ -4226,7 +4226,6 @@ button:focus-visible {
   border: 3px solid #ddd;
   max-width: 100%;
   width: 98%;
-  
   font-weight: bold;
 }
 
@@ -4243,7 +4242,7 @@ button:focus-visible {
 }
 
   .postVentaContainer1 {
-    padding: 40px;
+    padding: 10px;
     background-color: white;
     margin: auto;
     font-family: "Merri", sans-serif;
@@ -4254,7 +4253,7 @@ button:focus-visible {
     max-width: 100%;
     margin: 0 auto;
     margin-top: 1rem;
-    width: 50%;
+    width: 80%;
     color: black;
   }
 
@@ -6053,4 +6052,42 @@ p {
 .select-activo {
   flex: 1;
   margin-left: 10px;
+}
+
+.detalleUsuarioCard {
+  max-width: 800px;
+  width: 100%;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.detalleTitulo {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 700;
+}
+
+.detalleItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.detalleItem:last-child {
+  border-bottom: none;
+}
+
+.detalleLabel {
+  font-weight: 600;
+  color: #555;
+}
+
+.detalleValue {
+  color: #222;
 }
