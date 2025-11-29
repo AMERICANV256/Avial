@@ -319,7 +319,7 @@ export default function FormProduct() {
               options={opcionesConNuevaDivision}
               value={selectedDivision}
               onChange={handleChangeDivision}
-              placeholder="Selecciona o agrega una nueva división"
+              placeholder="Selecciona o Creá una nueva división"
               isClearable
               formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
             />
@@ -334,7 +334,7 @@ export default function FormProduct() {
               options={opcionesConNuevaFamilia}
               value={selectedFamilia}
               onChange={handleChangeFamilia}
-              placeholder="Selecciona o agrega una nueva categoría"
+              placeholder="Selecciona o Creá una nueva categoría"
               isClearable
               required
               formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
@@ -354,7 +354,7 @@ export default function FormProduct() {
               options={opcionesConNuevaMarca}
               value={selectedMarca}
               onChange={handleChangeMarca}
-              placeholder="Selecciona o agrega una nueva marca"
+              placeholder="Selecciona o Creá una nueva marca"
               required
               formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
             />

@@ -62,7 +62,11 @@ export default function CotizacionEdit() {
   useEffect(() => {
     if (!isLoadingCotizacion && cotizacionDetalle) {
       // Verificar si existe cotizacionDetalle y si tiene cotizacionesIndividuales
-      const cotizaciones = cotizacionDetalle.cotizacionesIndividuales || [];
+      const cotizaciones = Array.isArray(
+        cotizacionDetalle.cotizacionesIndividuales
+      )
+        ? cotizacionDetalle.cotizacionesIndividuales
+        : [];
 
       // Actualizar formData con la información del detalle de cotización
       setFormData({
