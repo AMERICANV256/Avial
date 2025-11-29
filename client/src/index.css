@@ -60,9 +60,9 @@ h1 {
 .tituloCompo {
   font-family: "merri";
   display: flex;
-  color: #febb00;
+  color: #cc9900;
   text-decoration: underline;
-  text-decoration-color: #febb00;
+  text-decoration-color: #cc9900;
   display: flex;
   justify-content: flex-start;
   margin-bottom: 1rem;
