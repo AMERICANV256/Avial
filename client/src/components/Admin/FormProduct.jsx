@@ -303,18 +303,12 @@ export default function FormProduct() {
   };
 
   return (
-    <div className="postVentaContainer1">
+    <div className="postVentaContainer">
       <BackButton />
-      <h2
-        className="tituloCompo"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        Cargar Producto
-      </h2>{" "}
-      <br />
+      <h3 className="tituloCompo">Cargar Producto</h3> <br />
       <form onSubmit={saveProduct}>
         <div className="form-group">
-          <div className="form-group">
+          <div className="registroform">
             <label htmlFor="division">
               División <span className="obligatorio">*</span>
             </label>
@@ -330,41 +324,43 @@ export default function FormProduct() {
               formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
             />
           </div>
-          <label htmlFor="familia">
-            Familia <span className="obligatorio">*</span>
-          </label>
-          <CreatableSelect
-            id="familia"
-            name="familia"
-            options={opcionesConNuevaFamilia}
-            value={selectedFamilia}
-            onChange={handleChangeFamilia}
-            placeholder="Selecciona o agrega una nueva categoría"
-            isClearable
-            required
-            formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
-          />
+          <div className="registroform">
+            <label htmlFor="familia">
+              Familia <span className="obligatorio">*</span>
+            </label>
+            <CreatableSelect
+              id="familia"
+              name="familia"
+              options={opcionesConNuevaFamilia}
+              value={selectedFamilia}
+              onChange={handleChangeFamilia}
+              placeholder="Selecciona o agrega una nueva categoría"
+              isClearable
+              required
+              formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
+            />
+          </div>
         </div>
+        <div className="registroform">
+          <div className="form-group">
+            <label htmlFor="marca">
+              Marca <span className="obligatorio">*</span>
+            </label>
 
-        <div className="form-group">
-          <label htmlFor="marca">
-            Marca <span className="obligatorio">*</span>
-          </label>
-
-          <CreatableSelect
-            id="marca"
-            name="marca"
-            type="text"
-            options={opcionesConNuevaMarca}
-            value={selectedMarca}
-            onChange={handleChangeMarca}
-            placeholder="Selecciona o agrega una nueva marca"
-            required
-            formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
-          />
+            <CreatableSelect
+              id="marca"
+              name="marca"
+              type="text"
+              options={opcionesConNuevaMarca}
+              value={selectedMarca}
+              onChange={handleChangeMarca}
+              placeholder="Selecciona o agrega una nueva marca"
+              required
+              formatCreateLabel={(inputValue) => `Crear "${inputValue}"`}
+            />
+          </div>
         </div>
-
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="modelo">
             Modelo<span className="obligatorio">*</span>
           </label>
@@ -384,7 +380,7 @@ export default function FormProduct() {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="precio">
             Precio U$D <span className="obligatorio">*</span>
           </label>
@@ -402,7 +398,7 @@ export default function FormProduct() {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="imagen">Imagen</label>
           <input
             type="file"
@@ -412,7 +408,7 @@ export default function FormProduct() {
             onChange={(e) => uploadImage(e, 0)}
           />
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="imagen">Imagen 1</label>
           <input
             type="file"
@@ -422,7 +418,7 @@ export default function FormProduct() {
             onChange={(e) => uploadImage(e, 1)}
           />
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="imagen">Imagen 2</label>
           <input
             type="file"
@@ -432,7 +428,7 @@ export default function FormProduct() {
             onChange={(e) => uploadImage(e, 2)}
           />
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="imagen">Imagen 3</label>
           <input
             type="file"
@@ -442,7 +438,7 @@ export default function FormProduct() {
             onChange={(e) => uploadImage(e, 3)}
           />
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="fichaPDF">Ficha PDF</label>
           <input
             id="fichaPDF"
@@ -452,7 +448,7 @@ export default function FormProduct() {
             onChange={uploadPDF}
           />
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="cantidadTotal">Cantidad Total</label>
           <div>
             <input
@@ -469,7 +465,7 @@ export default function FormProduct() {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="codigo">Código</label>
           <div>
             <input
@@ -485,7 +481,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="caracteristicasGenerales">
             Características Generales
           </label>
@@ -509,7 +505,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="motoresDeTraslacionYZapatas">
             Motores de Traslación y Zapatas
           </label>
@@ -533,7 +529,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="sistemaHidraulico">Sistema Hidráulico</label>
           <div>
             <p style={{ fontSize: "10px" }}>
@@ -556,7 +552,7 @@ export default function FormProduct() {
           </div>
         </div>
 
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="motor">Motor</label>
           <div>
             <p style={{ fontSize: "10px" }}>
@@ -578,7 +574,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="capacidades">Capacidades</label>
           <div>
             <p style={{ fontSize: "10px" }}>
@@ -600,7 +596,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="cabina">Cabina</label>
           <div>
             <textarea
@@ -619,7 +615,7 @@ export default function FormProduct() {
             />
           </div>
         </div>
-        <div className="form-group">
+        <div className="registroform">
           <label htmlFor="dimensionesGenerales">Dimensiones Generales</label>
           <div>
             <p style={{ fontSize: "10px" }}>

@@ -37,30 +37,19 @@ export default function ProductosDetalle() {
       .replace(/^./, (str) => str.toUpperCase());
   };
 
-  const itemStyle = {
-    marginBottom: "10px",
-    textTransform: "capitalize",
-    display: "flex",
-    justifyContent: "center",
-  };
-
   return (
-    <div className="postVentaContainer1">
+    <div className="detalleUsuarioCard">
       <BackButton />
-      <h3 style={itemStyle} className="tituloCompo">
-        Detalle del Producto
-      </h3>
-      <br />
-      <div>
-        {Object.keys(productoData)
-          .filter((key) => !excludedFields.includes(key))
-          .map((key) => (
-            <div key={key}>
-              <strong>{formatFieldName(key)}:</strong> {productoData[key]}
-              <hr />
-            </div>
-          ))}
-      </div>
+      <h3 className="detalleTitulo">Detalle del Producto</h3>
+
+      {Object.keys(productoData)
+        .filter((key) => !excludedFields.includes(key))
+        .map((key) => (
+          <div className="detalleItem" key={key}>
+            <span className="detalleLabel">{formatFieldName(key)}:</span>
+            <span className="detalleValue">{productoData[key]}</span>
+          </div>
+        ))}
     </div>
   );
 }
