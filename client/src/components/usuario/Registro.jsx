@@ -6,7 +6,7 @@ import Select from "react-select";
 import Spinner from "../../UI/Spinner";
 import { useNavigate } from "react-router-dom";
 
-export default function Registro({ handleCerrarModalRegistro }) {
+export default function Registro() {
   const navigate = useNavigate();
 
   // Opciones de tipo de usuario
@@ -68,7 +68,6 @@ export default function Registro({ handleCerrarModalRegistro }) {
     if (data.status === "success") {
       setSaved("saved");
       setShowWelcomeMessage(true);
-      navigate("/admin/Usuarios");
     } else {
       setSaved("error");
     }
@@ -78,7 +77,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
     if (showWelcomeMessage) {
       const timer = setTimeout(() => {
         setShowWelcomeMessage(false);
-        handleCerrarModalRegistro();
+        navigate("/admin/Usuarios");
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -102,12 +101,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
     <div className="postVentaContainer">
       <BackButton />
 
-      <h3
-        className="tituloCompo"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        Ingresá los datos del Usuario
-      </h3>
+      <h3 className="tituloCompo">Ingresá los datos del Usuario</h3>
 
       <br />
       <form className="registro" onSubmit={saveUser}>
@@ -174,7 +168,13 @@ export default function Registro({ handleCerrarModalRegistro }) {
           </div>
         </div>
 
-        <div className="registroform">
+        <div
+          className="registroform"
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <label htmlFor="tipoUsuario">
             Tipo de Usuario<span className="requiredRed">*</span>
           </label>
@@ -205,11 +205,18 @@ export default function Registro({ handleCerrarModalRegistro }) {
               }
             }}
             placeholder="Selecciona el tipo de usuario"
+            className="select-activo"
           />
         </div>
 
         {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
-          <div className="registroform">
+          <div
+            className="registroform"
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <label htmlFor="distribuidor">Región</label>
             <Select
               options={distribuidorOptions}
@@ -220,11 +227,18 @@ export default function Registro({ handleCerrarModalRegistro }) {
                 });
               }}
               placeholder="Selecciona la región"
+              className="select-activo"
             />
           </div>
         )}
 
-        <div className="registroform">
+        <div
+          className="registroform"
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <label htmlFor="activo">
             Estado <span className="requiredRed">*</span>
           </label>
@@ -237,6 +251,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
               changed({ target: { name: "activo", value: option.value } });
             }}
             placeholder="Selecciona estado"
+            className="select-activo"
           />
         </div>
 
@@ -254,18 +269,22 @@ export default function Registro({ handleCerrarModalRegistro }) {
           </div>
         )}
 
-        <input
-          type="submit"
-          value="Registrate"
-          className="button-registro"
-          disabled={!isFormValid}
-        />
+        <div
+          style={{ display: "flex", justifyContent: "center", width: "100%" }}
+        >
+          <input
+            type="submit"
+            value="Registrar Usuario"
+            className="button-centrado"
+            disabled={!isFormValid}
+          />
+        </div>
       </form>
       <br />
       {showWelcomeMessage && (
         <div className="welcome-message">
           <img src={logo} alt="Logo" />
-          <p>Ya estás registrado en AMERICAN VIAL!</p>
+          <p>Usuario registrado en AMERICAN VIAL!</p>
         </div>
       )}
     </div>

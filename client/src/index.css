@@ -65,6 +65,7 @@ h1 {
   text-decoration-color: #febb00;
   display: flex;
   justify-content: flex-start;
+  margin-bottom: 1rem;
 }
 
 .tituloCompo1 {
@@ -2019,7 +2020,7 @@ button:focus-visible {
 }
 
 .registroform {
-  width: 100%;
+  width: 90%;
   margin-bottom: 16px;
 }
 
@@ -2029,9 +2030,9 @@ button:focus-visible {
 }
 
 .registroform input {
-  width: calc(90% - 16px);
-  padding: 8px;
-  border: 1px solid #ccc;
+  width: calc(100% - 16px);
+  padding: 12px;
+  border: 1.5px solid #ccc;
   border-radius: 4px;
 }
 
@@ -2056,6 +2057,23 @@ button:focus-visible {
 .button-registro:hover {
   background-color: #ffd966;
 }
+
+.button-centrado {
+  width: 200px;             
+  padding: 8px 16px;        
+  color: #000000;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 2rem;         
+  text-align: center;       
+}
+
+.button-centrado:hover {
+  background-color: #ffd966;
+}
+
 
 .registro-container span {
   color: red;
@@ -4197,7 +4215,8 @@ button:focus-visible {
 }
 
 .postVentaContainer {
-  padding: 40px;
+  padding: 10px;
+  margin: 10px;
   background-color: white;
   color: #ffc107;
   font-family: "Merri", sans-serif;
@@ -4206,9 +4225,8 @@ button:focus-visible {
   border-radius: 10px;
   border: 3px solid #ddd;
   max-width: 100%;
-  width: 80%;
-  margin: 0 auto;
-  margin-top: 1rem;
+  width: 100%;
+  
   font-weight: bold;
 }
 
@@ -6029,4 +6047,9 @@ p {
 .button-registro:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+.select-activo {
+  flex: 1;
+  margin-left: 10px;
 }
