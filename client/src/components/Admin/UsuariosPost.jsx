@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "../../hooks/useForm";
 import useAuth from "../../hooks/useAuth";
-import Spinner from "../../UI/Spinner";
+
 import BackButton from "../../UI/BackButton";
 import Select from "react-select";
 import { useUsuario } from "../../hooks/useUsuarios";
 import { useParams } from "react-router-dom";
+
+const Clouddinary = import.meta.env.VITE_CLOUDINARY_URL;
 
 export default function UsuariosPost() {
   const { id } = useParams();
@@ -77,7 +79,7 @@ export default function UsuariosPost() {
 
   const uploadImage = async (e) => {
     const file = e.target.files[0];
-
+    console.log("Archivo seleccionado:", file);
     if (!file) return;
 
     setLoading(true);
@@ -93,7 +95,8 @@ export default function UsuariosPost() {
       });
 
       const imageData = await res.json();
-      setProducto({ ...producto, imagen: imageData.secure_url });
+
+      changed({ target: { name: "firma", value: imageData.secure_url } });
     } catch (error) {
       console.error("Error al subir la imagen:", error);
     } finally {
@@ -106,7 +109,7 @@ export default function UsuariosPost() {
     let newUser = { ...form };
 
     newUser.id = usuariosDetail.id;
-    newUser.firma = producto.imagen || usuariosDetail.firma;
+    newUser.firma = form.firma || usuariosDetail.firma;
 
     try {
       const request = await fetch(
@@ -137,14 +140,15 @@ export default function UsuariosPost() {
     }
   };
 
-  const tipoUsuarioValue =
-    form?.rol === true && form?.distribuidor
-      ? "distribuidor"
-      : form?.rol === true && !form?.distribuidor
-      ? "admin"
-      : form?.rol === false
-      ? "vendedor"
-      : null;
+  const isFormValid =
+    form.email &&
+    form.currentPassword &&
+    form.newPassword &&
+    form.confirmPassword &&
+    form.nombre &&
+    form.apellido &&
+    tipoUsuario &&
+    form.activo;
 
   return (
     <div className="postVentaContainer">
@@ -176,9 +180,7 @@ export default function UsuariosPost() {
           </div>
 
           <div className="registroform">
-            <label htmlFor="currentPassword">
-              Contraseña actual <span className="requiredRed">*</span>
-            </label>
+            <label htmlFor="currentPassword">Contraseña actual</label>
             <div className="password-input">
               <input
                 type={showCurrent ? "text" : "password"}
@@ -204,9 +206,7 @@ export default function UsuariosPost() {
           </div>
 
           <div className="registroform">
-            <label htmlFor="newPassword">
-              Nueva contraseña <span className="requiredRed">*</span>
-            </label>
+            <label htmlFor="newPassword">Nueva contraseña</label>
             <div className="password-input">
               <input
                 type={showNew ? "text" : "password"}
@@ -232,9 +232,7 @@ export default function UsuariosPost() {
           </div>
 
           <div className="registroform">
-            <label htmlFor="confirmPassword">
-              Repetir nueva contraseña <span className="requiredRed">*</span>
-            </label>
+            <label htmlFor="confirmPassword">Repetir nueva contraseña</label>
             <div className="password-input">
               <input
                 type={showConfirm ? "text" : "password"}
@@ -376,6 +374,11 @@ export default function UsuariosPost() {
           style={{ width: "100%", marginTop: "10px" }}
         >
           <h6 style={{ color: "black" }}>Adjuntar Firma</h6>
+          {usuariosDetail?.firma && (
+            <span>
+              El archivo guardado es {usuariosDetail.firma.split("/").pop()}
+            </span>
+          )}
           <input
             style={{ width: "100%", textAlign: "center" }}
             type="file"

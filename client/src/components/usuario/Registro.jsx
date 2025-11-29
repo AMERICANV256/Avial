@@ -184,7 +184,7 @@ export default function Registro({ handleCerrarModalRegistro }) {
 
               if (option.value === "distribuidor") {
                 setRol(true);
-                setDistribuidor(null); // se setea luego con el select de región
+                setDistribuidor(null);
                 changed({ target: { name: "rol", value: true } });
               }
 
