@@ -328,51 +328,57 @@ export default function CotizacionEdit() {
       <BackButton />
       <form onSubmit={handleSubmit}>
         <div>
-          <h2 className="tituloCompo">Modificar Cotización</h2>{" "}
-          <h2> {formData.codigoCotizacion}</h2>
+          <h3 className="tituloCompo">Modificar Cotización</h3>{" "}
+          <h3 style={{ color: "black" }}> {formData.codigoCotizacion}</h3>
           <br />
         </div>
-        <div></div>
-        <div className="form-group">
-          <label className="form-label">Vendedor</label>
-          <input
-            type="number"
-            name="idUsuario"
-            placeholder={`${auth?.nombre || ""} ${auth?.apellido || ""}`}
-            onChange={handleChange}
-            readOnly
-            className="form-input"
-            value={formData.idUsuario}
-          />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Vendedor</label>
+            <input
+              type="number"
+              name="idUsuario"
+              placeholder={`${auth?.nombre || ""} ${auth?.apellido || ""}`}
+              onChange={handleChange}
+              readOnly
+              className="form-input"
+              value={formData.idUsuario}
+            />
+          </div>
         </div>
-        <div className="form-group">
-          <label className="form-label">Cliente</label>
-          <div className="cliente-info">
-            <div className="form-group cliente-detail">
-              <Select
-                name="idCliente"
-                value={{
-                  label: formData.cliente || "",
-                  value: formData.idCliente || "",
-                }}
-                isDisabled={true}
-                onChange={(option) =>
-                  setFormData({ ...formData, cliente: option?.value || "" })
-                }
-                options={[]}
-                className="form-select"
-              />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Cliente</label>
+            <div className="cliente-info">
+              <div className="form-group cliente-detail">
+                <Select
+                  name="idCliente"
+                  value={{
+                    label: formData.cliente || "",
+                    value: formData.idCliente || "",
+                  }}
+                  isDisabled={true}
+                  onChange={(option) =>
+                    setFormData({ ...formData, cliente: option?.value || "" })
+                  }
+                  options={[]}
+                />
+              </div>
             </div>
           </div>
-          <div className="info-cliente-edit">
-            <span>
-              {" "}
-              CUIT: {formData.CUIT} {""}
-            </span>
-            <span> RAZÓN SOCIAL: {formData.razonSocial}</span>
-          </div>
         </div>
-        <div></div>
+        <div className="info-cliente-edit">
+          <span>
+            {" "}
+            CUIT: {formData.CUIT} {""}
+          </span>
+          <span> RAZÓN SOCIAL: {formData.razonSocial}</span>
+        </div>
+        <hr style={{ color: "black" }} />
+        <br />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h3 className="tituloCompo">Datos generales</h3> <br />
+        </div>
         <div className="postVentaContainer2">
           <div className="form-group">
             <label className="form-label">Familia</label>
@@ -385,6 +391,7 @@ export default function CotizacionEdit() {
               disabled
             />
           </div>
+
           <div className="form-group">
             <label className="form-label">Marca</label>
             <input
@@ -489,11 +496,11 @@ export default function CotizacionEdit() {
             />
           </div>
         </div>
+        <br />
         {formData.cotizacionesIndividuales.map((cotizacion, index) => (
           <div key={index} className="postVentaContainer2">
             <div style={{ display: "flex", justifyContent: "center" }}>
-              {" "}
-              <h2 className="tituloCompo">Cotización</h2> <br />
+              <h3 className="tituloCompo">Cotización</h3> <br />
             </div>
             <div className="form-group">
               <label className="form-label">
@@ -753,7 +760,7 @@ export default function CotizacionEdit() {
                   className="buttonEliminar"
                   onClick={() => removeCotizacionIndividual(index)}
                 >
-                  Eliminar Cotización
+                  Eliminar
                 </button>
               )}
             </div>
@@ -769,23 +776,28 @@ export default function CotizacionEdit() {
           </button>
         </div>
         <br />
-        <div className="form-group">
-          <label className="form-label">Notas Email</label>
-          <textarea
-            name="notasEmail"
-            value={formData.notasEmail}
-            onChange={handleChange}
-            className="form-textarea"
-          />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Notas Usuario</label>
-          <textarea
-            name="notasUsuario"
-            value={formData.notasUsuario}
-            onChange={handleChange}
-            className="form-textarea"
-          />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Notas para el Cliente</label>
+            <textarea
+              name="notasEmail"
+              value={formData.notasEmail}
+              onChange={handleChange}
+              className="form-textarea"
+              style={{ width: "100%", height: "150px", padding: "8px" }}
+            />
+          </div>
+
+          <div className="registroform">
+            <label className="form-label">Notas del Vendedor</label>
+            <textarea
+              name="notasUsuario"
+              value={formData.notasUsuario}
+              onChange={handleChange}
+              className="form-textarea"
+              style={{ width: "100%", height: "150px", padding: "8px" }}
+            />
+          </div>
         </div>
         <button type="submit" className="form-submit">
           Guardar cambios
