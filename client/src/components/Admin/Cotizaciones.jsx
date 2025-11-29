@@ -73,44 +73,38 @@ export default function Cotizaciones() {
       name: "Nro Cotización",
       selector: (row) => row.codigoCotizacion,
       sortable: true,
-      width: "160px",
     },
     {
       name: "Familia",
       selector: (row) => row.Producto.familia,
       sortable: true,
-      width: "160px",
     },
     {
       name: "Marca",
       selector: (row) => row.Producto.marca,
       sortable: true,
-      width: "160px",
+      minWidth: "160px",
     },
     {
       name: "Modelo",
       selector: (row) => row.Producto.modelo,
       sortable: true,
-      width: "160px",
     },
 
     {
       name: "Fecha de Cotización",
       selector: (row) => new Date(row.fechaDeCreacion).toLocaleDateString(),
       sortable: true,
-      width: "160px",
     },
     {
       name: "Vendedor",
       selector: (row) => `${row.Usuario.nombre} ${row.Usuario.apellido}`,
       sortable: true,
-      width: "160px",
     },
     {
       name: "Cliente",
       selector: (row) => `${row.Cliente.nombre} ${row.Cliente.apellido}`,
       sortable: true,
-      width: "160px",
     },
 
     {
@@ -172,23 +166,26 @@ export default function Cotizaciones() {
             disabled={!cotizacionesQueryById.data}
           />
         </div>
-        {!showSpinner ? (
-          <DataTable
-            className="datatable-container"
-            paginationComponentOptions={paginationOptions}
-            columns={columns}
-            data={cotizaciones}
-            pagination
-            striped
-            noDataComponent={
-              <div className="noData">Aún no hay registros ingresados</div>
-            }
-          />
-        ) : (
-          <Spinner loading={isLoading} />
-        )}
-        <div>
-          <CotizacionesExcel data={cotizacionesQueryById.data} />
+        <div className="datatable-container">
+          {!showSpinner ? (
+            <DataTable
+              paginationComponentOptions={paginationOptions}
+              columns={columns}
+              data={cotizaciones}
+              pagination
+              responsive
+              striped
+              fixedHeaderScrollHeight="400px"
+              noDataComponent={
+                <div className="noData">Aún no hay registros ingresados</div>
+              }
+            />
+          ) : (
+            <Spinner loading={isLoading} />
+          )}
+          <div>
+            <CotizacionesExcel data={cotizacionesQueryById.data} />
+          </div>
         </div>
       </div>
     </div>

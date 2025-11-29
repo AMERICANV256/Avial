@@ -433,31 +433,25 @@ const Cotizador = () => {
       <form onSubmit={handleSubmit}>
         <BackButton />
         <div>
-          <h2 className="tituloCompo">Crear Cotización</h2> <br />
+          <h3 className="tituloCompo">Crear Cotización</h3> <br />
         </div>
-        <div></div>
-        <div className="form-group">
-          <label className="form-label">Vendedor</label>
-          <input
-            type="number"
-            name="idUsuario"
-            placeholder={`${auth?.nombre} ${auth?.apellido}`}
-            onChange={handleChange}
-            readOnly
-            className="form-input"
-          />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Vendedor</label>
+            <input
+              type="number"
+              name="idUsuario"
+              placeholder={`${auth?.nombre} ${auth?.apellido}`}
+              onChange={handleChange}
+              readOnly
+              className="form-input"
+            />
+          </div>
         </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Cliente</label>
 
-        <div className="form-group">
-          <label className="form-label">Cliente</label>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-            }}
-          >
             <Select
               name="idCliente"
               value={
@@ -471,7 +465,6 @@ const Cotizador = () => {
               placeholder="Seleccionar"
               isClearable
               required
-              className="form-input"
               styles={{
                 container: (provided) => ({
                   ...provided,
@@ -485,9 +478,10 @@ const Cotizador = () => {
             />
           </div>
         </div>
+        <br />
         {selectedCliente && (
           <div className="cliente-info">
-            <div className="form-group cliente-detail">
+            <div className="registroform">
               <label className="form-label small">Nombre:</label>
               <input
                 type="text"
@@ -497,7 +491,7 @@ const Cotizador = () => {
                 className="form-input small"
               />
             </div>
-            <div className="form-group cliente-detail">
+            <div className="registroform">
               <label className="form-label small">Apellido:</label>
               <input
                 type="text"
@@ -507,7 +501,7 @@ const Cotizador = () => {
                 className="form-input small"
               />
             </div>
-            <div className="form-group cliente-detail">
+            <div className="registroform">
               <label className="form-label small">CUIT:</label>
               <input
                 type="text"
@@ -519,6 +513,10 @@ const Cotizador = () => {
             </div>
           </div>
         )}
+        <hr style={{ color: "black" }} />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h3 className="tituloCompo">Datos generales</h3> <br />
+        </div>
         <div className="postVentaContainer2">
           <div className="form-group">
             <label className="form-label">
@@ -529,7 +527,6 @@ const Cotizador = () => {
               value={selectedFamilia}
               onChange={setSelectedFamilia}
               placeholder="Seleccionar"
-              className="form-input"
               required
             />
           </div>
@@ -543,7 +540,6 @@ const Cotizador = () => {
               onChange={setSelectedMarca}
               placeholder="Seleccionar"
               isDisabled={!selectedFamilia}
-              className="form-input"
               required
             />
           </div>
@@ -557,7 +553,6 @@ const Cotizador = () => {
               onChange={setSelectedModelo}
               placeholder="Seleccionar"
               isDisabled={!selectedMarca}
-              className="form-input"
               required
             />
           </div>
@@ -670,14 +665,12 @@ const Cotizador = () => {
             />
           </div>
         </div>
-
+        <hr style={{ color: "black" }} />
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <h3 className="tituloCompo">Ingresar cotización</h3> <br />
+        </div>
         {formData.cotizacionesIndividuales.map((cotizacion, index) => (
           <div key={index} className="postVentaContainer2">
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              {" "}
-              <h2 className="tituloCompo">Cotización</h2> <br />
-            </div>
-            <div></div>
             <div className="form-group">
               <label className="form-label">
                 Cotización Dólar: <span className="obligatorio">*</span>
@@ -959,7 +952,7 @@ const Cotizador = () => {
                 type="button"
                 onClick={() => removeCotizacionIndividual(index)}
               >
-                Eliminar Cotización
+                Eliminar
               </button>
             </div>
           </div>
@@ -975,29 +968,32 @@ const Cotizador = () => {
           </button>
         </div>
         <br />
-        <div className="form-group">
-          <label className="form-label">Notas para el Cliente</label>
-          <textarea
-            type="text"
-            name="notasEmail"
-            value={formData.notasEmail}
-            onChange={handleChange}
-            className="form-input"
-            style={{ width: "100%", height: "150px", padding: "8px" }}
-          />
+        <hr style={{ color: "black" }} />
+        <br />
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <div className="registroform">
+            <label className="form-label">Notas para el Cliente</label>
+            <textarea
+              type="text"
+              name="notasEmail"
+              value={formData.notasEmail}
+              onChange={handleChange}
+              className="form-input"
+              style={{ width: "100%", height: "150px", padding: "8px" }}
+            />
+          </div>
+          <div className="registroform">
+            <label className="form-label">Notas del Vendedor</label>
+            <textarea
+              type="text"
+              name="notasUsuario"
+              value={formData.notasUsuario}
+              onChange={handleChange}
+              className="form-input"
+              style={{ width: "100%", height: "150px", padding: "8px" }}
+            />
+          </div>
         </div>
-        <div className="form-group">
-          <label className="form-label">Notas De la Cotización</label>
-          <textarea
-            type="text"
-            name="notasUsuario"
-            value={formData.notasUsuario}
-            onChange={handleChange}
-            className="form-input"
-            style={{ width: "100%", height: "150px", padding: "8px" }}
-          />
-        </div>
-
         <div className="botoncotizador">
           <button type="submit" className="form-submit">
             Guardar Cotización
