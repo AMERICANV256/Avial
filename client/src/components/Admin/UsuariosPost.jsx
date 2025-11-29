@@ -140,15 +140,10 @@ export default function UsuariosPost() {
     }
   };
 
-  const isFormValid =
-    form.email &&
-    form.currentPassword &&
-    form.newPassword &&
-    form.confirmPassword &&
-    form.nombre &&
-    form.apellido &&
-    tipoUsuario &&
-    form.activo;
+  const filteredActivoOptions =
+    tipoUsuario === "admin"
+      ? activoOptions
+      : activoOptions.filter((opt) => opt.value === true);
 
   return (
     <div className="postVentaContainer">
@@ -360,8 +355,10 @@ export default function UsuariosPost() {
               Estado <span className="requiredRed">*</span>
             </label>
             <Select
-              options={activoOptions}
-              value={activoOptions.find((opt) => opt.value === form?.activo)}
+              options={filteredActivoOptions}
+              value={filteredActivoOptions.find(
+                (opt) => opt.value === form?.activo
+              )}
               onChange={(option) => {
                 changed({ target: { name: "activo", value: option.value } });
               }}

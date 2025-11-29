@@ -22,6 +22,11 @@ export default function Registro({ handleCerrarModalRegistro }) {
     { value: 2, label: "Córdoba" },
   ];
 
+  const activoOptions = [
+    { value: true, label: "Activo" },
+    { value: false, label: "SuperAdmin" },
+  ];
+
   const { form, changed } = useForm({});
   const [saved, setSaved] = useState("not_sended");
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false);
@@ -88,8 +93,13 @@ export default function Registro({ handleCerrarModalRegistro }) {
     form.apellido &&
     tipoUsuario;
 
+  const filteredActivoOptions =
+    tipoUsuario === "admin"
+      ? activoOptions
+      : activoOptions.filter((opt) => opt.value === true);
+
   return (
-    <div className="postVentaContainer1">
+    <div className="postVentaContainer">
       <BackButton />
 
       <h3
@@ -213,6 +223,22 @@ export default function Registro({ handleCerrarModalRegistro }) {
             />
           </div>
         )}
+
+        <div className="registroform">
+          <label htmlFor="activo">
+            Estado <span className="requiredRed">*</span>
+          </label>
+          <Select
+            options={filteredActivoOptions}
+            value={filteredActivoOptions.find(
+              (opt) => opt.value === form?.activo
+            )}
+            onChange={(option) => {
+              changed({ target: { name: "activo", value: option.value } });
+            }}
+            placeholder="Selecciona estado"
+          />
+        </div>
 
         {errorMessage && (
           <div className="error-message">

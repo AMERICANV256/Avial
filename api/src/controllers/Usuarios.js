@@ -43,9 +43,10 @@ const registro = async (req, res) => {
         codigo: null,
         distribuidor: distribuidor,
         rol: rol,
-        activo: true,
+        activo: req.body.activo !== undefined ? req.body.activo : true,
         baneado: false,
         codigo: null,
+        firma: null,
       },
     });
 
@@ -408,7 +409,7 @@ const obtenerDetalleUsuario = async (req, res) => {
       apellido: usuario.apellido,
       direccion: usuario.direccion || "N/A",
       telefono: usuario.telefono || "N/A",
-      firma: usuario.firma || "N/A",
+      firma: usuario.firma || null,
       rol: usuario.rol,
       distribuidor: usuario.distribuidor || null,
       activo: usuario.activo,
