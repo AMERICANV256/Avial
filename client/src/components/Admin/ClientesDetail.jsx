@@ -42,121 +42,118 @@ export default function ClientesDetail() {
   } = clienteDetalle;
 
   return (
-    <div className="postVentaContainer1">
+    <div className="detalleUsuarioCard">
       <BackButton />
-      <h2
-        className="tituloCompo"
-        style={{ display: "flex", justifyContent: "center" }}
-      >
-        Detalle del Cliente
-      </h2>
-      <br />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>CUIT:</strong> {CUIT}
+      <h3 className="detalleTitulo">Detalle del Cliente</h3>
+
+      <div className="detalleItem">
+        <span className="detalleLabel">CUIT:</span>
+        <span className="detalleValue">{CUIT}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Razón Social:</strong> {razonSocial}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Razón Social:</span>
+        <span className="detalleValue">{razonSocial}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Domicilio:</strong> {domicilio}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Domicilio:</span>
+        <span className="detalleValue">{domicilio}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Nombre:</strong> {nombre}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Nombre:</span>
+        <span className="detalleValue">{nombre}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Apellido:</strong> {apellido}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Apellido:</span>
+        <span className="detalleValue">{apellido}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Email:</strong> {mail}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Email:</span>
+        <span className="detalleValue">{mail}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Teléfono:</strong> {telefono}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Teléfono:</span>
+        <span className="detalleValue">{telefono}</span>
       </div>
-      <hr />
+
       {contactoAlternativo && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Contacto Alternativo:</strong> {contactoAlternativo}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Contacto Alternativo:</span>
+          <span className="detalleValue">{contactoAlternativo}</span>
+        </div>
       )}
 
       {mailAlternativo && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Email:</strong> {mailAlternativo}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Email Alternativo:</span>
+          <span className="detalleValue">{mailAlternativo}</span>
+        </div>
       )}
 
       {telefonoAlternativo && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Teléfono Alternativo:</strong> {telefonoAlternativo}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Teléfono Alternativo:</span>
+          <span className="detalleValue">{telefonoAlternativo}</span>
+        </div>
       )}
 
       {contactoAlternativo1 && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Contacto Alternativo:</strong> {contactoAlternativo1}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Contacto Alternativo:</span>
+          <span className="detalleValue">{contactoAlternativo1}</span>
+        </div>
       )}
 
       {mailAlternativo1 && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Email:</strong> {mailAlternativo1}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Email Alternativo:</span>
+          <span className="detalleValue">{mailAlternativo1}</span>
+        </div>
       )}
 
       {telefonoAlternativo1 && (
-        <>
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Teléfono:</strong> {telefonoAlternativo1}
-          </div>
-          <hr />
-        </>
+        <div className="detalleItem">
+          <span className="detalleLabel">Teléfono Alternativo:</span>
+          <span className="detalleValue">{telefonoAlternativo1}</span>
+        </div>
       )}
 
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Provincia:</strong> {provincia}
+      <div className="detalleItem">
+        <span className="detalleLabel">Provincia:</span>
+        <span className="detalleValue">{provincia}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Ciudad:</strong> {ciudad}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Ciudad:</span>
+        <span className="detalleValue">{ciudad}</span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Creado:</strong>{" "}
-        {new Date(fechaDeCreacion).toLocaleDateString("es-ES", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        })}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Creado:</span>
+        <span className="detalleValue">
+          {new Date(fechaDeCreacion).toLocaleDateString("es-ES", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <strong>Cargado por:</strong> {Usuario.nombre} {Usuario.apellido}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Cargado por:</span>
+        <span className="detalleValue">
+          {Usuario.nombre} {Usuario.apellido}
+        </span>
       </div>
-      <hr />
-      <div style={{ marginBottom: "10px" }}>
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Modificado:</strong>{" "}
+
+      <div className="detalleItem">
+        <span className="detalleLabel">Modificado:</span>
+        <span className="detalleValue">
           {fechaModi
             ? new Date(fechaModi).toLocaleDateString("es-ES", {
                 day: "2-digit",
@@ -164,8 +161,7 @@ export default function ClientesDetail() {
                 year: "numeric",
               })
             : "Sin modificaciones"}
-        </div>
-        <hr />
+        </span>
       </div>
     </div>
   );
