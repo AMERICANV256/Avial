@@ -41,7 +41,7 @@ export default function UsuariosDetail() {
       : "—";
 
   // Activo
-  const activoLabel = usuariosDetail?.activo ? "Activo" : "Inactivo";
+  const activoLabel = usuariosDetail?.activo ? "Activo" : "Super Administrador";
 
   // Baneado
   const baneadoLabel = usuariosDetail?.baneado ? "Sí" : "No";

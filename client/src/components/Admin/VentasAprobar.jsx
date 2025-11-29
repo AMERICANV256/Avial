@@ -13,7 +13,7 @@ export default function VentasAprobar() {
   return (
     <div className="ventasPendientes">
       <BackButton />
-      <h2 className="tituloCompo1">Ventas Pendientes</h2> <br />
+      <h3 className="tituloCompo1">Ventas Pendientes</h3> <br />
       {data && data.length > 0 ? (
         data.map((cotizacion) => (
           <div key={cotizacion.codigoCotizacion} className="cotizacion-general">

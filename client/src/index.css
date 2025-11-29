@@ -4255,6 +4255,7 @@ button:focus-visible {
   max-width: 100%;
   width: 98%;
   font-weight: bold;
+ 
 }
 
 @media screen and (min-width: 600px) and (max-width: 900px) {
@@ -5989,12 +5990,14 @@ p {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  
 }
 
 .cliente h4 {
   margin-bottom: 15px;
   text-align: left;
   width: 100%;
+  
 }
 
 .email-item {
@@ -6002,10 +6005,12 @@ p {
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+  color:#e6a800;
 }
 
 .email-item input {
   margin-right: 10px;
+  
 }
 
 .select-buttons {
@@ -6118,3 +6123,9 @@ p {
 .detalleValue {
   color: #222;
 }
+
+.centrado-input {
+  display: flex;
+  justify-content: center;
+}
+

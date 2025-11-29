@@ -296,34 +296,36 @@ export default function UsuariosPost() {
           </div>
           <br />
           <div className="registroform">
-            <label htmlFor="tipoUsuario">
-              Tipo de Usuario <span className="requiredRed">*</span>
-            </label>
-            <Select
-              options={tipoUsuarioOptions}
-              value={
-                tipoUsuarioOptions.find((opt) => opt.value === tipoUsuario) ||
-                null
-              }
-              onChange={(option) => {
-                setTipoUsuario(option.value);
+            <div className="centrado-input">
+              <label htmlFor="tipoUsuario">
+                Tipo de Usuario <span className="requiredRed">*</span>
+              </label>
+              <Select
+                options={tipoUsuarioOptions}
+                value={
+                  tipoUsuarioOptions.find((opt) => opt.value === tipoUsuario) ||
+                  null
+                }
+                onChange={(option) => {
+                  setTipoUsuario(option.value);
 
-                if (option.value === "admin") {
-                  setRol(true);
-                  setDistribuidor(null);
-                  changed({ target: { name: "rol", value: true } });
-                  changed({ target: { name: "distribuidor", value: null } });
-                }
-                if (option.value === "distribuidor") {
-                  setRol(true);
-                  changed({ target: { name: "rol", value: true } });
-                }
-                if (option.value === "vendedor") {
-                  setRol(false);
-                  changed({ target: { name: "rol", value: false } });
-                }
-              }}
-            />
+                  if (option.value === "admin") {
+                    setRol(true);
+                    setDistribuidor(null);
+                    changed({ target: { name: "rol", value: true } });
+                    changed({ target: { name: "distribuidor", value: null } });
+                  }
+                  if (option.value === "distribuidor") {
+                    setRol(true);
+                    changed({ target: { name: "rol", value: true } });
+                  }
+                  if (option.value === "vendedor") {
+                    setRol(false);
+                    changed({ target: { name: "rol", value: false } });
+                  }
+                }}
+              />
+            </div>
           </div>
           <br />
           {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (

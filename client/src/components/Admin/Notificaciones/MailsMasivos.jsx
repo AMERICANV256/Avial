@@ -231,7 +231,7 @@ export default function MailsMasivos() {
   return (
     <div className="postVentaContainer">
       <BackButton />
-      <h2 className="tituloCompo">Notificar vía Email</h2>
+      <h3 className="tituloCompo">Notificar vía Email</h3>
       <hr />
       <br />
       <form onSubmit={handleEnviarEmails}>
@@ -254,7 +254,7 @@ export default function MailsMasivos() {
 
             return (
               <div key={cliente.nombre} className="cliente">
-                <h4>
+                <h4 style={{ color: "black" }}>
                   {cliente.apellido}, {cliente.nombre}
                 </h4>
                 {emails.map((email) => (
@@ -265,7 +265,10 @@ export default function MailsMasivos() {
                       onChange={() => handleEmailSelection(email)}
                       checked={selectedEmails.includes(email)}
                     />
-                    <label>{email}</label>
+                    <label>
+                      {" "}
+                      <strong>{email}</strong>
+                    </label>
                   </div>
                 ))}
               </div>
@@ -275,91 +278,108 @@ export default function MailsMasivos() {
 
         <hr />
         <div className="email-body">
-          <label style={{ color: "black" }} htmlFor="cuerpoMensaje">
-            Mensaje:
-          </label>
-          <textarea
-            id="cuerpoMensaje"
-            value={cuerpoMensaje}
-            onChange={(e) => setCuerpoMensaje(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="imagen">Imagen 1</label>
-          <input
-            type="file"
-            id="imagen"
-            accept="image/png, image/jpeg"
-            onChange={(e) => {
-              uploadImage(e, 0);
-              setProducto({
-                ...producto,
-                previewImage: URL.createObjectURL(e.target.files[0]),
-              });
-            }}
-          />
-          {producto?.previewImage && (
-            <div className="image-preview">
-              <img
-                src={producto.previewImage}
-                alt="Previsualización Imagen 1"
-                style={{ width: "200px" }}
+          <div className="centrado-input">
+            <div className="registroform">
+              <label style={{ color: "black" }} htmlFor="cuerpoMensaje">
+                Mensaje:
+              </label>
+              <textarea
+                id="cuerpoMensaje"
+                value={cuerpoMensaje}
+                onChange={(e) => setCuerpoMensaje(e.target.value)}
               />
             </div>
-          )}
+          </div>
         </div>
 
-        <div className="form-group">
-          <label htmlFor="imagen1">Imagen 2</label>
-          <input
-            type="file"
-            id="imagen1"
-            accept="image/png, image/jpeg"
-            onChange={(e) => {
-              uploadImage(e, 1);
-              setProducto({
-                ...producto,
-                previewImage1: URL.createObjectURL(e.target.files[0]),
-              });
-            }}
-          />
-          {producto?.previewImage1 && (
-            <div className="image-preview">
-              <img
-                src={producto.previewImage1}
-                alt="Previsualización Imagen 2"
-                style={{ width: "200px" }}
-              />
-            </div>
-          )}
+        <div className="centrado-input">
+          <div className="registroform">
+            <label htmlFor="imagen" style={{ color: "black" }}>
+              Imagen 1
+            </label>
+            <input
+              type="file"
+              id="imagen"
+              accept="image/png, image/jpeg"
+              onChange={(e) => {
+                uploadImage(e, 0);
+                setProducto({
+                  ...producto,
+                  previewImage: URL.createObjectURL(e.target.files[0]),
+                });
+              }}
+            />
+          </div>
         </div>
+        {producto?.previewImage && (
+          <div className="image-preview">
+            <img
+              src={producto.previewImage}
+              alt="Previsualización Imagen 1"
+              style={{ width: "200px" }}
+            />
+          </div>
+        )}
 
-        <div className="form-group">
-          <label htmlFor="fichaPDF">PDF</label>
-          <input
-            type="file"
-            id="fichaPDF"
-            accept="application/pdf"
-            onChange={(e) => {
-              uploadPDF(e);
-              setProducto({
-                ...producto,
-                previewPDF: URL.createObjectURL(e.target.files[0]),
-              });
-            }}
-          />
-          {producto?.previewPDF && (
-            <div className="pdf-preview">
-              <a
-                href={producto.previewPDF}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Ver Previsualización PDF
-              </a>
-            </div>
-          )}
+        <div className="centrado-input">
+          <div className="registroform">
+            <label htmlFor="imagen1" style={{ color: "black" }}>
+              Imagen 2
+            </label>
+            <input
+              type="file"
+              id="imagen1"
+              accept="image/png, image/jpeg"
+              onChange={(e) => {
+                uploadImage(e, 1);
+                setProducto({
+                  ...producto,
+                  previewImage1: URL.createObjectURL(e.target.files[0]),
+                });
+              }}
+            />
+          </div>
         </div>
+        {producto?.previewImage1 && (
+          <div className="image-preview">
+            <img
+              src={producto.previewImage1}
+              alt="Previsualización Imagen 2"
+              style={{ width: "200px" }}
+            />
+          </div>
+        )}
+
+        <div className="centrado-input">
+          <div className="registroform">
+            <label htmlFor="fichaPDF" style={{ color: "black" }}>
+              PDF
+            </label>
+            <input
+              type="file"
+              id="fichaPDF"
+              accept="application/pdf"
+              onChange={(e) => {
+                uploadPDF(e);
+                setProducto({
+                  ...producto,
+                  previewPDF: URL.createObjectURL(e.target.files[0]),
+                });
+              }}
+            />
+          </div>
+        </div>
+        {producto?.previewPDF && (
+          <div className="pdf-preview">
+            <a
+              href={producto.previewPDF}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver Previsualización PDF
+            </a>
+          </div>
+        )}
 
         <button className="form-submit" type="submit" disabled={enviando}>
           {enviando ? "Enviando..." : "Enviar Email"}

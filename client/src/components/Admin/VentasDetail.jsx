@@ -57,90 +57,104 @@ export default function VentasDetail() {
   };
 
   return (
-    <div className="postVentaContainer1">
+    <div className="detalleUsuarioCard">
       <BackButton />
-      <h2 className="tituloCompo1">Detalle de la Venta</h2>
-      <br />
+      <h3 className="detalleTitulo">Detalle de la venta</h3>
+
       <div className="detail-section">
         <h4>Producto</h4>
-
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Familia:</strong> {mappedVentaData.producto.familia}
+        <div className="detalleItem">
+          <span className="detalleLabel">Familia:</span>
+          <span className="detalleValue">
+            {mappedVentaData.producto.familia}
+          </span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Marca:</strong> {mappedVentaData.producto.marca}
+        <div className="detalleItem">
+          <span className="detalleLabel">Marca:</span>
+          <span className="detalleValue">{mappedVentaData.producto.marca}</span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Modelo:</strong> {mappedVentaData.producto.modelo}
+        <div className="detalleItem">
+          <span className="detalleLabel">Modelo:</span>
+          <span className="detalleValue">
+            {mappedVentaData.producto.modelo}
+          </span>
         </div>
-        <hr />
       </div>
+
       <div className="detail-section">
         <h4>Cliente</h4>
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Nombre:</strong>{" "}
-          {`${mappedVentaData.cliente.nombre} ${mappedVentaData.cliente.apellido}`}
+        <div className="detalleItem">
+          <span className="detalleLabel">Nombre:</span>
+          <span className="detalleValue">
+            {`${mappedVentaData.cliente.nombre} ${mappedVentaData.cliente.apellido}`}
+          </span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Email:</strong> {mappedVentaData.cliente.mail}
+        <div className="detalleItem">
+          <span className="detalleLabel">Email:</span>
+          <span className="detalleValue">{mappedVentaData.cliente.mail}</span>
         </div>
-        <hr />
       </div>
+
       <div className="detail-section">
         <h4>Vendedor</h4>
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Nombre:</strong>{" "}
-          {`${mappedVentaData.usuario.nombre} ${mappedVentaData.usuario.apellido}`}
+        <div className="detalleItem">
+          <span className="detalleLabel">Nombre:</span>
+          <span className="detalleValue">
+            {`${mappedVentaData.usuario.nombre} ${mappedVentaData.usuario.apellido}`}
+          </span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Email:</strong> {mappedVentaData.usuario.email}
+        <div className="detalleItem">
+          <span className="detalleLabel">Email:</span>
+          <span className="detalleValue">{mappedVentaData.usuario.email}</span>
         </div>
-        <hr />
       </div>
-      <br />
+
       <div className="detail-section">
         <h4>Detalles Financieros</h4>
-
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Precio de Venta:</strong> {VentaData.moneda}{" "}
-          {VentaData.precio}
+        <div className="detalleItem">
+          <span className="detalleLabel">Precio de Venta:</span>
+          <span className="detalleValue">
+            {VentaData.moneda} {VentaData.precio}
+          </span>
         </div>
-        <hr />
-        <h4>Financiación:</h4>
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Forma de Pago:</strong> {mappedVentaData.formaPago}
+        <h4>Financiación</h4>
+        <div className="detalleItem">
+          <span className="detalleLabel">Forma de Pago:</span>
+          <span className="detalleValue">{mappedVentaData.formaPago}</span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Precio Final:</strong> {VentaData.moneda}{" "}
-          {VentaData.PrecioFinal}
+        <div className="detalleItem">
+          <span className="detalleLabel">Precio Final:</span>
+          <span className="detalleValue">
+            {VentaData.moneda} {VentaData.PrecioFinal}
+          </span>
         </div>
-        <hr />
-        <div style={{ marginBottom: "10px" }}>
-          {VentaData.cuotas} Pagos de {VentaData.moneda} {VentaData.cuotaValor}
+        <div className="detalleItem">
+          <span className="detalleLabel">Cuotas:</span>
+          <span className="detalleValue">
+            {VentaData.cuotas} pagos de {VentaData.moneda}{" "}
+            {VentaData.cuotaValor}
+          </span>
         </div>
-        <hr />
-
-        <div style={{ marginBottom: "10px" }}>
-          Anticipo: U$D {VentaData.anticipo}
+        <div className="detalleItem">
+          <span className="detalleLabel">Anticipo:</span>
+          <span className="detalleValue">U$D {VentaData.anticipo}</span>
         </div>
-        <hr />
       </div>
-      <br />
+
       <div className="detail-section">
         <h4>Información de la Venta</h4>
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Fecha de Cotización:</strong>{" "}
-          {new Date(VentaData.fechaDeCreacion).toLocaleDateString()}
+        <div className="detalleItem">
+          <span className="detalleLabel">Fecha de Cotización:</span>
+          <span className="detalleValue">
+            {new Date(VentaData.fechaDeCreacion).toLocaleDateString()}
+          </span>
         </div>
         {VentaData.fechaVenta && (
-          <div style={{ marginBottom: "10px" }}>
-            <strong>Fecha de Venta:</strong>{" "}
-            {new Date(VentaData.fechaVenta).toLocaleDateString()}
+          <div className="detalleItem">
+            <span className="detalleLabel">Fecha de Venta:</span>
+            <span className="detalleValue">
+              {new Date(VentaData.fechaVenta).toLocaleDateString()}
+            </span>
           </div>
         )}
       </div>

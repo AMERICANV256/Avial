@@ -107,7 +107,10 @@ export default function Registro() {
       <form className="registro" onSubmit={saveUser}>
         <div
           className="registroform"
-          style={{ display: "block", justifyContent: "center" }}
+          style={{
+            display: "block",
+            justifyContent: "center",
+          }}
         >
           <label
             style={{ display: "flex", justifyContent: "center" }}
@@ -168,93 +171,80 @@ export default function Registro() {
           </div>
         </div>
 
-        <div
-          className="registroform"
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="tipoUsuario">
-            Tipo de Usuario<span className="requiredRed">*</span>
-          </label>
+        <div className="registroform">
           <br />
-          <br />
-          <Select
-            options={tipoUsuarioOptions}
-            onChange={(option) => {
-              setTipoUsuario(option.value);
-
-              if (option.value === "admin") {
-                setRol(true);
-                setDistribuidor(null);
-                changed({ target: { name: "rol", value: true } });
-                changed({ target: { name: "distribuidor", value: null } });
-              }
-
-              if (option.value === "distribuidor") {
-                setRol(true);
-                setDistribuidor(null);
-                changed({ target: { name: "rol", value: true } });
-              }
-
-              if (option.value === "vendedor") {
-                setRol(false);
-                setDistribuidor(null);
-                changed({ target: { name: "rol", value: false } });
-              }
-            }}
-            placeholder="Selecciona el tipo de usuario"
-            className="select-activo"
-          />
-        </div>
-
-        {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
-          <div
-            className="registroform"
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <label htmlFor="distribuidor">Región</label>
+          <div className="centrado-input" style={{ marginLeft: "2rem" }}>
+            <label htmlFor="tipoUsuario">
+              Tipo de Usuario<span className="requiredRed">*</span>
+            </label>
+            <br />
+            <br />
             <Select
-              options={distribuidorOptions}
+              options={tipoUsuarioOptions}
               onChange={(option) => {
-                setDistribuidor(option.value);
-                changed({
-                  target: { name: "distribuidor", value: option.value },
-                });
+                setTipoUsuario(option.value);
+
+                if (option.value === "admin") {
+                  setRol(true);
+                  setDistribuidor(null);
+                  changed({ target: { name: "rol", value: true } });
+                  changed({ target: { name: "distribuidor", value: null } });
+                }
+
+                if (option.value === "distribuidor") {
+                  setRol(true);
+                  setDistribuidor(null);
+                  changed({ target: { name: "rol", value: true } });
+                }
+
+                if (option.value === "vendedor") {
+                  setRol(false);
+                  setDistribuidor(null);
+                  changed({ target: { name: "rol", value: false } });
+                }
               }}
-              placeholder="Selecciona la región"
+              placeholder="Selecciona el tipo de usuario"
               className="select-activo"
             />
           </div>
+        </div>
+        {(tipoUsuario === "distribuidor" || tipoUsuario === "vendedor") && (
+          <div className="registroform">
+            <div className="centrado-input" style={{ marginLeft: "2rem" }}>
+              <label htmlFor="distribuidor">Región</label>
+              <Select
+                options={distribuidorOptions}
+                onChange={(option) => {
+                  setDistribuidor(option.value);
+                  changed({
+                    target: { name: "distribuidor", value: option.value },
+                  });
+                }}
+                placeholder="Selecciona la región"
+                className="select-activo"
+              />
+            </div>
+          </div>
         )}
 
-        <div
-          className="registroform"
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="activo">
-            Estado <span className="requiredRed">*</span>
-          </label>
-          <Select
-            options={filteredActivoOptions}
-            value={filteredActivoOptions.find(
-              (opt) => opt.value === form?.activo
-            )}
-            onChange={(option) => {
-              changed({ target: { name: "activo", value: option.value } });
-            }}
-            placeholder="Selecciona estado"
-            className="select-activo"
-          />
+        <div className="registroform">
+          <div className="centrado-input" style={{ marginLeft: "2rem" }}>
+            <label htmlFor="activo">
+              Estado <span className="requiredRed">*</span>
+            </label>
+            <Select
+              options={filteredActivoOptions}
+              value={filteredActivoOptions.find(
+                (opt) => opt.value === form?.activo
+              )}
+              onChange={(option) => {
+                changed({ target: { name: "activo", value: option.value } });
+              }}
+              placeholder="Selecciona estado"
+              className="select-activo"
+            />
+          </div>
         </div>
-
         {errorMessage && (
           <div className="error-message">
             <strong>{errorMessage}</strong>
