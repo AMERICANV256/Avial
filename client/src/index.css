@@ -1007,14 +1007,23 @@ button:focus-visible {
 }
 
 .copy {
-  color: #000;
-  height: 50px;
+  background: #000;                
+  color: #e6e6e6;                  
+  height: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-weight: 600;
+
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.7px;
+
+  border-top: 1px solid #2a2a2a;  
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.6); 
 }
+
+
 
 .about-button {
   display: flex;
@@ -2746,6 +2755,7 @@ button:focus-visible {
   margin-left: 1rem;
   color: #000000;
   max-width: 100%;
+  margin-bottom: 1rem;
 }
 
 .userListContainer span {
@@ -6100,9 +6110,15 @@ p {
   text-align: center;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
-  color: #333;
   font-weight: 700;
+  color: #000;                      
+  
+  display: inline-block;           
+  border-bottom: 3px solid #cc9900; 
+  padding-bottom: 4px;             
 }
+
+
 
 .detalleItem {
   display: flex;

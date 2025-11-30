@@ -127,6 +127,8 @@ const AdminLayout = () => {
       </div>
     );
   }
+
+  const currentYear = new Date().getFullYear();
   return (
     <>
       <NavBarAdmin />
@@ -164,6 +166,9 @@ const AdminLayout = () => {
           <Route path="/Notificaciones/WhatsApp" element={<Wapp />} />
           <Route path="/Notificaciones/Emails" element={<MailsMasivos />} />
         </Routes>
+      </div>
+      <div className="copy">
+        Copyright © {currentYear} | American Vial Todos los derechos reservados
       </div>
     </>
   );
