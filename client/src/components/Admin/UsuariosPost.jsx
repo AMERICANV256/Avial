@@ -33,7 +33,7 @@ export default function UsuariosPost() {
   const [producto, setProducto] = useState({ imagen: "" });
 
   useEffect(() => {
-    if (usuariosDetail) {
+    if (usuariosDetail && Object.keys(form).length === 0) {
       setForm(usuariosDetail);
 
       let tipo = "";
@@ -115,7 +115,7 @@ export default function UsuariosPost() {
     let newUser = { ...form };
 
     newUser.id = usuariosDetail.id;
-    newUser.firma = form.firma || usuariosDetail.firma;
+    newUser.firma = form.firma;
 
     try {
       const request = await fetch(
@@ -414,7 +414,7 @@ export default function UsuariosPost() {
               }}
             >
               <img
-                src={usuariosDetail.firma}
+                src={form.firma || usuariosDetail.firma}
                 alt="Firma del usuario"
                 style={{
                   maxWidth: "200px",
@@ -428,7 +428,7 @@ export default function UsuariosPost() {
           <input
             style={{ width: "100%", textAlign: "center", marginTop: "10px" }}
             type="file"
-            name="Agregar Firma"
+            name="firma"
             placeholder="AGREGAR FIRMA"
             onChange={uploadImage}
           />

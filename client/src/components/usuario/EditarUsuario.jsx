@@ -175,7 +175,7 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
         <input
           type="file"
           className="d-block"
-          name="Agregar Firma"
+          name="firma"
           placeholder="AGREGAR FIRMA"
           onChange={uploadImage}
         />
