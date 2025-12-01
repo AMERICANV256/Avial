@@ -138,24 +138,48 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
               placeholder={auth.telefono}
             />
           </div>
-        </div>
-        <div
-          className="registroform"
-          style={{ width: "100%", marginTop: "10px" }}
-        >
-          <h6 style={{ color: "black" }}>Adjuntar Firma</h6>
-          {auth?.firma && (
-            <span>El archivo guardado es {auth.firma.split("/").pop()}</span>
-          )}
+          <div
+            className="registroform"
+            style={{ width: "100%", marginTop: "10px" }}
+          >
+            <h6 style={{ color: "black", textAlign: "center" }}>
+              Firma actual
+            </h6>
 
-          <input
-            style={{ width: "100%", textAlign: "center" }}
-            type="file"
-            name="Agregar Firma"
-            placeholder={auth.firma}
-            onChange={uploadImage}
-          />
+            {auth?.firma && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={auth.firma}
+                  alt="Firma del usuario"
+                  style={{
+                    width: "80px",
+                    height: "50px",
+                    marginTop: "8px",
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
+        <span
+          style={{ color: "black", marginLeft: "10px", marginRight: "10px" }}
+        >
+          <strong>Firma</strong>
+        </span>
+        <input
+          type="file"
+          className="d-block"
+          name="Agregar Firma"
+          placeholder="AGREGAR FIRMA"
+          onChange={uploadImage}
+        />
+
         <input
           type="submit"
           value="Guardar Cambios"

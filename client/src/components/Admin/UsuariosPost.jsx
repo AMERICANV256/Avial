@@ -380,16 +380,35 @@ export default function UsuariosPost() {
         </div>
         <div
           className="registroform"
-          style={{ width: "100%", marginTop: "10px" }}
+          style={{
+            width: "100%",
+            marginTop: "10px",
+          }}
         >
-          <h6 style={{ color: "black" }}>Adjuntar Firma</h6>
+          <h6 style={{ color: "black", textAlign: "center" }}>Firma</h6>
           {usuariosDetail?.firma && (
-            <span>
-              El archivo guardado es {usuariosDetail.firma.split("/").pop()}
-            </span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                marginTop: "8px",
+              }}
+            >
+              <img
+                src={usuariosDetail.firma}
+                alt="Firma del usuario"
+                style={{
+                  maxWidth: "200px",
+                  display: "block",
+                  marginTop: "8px",
+                }}
+              />
+            </div>
           )}
+
           <input
-            style={{ width: "100%", textAlign: "center" }}
+            style={{ width: "100%", textAlign: "center", marginTop: "10px" }}
             type="file"
             name="Agregar Firma"
             placeholder="AGREGAR FIRMA"
