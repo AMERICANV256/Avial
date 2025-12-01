@@ -503,8 +503,8 @@ export default function CotizacionEdit() {
         <br />
         {formData.cotizacionesIndividuales.map((cotizacion, index) => (
           <div key={index} className="postVentaContainer2">
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <h3 className="tituloCompo">Cotización</h3> <br />
+            <div className="tituloCotizacionWrapper">
+              <h3 className="tituloCotizacion">Cotización Nº {index + 1}</h3>
             </div>
             <div className="form-group">
               <label className="form-label">

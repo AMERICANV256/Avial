@@ -671,6 +671,9 @@ const Cotizador = () => {
         </div>
         {formData.cotizacionesIndividuales.map((cotizacion, index) => (
           <div key={index} className="postVentaContainer2">
+            <div className="tituloCotizacionWrapper">
+              <h3 className="tituloCotizacion">Cotización Nº {index + 1}</h3>
+            </div>
             <div className="form-group">
               <label className="form-label">
                 Cotización Dólar: <span className="obligatorio">*</span>
@@ -968,6 +971,7 @@ const Cotizador = () => {
           </button>
         </div>
         <br />
+
         <hr style={{ color: "black" }} />
         <br />
         <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>

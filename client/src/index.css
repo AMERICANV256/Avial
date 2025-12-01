@@ -4331,7 +4331,23 @@ button:focus-visible {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   overflow-x: auto;
+  margin-bottom: 1rem;
 }
+
+.tituloCotizacionWrapper {
+  width: 100%;            /* ocupa toda la fila */
+  margin-bottom: 1rem;    /* espacio separado del formulario */
+}
+
+.tituloCotizacion {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #000;
+  display: inline-block; 
+  border-bottom: 3px solid #cc9900;
+  padding-bottom: 3px;
+}
+
 
 .postVentaContainer2 .form-group {
   width: 100%;
@@ -5532,6 +5548,7 @@ button:focus-visible {
   outline: none;
   box-shadow: 0 0 5px #ff4d4d;
 }
+
 
 @media (max-width: 900px) {
   .buttonEliminar {
