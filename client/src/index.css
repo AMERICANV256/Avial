@@ -2440,9 +2440,7 @@ button:focus-visible {
   background-color: orange;
 }
 
-.icon {
-  margin-right: 10px;
-}
+
 
 .sidebarAdmin__label {
   margin-left: 10px;
@@ -5002,10 +5000,15 @@ button:focus-visible {
   position: absolute;
   right: 70px;
   top: 165px;
+  padding: 5px 8px;
 }
 
 .back-button:hover {
   background-color: #e6b106;
+}
+
+.icon {
+  margin-right: 10px;
 }
 
 @media screen and (max-width: 600px) {
