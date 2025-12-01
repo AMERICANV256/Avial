@@ -396,6 +396,8 @@ export default function UsuariosPost() {
             />
           </div>
         </div>
+        {loading && <div className="loader">Cargando...</div>}
+
         <div
           className="registroform"
           style={{
@@ -416,6 +418,7 @@ export default function UsuariosPost() {
               <img
                 src={form.firma || usuariosDetail.firma}
                 alt="Firma del usuario"
+                onLoad={() => setLoading(false)}
                 style={{
                   maxWidth: "200px",
                   display: "block",
