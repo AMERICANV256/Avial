@@ -62,11 +62,7 @@ export default function UsuariosPost() {
 
   useEffect(() => {
     if (tipoUsuario === "admin") {
-      setForm((prev) => ({
-        ...prev,
-        distribuidor: null,
-        rol: true,
-      }));
+      setForm((prev) => ({ ...prev, distribuidor: null, rol: true }));
     }
   }, [tipoUsuario]);
 
@@ -116,7 +112,7 @@ export default function UsuariosPost() {
 
   const saveUser = async (e) => {
     e.preventDefault();
-    let newUser = { ...form, distribuidor: distribuidor ?? null };
+    let newUser = { ...form };
 
     newUser.id = usuariosDetail.id;
     newUser.firma = form.firma || usuariosDetail.firma;
@@ -317,21 +313,43 @@ export default function UsuariosPost() {
                 null
               }
               onChange={(option) => {
-                setTipoUsuario(option.value);
+                const value = option.value;
+                setTipoUsuario(value);
 
-                if (option.value === "admin") {
-                  setRol(true);
-                  setDistribuidor(null);
-                  changed({ target: { name: "rol", value: true } });
-                  changed({ target: { name: "distribuidor", value: null } });
+                if (value === "admin") {
+                  // Admin → rol true + distribuidor null
+                  changed({
+                    target: {
+                      name: "rol",
+                      value: true,
+                    },
+                  });
+                  changed({
+                    target: {
+                      name: "distribuidor",
+                      value: null,
+                    },
+                  });
                 }
-                if (option.value === "distribuidor") {
-                  setRol(true);
-                  changed({ target: { name: "rol", value: true } });
+
+                if (value === "distribuidor") {
+                  // Gerente → rol true
+                  changed({
+                    target: {
+                      name: "rol",
+                      value: true,
+                    },
+                  });
                 }
-                if (option.value === "vendedor") {
-                  setRol(false);
-                  changed({ target: { name: "rol", value: false } });
+
+                if (value === "vendedor") {
+                  // Vendedor → rol false
+                  changed({
+                    target: {
+                      name: "rol",
+                      value: false,
+                    },
+                  });
                 }
               }}
             />
