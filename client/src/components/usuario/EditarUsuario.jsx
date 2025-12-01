@@ -138,6 +138,7 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
               placeholder={auth.telefono}
             />
           </div>
+          {loading && <div className="loader">Cargando...</div>}
           <div
             className="registroform"
             style={{ width: "100%", marginTop: "10px" }}
@@ -155,8 +156,9 @@ export default function EditarUsuario({ handleCerrarModalEdit }) {
                 }}
               >
                 <img
-                  src={auth.firma}
+                  src={form.firma || auth.firma}
                   alt="Firma del usuario"
+                  onLoad={() => setLoading(false)}
                   style={{
                     width: "80px",
                     height: "50px",
